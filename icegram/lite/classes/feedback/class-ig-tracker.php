@@ -310,7 +310,7 @@ if ( ! class_exists( 'IG_Tracker_V_1_2_8' ) ) {
 				'version' 				=> IG_PLUGIN_VERSION,
 				'installed_on' 			=> get_option('ig_installed_on', ''),
 				'is_premium' 			=> ( $is_premium_plan ) ? 'yes' : 'no',
-				'plan' 					=> ( $is_premium_plan ) ? get_option('ig_engage_plan') : 'lite',
+				'plan' 					=> ( $is_premium_plan ) ? $ig->get_plan() : 'lite',
 				'gallery_item_usage' 	=> maybe_unserialize( get_option('ig_imported_gallery_items')),
 				'settings' 				=> array(
 						'ig_allow_tracking' => get_option('ig_allow_tracking', 'no'),

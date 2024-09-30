@@ -126,7 +126,7 @@ class IG_Trial {
 		}
 	}
 
-	public function is_trial_expired(){
+	public static function is_trial_expired(){
 		$is_trial_valid = get_transient( 'ig_trial' );
 
 		if( ! $is_trial_valid ){

@@ -1,5 +1,6 @@
 <?php
 if ( ! defined( 'ABSPATH' ) ) exit;
+global $icegram;
 
 if( isset( $_POST['submit'] ) && isset( $_POST['ig-settings-nonce'] ) && wp_verify_nonce( $_POST['ig-settings-nonce'], 'ig_settings' ) ) {
 	if( isset( $_POST['icegram_share_love'] ) ) {
@@ -43,7 +44,7 @@ if( isset( $_POST['submit'] ) && isset( $_POST['ig-settings-nonce'] ) && wp_veri
 				</td>
 			</tr>
 			<?php
-				$product_plan = get_option( 'ig_engage_plan', 'lite' );
+				$product_plan = $icegram->get_plan();
 				if( 'lite' === $product_plan ){
 			?>
 				<tr>

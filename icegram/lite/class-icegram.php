@@ -26,6 +26,9 @@ if ( ! class_exists( 'Icegram' ) ) {
 		public function __construct() {
 			global $ig_feedback, $ig_tracker, $ig_usage_tracker;
 
+			//To get trial related functions
+			require_once IG_PLUGIN_DIR.'lite/classes/class-icegram-trial-admin.php';
+
 			$this->version             = IG_PLUGIN_VERSION;
 			$this->shortcode_instances = array();
 			$this->mode                = 'local';
@@ -822,8 +825,8 @@ if ( ! class_exists( 'Icegram' ) ) {
 			if ( ! wp_script_is( 'ig_gallery_js' ) ) {
 				wp_enqueue_script( 'ig_gallery_js' );
 				$imported_gallery_items = get_option( 'ig_imported_gallery_items', true );
-				$ig_plan                = get_option( 'ig_engage_plan' );
-				$ig_plan                = ( ! empty( $ig_plan ) ) ? ( ( $ig_plan == 'plus' ) ? 1 : ( ( $ig_plan == 'pro' ) ? 2 : ( ( $ig_plan == 'max' ) ? 3 : 0 ) ) ) : 0;
+				$ig_plan                =   ( $icegram->is_plus() ) ? 1 : ( ( $icegram->is_pro() ) ? 2 : ( ( $icegram->is_max() ) ? 3 : 0 ) );
+				
 				$ig_gallery_json        =
 					wp_localize_script( 'ig_gallery_js', '_wpThemeSettings', array(
 						'themes'          => json_decode( $ig_gallery_items, true ),
@@ -1515,9 +1518,9 @@ if ( ! class_exists( 'Icegram' ) ) {
 
 			$name 				=	'Icegram'; 
 			$text_domain 		= 	'icegram';
-			$plugin 			= $text_domain;
+			$plugin 			=   $text_domain;
 			$plugin_prefix 		= 	'ig';
-			$plan 				= 	get_option( 'ig_engage_plan', 'lite' );
+			$plan 				= 	self::get_plan();
 			$plugin_file_path 	= 	IG_PLUGIN_DIR . 'icegram.php';
 			$allowed_by_default =  	( 'lite' === $plan ) ? false : true;
 			$event_prefix 		= 'igfree.';
@@ -2572,6 +2575,17 @@ if ( ! class_exists( 'Icegram' ) ) {
 		}
 
 		/**
+		 * Is IG PLUS?
+		 *
+		 * @return bool
+		 *
+		 * @since
+		 */
+		public function is_plus() {
+			return file_exists( IG_PLUGIN_DIR . '/plus/icegram-plus.php' );
+		}
+
+		/**
 		 * Is IG PRO?
 		 *
 		 * @return bool
@@ -2634,6 +2648,23 @@ if ( ! class_exists( 'Icegram' ) ) {
 		public function is_premium() {
 
 			return self::is_max() || self::is_pro();
+		}
+
+		public function get_plan() {
+
+			if ( is_file( $this->plugin_path . '/max/icegram-max.php' ) ) {
+				$plan = 'max';
+			} elseif ( is_file( $this->plugin_path . '/pro/icegram-pro.php' ) ) {
+				$plan = 'pro';
+			} elseif ( is_file( $this->plugin_path . '/plus/icegram-plus.php' ) ) {
+				$plan = 'plus';
+			} elseif ( self::is_trial() && ! IG_Trial::is_trial_expired() ) {
+				$plan = 'trial';
+			} else {
+				$plan = 'lite';
+			}
+
+			return $plan;
 		}
 
 		/**

@@ -1,9 +1,9 @@
 <?php
-
+global $icegram;
 // BFCM 2022 Campaign
 if ( ( get_option( 'ig_offer_bfcm_2023_icegram' ) !== 'yes' ) && Icegram::is_offer_period( 'bfcm') ) { 
     $img_url = $this->plugin_url .'/assets/images/bfcm-engage-free-pro-banner-2023.png';
-    $ig_plan = get_option( 'ig_engage_plan', 'lite' );
+    $ig_plan = $icegram->get_plan();
     if( 'max' === $ig_plan ){
         $img_url = $this->plugin_url .'/assets/images/bfcm-common-banner-2023.png';
     }
