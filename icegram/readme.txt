@@ -4,7 +4,7 @@ Donate link: https://www.icegram.com/
 Tags:  popup, optin, hellobar, lead capture, form
 Requires at least: 3.9
 Tested up to: 6.6
-Stable tag: 3.1.27
+Stable tag: 3.1.28
 License: GPLv3
 
 Create high-converting popups and optins for lead capture, convert subscribers, and boost sales with the most value-driven WordPress popup builder.
@@ -366,11 +366,17 @@ Contact Us, provide as much detail of the problem as you can. We will try to sol
 
 == Upgrade Notice ==
 
-= 3.1.27 =
+= 3.1.28 =
 
-* Fix: Small bug fix
+* New: Templates for Halloween
+* Update: UI improvements
 
 == Changelog ==
+
+**3.1.28 (24.10.2024)**
+
+* New: Templates for Halloween
+* Update: UI improvements
 
 **3.1.27 (26.09.2024)**
 
