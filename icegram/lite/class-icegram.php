@@ -1825,6 +1825,7 @@ if ( ! class_exists( 'Icegram' ) ) {
 		}
 
 		function import_sample_data( $data = array() ) {
+
 			$new_campaign_ids = $this->import( $data );
 			if ( ! empty( $new_campaign_ids ) ) {
 				update_option( 'icegram_sample_data_imported', $new_campaign_ids );
@@ -1866,65 +1867,355 @@ if ( ! class_exists( 'Icegram' ) ) {
 								'bg_color'    => '#eb593c'
 							),
 							array(
-								'post_title'  => '20% Off Coupon',
+								'post_title' => 'Showcase The Latest Collection',
 								'post_status' => 'publish',
 								'time'        => '4',
-								'type'        => 'messenger',
-								'theme'       => 'social',
-								'animation'   => 'slide',
-								'headline'    => '20% Off - for you',
-								'label'       => '',
-								'link'        => '',
-								'icon'        => '',
-								'message'     => "Hey there! We are running a <strong>special 20% off this week</strong> for registered users - like you. 
+								'type' => 'messenger',
+								'theme' => 'canvas',
+								'headline' => '',
+								'headline_font_family' => '',
+								'icon' => '',
+								'message' => '<div class="ig_heading">LATEST<br>
+							COLLECTION</div>
+							A Journey through the<br>
+							AW\'s Latest collection - Now Live!</div>
+							<div class="ig_btn_container"><button class="ig_btn1 ig_cta">SHOP WOMEN</button><button class="ig_btn2 ig_cta">SHOP MEN</button></div>',
+								'animation' => 'no-anim',
+								'form_font_family' => '',
+								'form_header' => '',
+								'form_html_original' => '',
+								'form_footer' => '',
+								'label' => '',
+								'cta_font_family' => '',
+								'link' => '',
+								'use_custom_code' => 'yes',
+								'custom_css' => '#ig_this_message {
+							width: 40%;
+							}
+							#ig_this_message .ig_content{
+								background-color: #01AAF6 !important;
+								border: none;
+							}
+							#ig_this_message .ig_body{
+								overflow-y: hidden;
+							}
+							#ig_this_message .ig_message{
+								text-align: center; 
+								font-family: \'Roboto\', sans-serif;
+								color: #FFFFFF;
+								line-height: 1.4;
+								font-size: 1.3em;
+							}
+							#ig_this_message .ig_heading{
+								font-size: 1.6em;
+								line-height: 1.2em;
+								font-weight: 600;
+								margin-bottom: 0.6em;
+								position: relative;
+							}
+							#ig_this_message .ig_heading:after{
+							content: \'\';
+							position: absolute;
+							width: 60%;
+							margin-left: 20%;
+							left: 0;
+							bottom: -0.3em;
+							border-bottom: 3px solid #fff;
+							}
 
-	                                                                Use coupon <code>LOYALTY20</code> during checkout.",
-								'position'    => '22',
-								'text_color'  => '#000000',
-								'bg_color'    => '#ffffff'
+							#ig_this_message .ig_btn_container{
+							width: 100%;
+							padding: 0.6em 0;
+							}
+
+							#ig_this_message .ig_btn_container > button{
+							display: inline-block;
+							width: 48%;
+							font-size: 1em;
+							border: 0;
+							color: #FFFFFF;
+							font-weight: 600;
+							border-radius: 0;
+							padding: 0.5em 0;
+							height: 2.5em;
+							}
+
+							#ig_this_message button.ig_btn1 {
+								background: none;
+								background-color: #0071a5;
+								border: 0;
+								font-weight: 600;
+								border-radius: 0;
+								box-shadow: none;
+							}
+							#ig_this_message button.ig_btn2 {
+								background: none;
+								background-color: transparent;
+								border: 2px solid #FFFFFF;
+								margin-left: 2%;
+								box-shadow: none;
+							}
+
+							#ig_this_message .ig_close:after {
+								background-image: url(https://www.icegram.com/gallery/wp-content/uploads/2017/07/sprite_close_02_white_48.png);
+								background-position: -258px center;
+							}
+
+							@media only screen and (max-width: 319px), (min-width: 320px) and (max-width: 359px), (min-width: 360px) and (max-width: 413px), (min-width: 414px) and (max-width: 643px), (min-width: 644px) and (max-width: 767px){
+							#ig_this_message {
+								width: 90%;
+								font-size: .9em;
+							}
+							}
+							@media only screen and (min-width: 768px) and (max-width: 992px), (min-width: 993px) and (max-width: 1023px) {
+							#ig_this_message {
+								width: 80%;
+							}
+
+							/* google fonts */
+
+							/* cyrillic-ext */
+							@font-face {
+							font-family: \'Roboto\';
+							font-style: normal;
+							font-weight: 400;
+							src: local(\'Roboto\'), local(\'Roboto-Regular\'), url(https://fonts.gstatic.com/s/roboto/v16/ek4gzZ-GeXAPcSbHtCeQI_esZW2xOQ-xsNqO47m55DA.woff2) format(\'woff2\');
+							unicode-range: U+0460-052F, U+20B4, U+2DE0-2DFF, U+A640-A69F;
+							}
+							/* cyrillic */
+							@font-face {
+							font-family: \'Roboto\';
+							font-style: normal;
+							font-weight: 400;
+							src: local(\'Roboto\'), local(\'Roboto-Regular\'), url(https://fonts.gstatic.com/s/roboto/v16/mErvLBYg_cXG3rLvUsKT_fesZW2xOQ-xsNqO47m55DA.woff2) format(\'woff2\');
+							unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+							}
+							/* greek-ext */
+							@font-face {
+							font-family: \'Roboto\';
+							font-style: normal;
+							font-weight: 400;
+							src: local(\'Roboto\'), local(\'Roboto-Regular\'), url(https://fonts.gstatic.com/s/roboto/v16/-2n2p-_Y08sg57CNWQfKNvesZW2xOQ-xsNqO47m55DA.woff2) format(\'woff2\');
+							unicode-range: U+1F00-1FFF;
+							}
+							/* greek */
+							@font-face {
+							font-family: \'Roboto\';
+							font-style: normal;
+							font-weight: 400;
+							src: local(\'Roboto\'), local(\'Roboto-Regular\'), url(https://fonts.gstatic.com/s/roboto/v16/u0TOpm082MNkS5K0Q4rhqvesZW2xOQ-xsNqO47m55DA.woff2) format(\'woff2\');
+							unicode-range: U+0370-03FF;
+							}
+							/* vietnamese */
+							@font-face {
+							font-family: \'Roboto\';
+							font-style: normal;
+							font-weight: 400;
+							src: local(\'Roboto\'), local(\'Roboto-Regular\'), url(https://fonts.gstatic.com/s/roboto/v16/NdF9MtnOpLzo-noMoG0miPesZW2xOQ-xsNqO47m55DA.woff2) format(\'woff2\');
+							unicode-range: U+0102-0103, U+1EA0-1EF9, U+20AB;
+							}
+							/* latin-ext */
+							@font-face {
+							font-family: \'Roboto\';
+							font-style: normal;
+							font-weight: 400;
+							src: local(\'Roboto\'), local(\'Roboto-Regular\'), url(https://fonts.gstatic.com/s/roboto/v16/Fcx7Wwv8OzT71A3E1XOAjvesZW2xOQ-xsNqO47m55DA.woff2) format(\'woff2\');
+							unicode-range: U+0100-024F, U+1E00-1EFF, U+20A0-20AB, U+20AD-20CF, U+2C60-2C7F, U+A720-A7FF;
+							}
+							/* latin */
+							@font-face {
+							font-family: \'Roboto\';
+							font-style: normal;
+							font-weight: 400;
+							src: local(\'Roboto\'), local(\'Roboto-Regular\'), url(https://fonts.gstatic.com/s/roboto/v16/CWB0XYA8bzo0kSThX0UTuA.woff2) format(\'woff2\');
+							unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215;
+							}',
+								'custom_js' => '<script type="text/javascript"> /* add your js code here */ </script>',
+								'message_font_family' => '',
+								'form_style' => 'style_0',
+								'form_layout' => 'inline',
+								'form_bg_color' => '',
+								'form_text_color' => '',
+								'use_theme_defaults' => 'yes',
+								'bg_color' => '',
+								'text_color' => '',
+								'cta_bg_color' => '',
+								'cta_text_color' => '',
+								'position' => 22
+								
 							),
-							array(
-								'post_title'  => 'How this blog makes over $34,800 / month for FREE.',
-								'post_status' => 'publish',
-								'time'        => '10',
-								'type'        => 'popup',
-								'theme'       => 'air-mail',
-								'headline'    => 'How this blog makes over $34,800 / month for FREE.',
-								'label'       => 'FREE INSTANT ACCESS',
-								'link'        => '',
-								'icon'        => '',
-								'message'     => "This website earns over $30,000 every month, every single month, almost on autopilot. I have 4 other sites with similar results. All I do is publish new regular content every week.
-
-	        <strong>Download my free kit to learn how I do this.</strong>
-
-	        <ul>
-	            <li>How to choose blog topics that create long term value</li>
-	            <li>The type of blog post that will make your site go viral</li>
-	            <li>How to free yourself from the routine tasks</li>
-	            <li>Resources and tips to get started quickly</li>
-	            <li>Private members club to connect with fellow owners</li>
-	        </ul>",
-								'text_color'  => '#000000',
-								'bg_color'    => '#ffffff'
-
-							),
-							array(
-								'post_title'  => 'Exclusive Marketing Report',
+						 array(
+								'post_title' => 'Latest offer subscription email',
 								'post_status' => 'publish',
 								'time'        => '6',
-								'type'        => 'toast',
-								'theme'       => 'stand-out',
-								'animation'   => 'pop',
-								'headline'    => 'Exclusive Marketing Report',
-								'label'       => '',
-								'link'        => '',
-								'icon'        => '',
-								'message'     => 'FREE for every subscriber. Click here to download it.',
-								'position'    => '02',
-								'text_color'  => '#000000',
-								'bg_color'    => '#ffffff'
+								'type' => 'popup',
+								'theme' => 'inspire',
+								'headline' => '',
+								'headline_font_family' => '',
+								'icon' => '',
+								'message' => '<div class="ig_msg_content_left">
+												<img src="http://www.icegram.com/gallery/wp-content/uploads/2022/08/illustration-hello-discount-man.png" alt="Offer" width="259" height="389" />
+											  </div>
+											  <div class="ig_msg_content_right">
+												<div class="ig_sub_headline"> Latest offers and updates on trendy gadgets</div>
+												<div class="ig_sub_text">Grab the latest offers on the go, be the first one to know about the next big things</div>
+												[ig_form]
+											  </div>',
+								'animation' => 'appear',
+								'use_form' => 'yes',
+								'form_font_family' => '',
+								'form_header' => '',
+								'form_html_original' => '<form action="" method="post" id="demo-embed-subscribe-form" name="demo-embed-subscribe-form" class="" target="blank">
+															<label for="NAME">Name </label>
+															<input type="text" value="" name="NAME" class="" id="NAME" required>
+															<label for="EMAIL">Email Address<span class="asterisk"></span> </label>
+															<input type="email" value="" name="EMAIL" class="required email" id="EMAIL" required>
+															<input type="submit" value="SEND IT NOW" name="subscribe" id="subscribe" class="button">
+														 </form>',
+								'form_footer' => '',
+								'label' => 'SEND IT NOW',
+								'cta_font_family' => '',
+								'link' => 'https://downloads.wordpress.org/plugin/icegram.latest-stable.zip?utm_source=site&utm_medium=download&utm_campaign=Download',
+								'use_custom_code' => 'yes',
+								'custom_css' => '#ig_this_message{
+													font-family: \'Open Sans\', sans-serif;
+													padding:1.5rem 0;
+													border-radius: 10px;
+													width:64%;
+												 }
+												 #ig_this_message .ig_sub_headline{ 
+													padding:0.2em;
+													text-align:left;
+													font-size: 2em;
+													line-height: 1.3em;
+													font-weight: 600;
+													color: #565454;
+												 }
+												 #ig_this_message .ig_form_els{
+													width:100%;
+												 }
+												 #ig_this_message .ig_sub_text{
+													padding: 0.8em;
+													font-size:0.8em;
+													font-weight: 500;
+													text-align:left;
+													color: #706f6f;
+												 }
+												 #ig_this_message .ig_msg_content_right{
+													float: right;
+													width: 60%;
+												 }
+												 #ig_this_message .ig_msg_content_left img{
+													margin-top: 13%;
+													width: 290px;
+													height: 300px;
+												 }
+												 #ig_this_message .ig_msg_content_left{
+													float: left;
+													font-size: .9em;
+												 }
+												 #ig_this_message .ig_close{
+													background-image: url(https://www.icegram.com/gallery/wp-content/uploads/2017/07/sprite_close_02_black_48.png);
+													background-position: -369px center;
+													background-color: transparent;
+													top: 15px;
+													right: 15px;
+													opacity: .6;
+													height: 30px;
+													width: 30px;
+												 }
+												 #ig_this_message .ig_cta_wrapper{
+													width: 90%;
+												 }
+												 #ig_this_message .ig_button {
+													box-shadow: none;
+													border: none;
+													border-radius: 5px;
+													text-shadow: none;
+													font-size: 1.2em;
+													border: 0;
+												 }
+												 @media only screen and (max-device-width: 319px), (min-width: 320px) and (max-width: 359px), (min-width: 360px) and (max-width: 413px), (min-width: 414px) and (max-width: 643px) {
+													#ig_this_message{
+														width: 90%;
+													}
+													#ig_this_message .ig_headline{
+														font-size: 2.2em;
+													}
+													#ig_this_message .ig_msg_content_right{
+														 width: inherit;
+													}
+													#ig_this_message .ig_msg_content_left img{
+													   display:none
+													}
+												 }
+												 @media only screen and (min-width: 644px) and (max-width: 767px), (min-width: 768px) and (max-width: 992px) {
+													#ig_this_message{
+														width: 75%;
+													}
+													#ig_this_message .ig_msg_content_left img{
+														width: 180px;
+														height: 250px;
+													}
+												 }
+												 @media only screen and (min-width: 993px) and (max-width: 1024px), (min-width: 1025px) and (max-width: 1036px){
+													#ig_this_message{
+														width: 65%;
+													}
+												 }
+												 @media only screen and (min-width: 768px) and (max-width: 992px), (min-width: 993px) and (max-width: 1024px), (min-width: 1025px) and (max-width: 1583px){
+													#ig_this_message .ig_msg_content_left{
+														width: 45%;
+													}
+													#ig_this_message .ig_msg_content_right{
+														width: 55%;
+													}
+												 }',
+								'custom_js' => '<script type="text/javascript"> /* add your js code here */ </script>',
+								'message_font_family' => '',
+								'form_style' => 'style_1',
+								'form_layout' => 'inline',
+								'form_bg_color' => '',
+								'form_text_color' => '',
+								'bg_color' => '#ffffff',
+								'text_color' => '#000000',
+								'cta_bg_color' => '#361f39',
+								'cta_text_color' => ''
+								
+							),
+							array(
+								'post_title' => 'Demo 4: Stand Out Copy',
+								'post_status' => 'publish',
+								'time'        => '10',
+								'type' => 'toast',
+								'theme' => 'stand-out',
+								'headline' => '<div class="ig_demo_headline_light">Bill Gates says</div>',
+								'headline_font_family' => '',
+								'icon' => 'https://www.icegram.com/gallery/wp-content/uploads/2016/04/billgates-1-150x150.jpg',
+								'message' => '<span class="st">"<em>Your most unhappy customers are</em> your greatest source of learning." </span>',
+								'animation' => 'slide',
+								'form_font_family' => '',
+								'form_header' => '',
+								'form_html_original' => '',		
+								'form_footer' => '',
+								'label' => '',
+								'cta_font_family' => '',
+								'link' => '',
+								'use_custom_code' => 'yes',
+								'custom_css' => '#ig_this_message .ig_content{
+							    color: #FFFFFF;
+							     }',
+								'custom_js' => '<script type="text/javascript"> /* add your js code here */ </script>',
+								'message_font_family' => '',
+								'form_style' => 'style_0',
+								'form_bg_color' => '',
+								'form_text_color' => '',
+								'bg_color' => '#ffffff',
+								'text_color' => '#000000',
+								'cta_bg_color' => '',
+								'cta_text_color' => '',
+								'position' => '02'
 							)
-
 						)
 					)
 				)
