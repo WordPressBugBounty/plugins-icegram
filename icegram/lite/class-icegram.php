@@ -90,6 +90,9 @@ if ( ! class_exists( 'Icegram' ) ) {
 			add_action( 'init', array( &$this, 'register_campaign_post_type' ) );
 			add_action( 'init', array( &$this, 'register_message_post_type' ) );
 
+			add_action( 'admin_init', array( &$this, 'check_user_permission') );
+			add_action( 'admin_menu', array( &$this, 'remove_plugin_menu') );
+
 			add_action( 'icegram_loaded', array( &$this, 'load_compat_classes' ) );
 
 			// execute shortcode in sidebar
@@ -825,7 +828,8 @@ if ( ! class_exists( 'Icegram' ) ) {
 			if ( ! wp_script_is( 'ig_gallery_js' ) ) {
 				wp_enqueue_script( 'ig_gallery_js' );
 				$imported_gallery_items = get_option( 'ig_imported_gallery_items', true );
-				$ig_plan                =   ( $icegram->is_plus() ) ? 1 : ( ( $icegram->is_pro() ) ? 2 : ( ( $icegram->is_max() ) ? 3 : 0 ) );
+				$ig_plan 				= $icegram->get_plan();
+				$ig_plan                = ( ! empty( $ig_plan ) ) ? ( ( $ig_plan == 'plus' ) ? 1 : ( ( $ig_plan == 'pro' ) ? 2 : ( ( $ig_plan == 'max' ) ? 3 : 0 ) ) ) : 0;
 				
 				$ig_gallery_json        =
 					wp_localize_script( 'ig_gallery_js', '_wpThemeSettings', array(
@@ -1663,6 +1667,43 @@ if ( ! class_exists( 'Icegram' ) ) {
 			);
 
 			register_post_type( 'ig_message', $args );
+		}
+
+		/**
+		 * Check if user have 'publish_posts' permission
+		 * Restrict access to Icegram pages if user don't have permission
+		 * 
+		 * @since 3.1.30
+		 */
+		public function check_user_permission() {
+			global $pagenow, $typenow;
+			
+			$post_type = '';
+			if ( 'post-new.php' === $pagenow || 'edit.php' === $pagenow ) {
+				$post_type = $typenow;
+			} elseif ( 'post.php' === $pagenow ) {
+				// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+				$post_type = ! empty( $_GET['post'] ) ? get_post_type( sanitize_text_field( $_GET['post'] ) ) : '';
+			}
+
+			$engage_cpts   = array( 'ig_campaign', 'ig_message' );
+			$is_engage_cpt = in_array( $post_type, $engage_cpts, true );
+
+			if ( $is_engage_cpt && ! current_user_can('publish_posts') ) {
+				wp_die( esc_html__('You do not have permission to access this page.', 'icegram') );
+			}
+		}
+		
+		/**
+		 * Remove plugin menu for users not having publish_posts permission
+		 * 
+		 * @since 3.1.30
+		 */
+		public function remove_plugin_menu() {
+			
+			if ( ! current_user_can( 'publish_posts' ) ) {
+				remove_menu_page('edit.php?post_type=ig_campaign');
+			}
 		}
 
 
@@ -2943,19 +2984,19 @@ if ( ! class_exists( 'Icegram' ) ) {
 
 		public function get_plan() {
 
-			if ( is_file( $this->plugin_path . '/max/icegram-max.php' ) ) {
-				$plan = 'max';
-			} elseif ( is_file( $this->plugin_path . '/pro/icegram-pro.php' ) ) {
-				$plan = 'pro';
-			} elseif ( is_file( $this->plugin_path . '/plus/icegram-plus.php' ) ) {
-				$plan = 'plus';
-			} elseif ( self::is_trial() && ! IG_Trial::is_trial_expired() ) {
-				$plan = 'trial';
-			} else {
-				$plan = 'lite';
-			}
+			if ( file_exists( IG_PLUGIN_DIR . 'max/icegram-max.php' ) ) {
+                $plan = 'max';
+            } elseif ( file_exists( IG_PLUGIN_DIR . 'pro/icegram-pro.php' ) ) {
+                $plan = 'pro';
+            } elseif ( file_exists( IG_PLUGIN_DIR . 'plus/icegram-plus.php' ) ) {
+                $plan = 'plus';
+            } elseif ( self::is_trial() && ! IG_Trial::is_trial_expired() ) {
+                $plan = 'trial';
+            } else {
+                $plan = 'lite';
+            }
 
-			return $plan;
+            return $plan;
 		}
 
 		/**

@@ -3,7 +3,7 @@
  * Plugin Name: Icegram Engage - Popups, Optins, CTAs & lot more...
  * Plugin URI: https://www.icegram.com/
  * Description: All in one solution to inspire, convert and engage your audiences. Action bars, Popup windows, Messengers, Toast notifications and more. Awesome themes and powerful rules.
- * Version: 3.1.29
+ * Version: 3.1.30
  * Tested up to: 6.6
  * Author: icegram
  * Author URI: https://www.icegram.com/
@@ -126,7 +126,7 @@ if ( ! defined( 'IG_PLUGIN_FILE' ) ) {
 }
 
 if ( ! defined( 'IG_PLUGIN_VERSION' ) ) {
-  	define( 'IG_PLUGIN_VERSION', '3.1.29' );
+  	define( 'IG_PLUGIN_VERSION', '3.1.30' );
 }
 
 if ( ! defined( 'IG_PRODUCT_ID' ) ) {
