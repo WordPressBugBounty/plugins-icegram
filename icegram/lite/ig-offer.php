@@ -1,11 +1,11 @@
 <?php
 global $icegram;
 // BFCM 2022 Campaign
-if ( ( get_option( 'ig_offer_bfcm_2023_icegram' ) !== 'yes' ) && Icegram::is_offer_period( 'bfcm') ) { 
-    $img_url = $this->plugin_url .'/assets/images/bfcm-engage-free-pro-banner-2023.png';
+if ( ( get_option( 'ig_offer_bfcm_2024_icegram' ) !== 'yes' ) && Icegram::is_offer_period( 'bfcm') ) { 
+    $img_url = $this->plugin_url .'/assets/images/bfcm-engage-free-pro-banner-2024.png';
     $ig_plan = $icegram->get_plan();
     if( 'max' === $ig_plan ){
-        $img_url = $this->plugin_url .'/assets/images/bfcm-common-banner-2023.png';
+        $img_url = $this->plugin_url .'/assets/images/bfcm-common-max-banner-2024.jpg';
     }
     // elseif( 'plus' === $ig_plan || 'pro' === $ig_plan ){
     //     $img_url = $this->plugin_url .'/assets/images/bfcm2021_pro.png';
@@ -22,6 +22,6 @@ if ( ( get_option( 'ig_offer_bfcm_2023_icegram' ) !== 'yes' ) && Icegram::is_off
 
     </style>
     <div class="ig_sale_offer">
-        <a target="_blank" href="?ig_dismiss_admin_notice=1&ig_option_name=ig_offer_bfcm_2023"><img src="<?php echo $img_url; ?>"/></a>
+        <a target="_blank" href="?ig_dismiss_admin_notice=1&ig_option_name=ig_offer_bfcm_2024"><img src="<?php echo $img_url; ?>"/></a>
     </div>
 <?php } ?>

@@ -215,9 +215,9 @@ if ( ! class_exists( 'Icegram' ) ) {
 				if ( in_array( $option_name, array( 'trial_to_premium_notice' ), true ) ) {
 					update_option( 'ig_' . $option_name . '_date', gmdate( 'Y-m-d H:i:s'), false );
 				}
-				//bfcm 2022 offer
-				if ( 'ig_offer_bfcm_2023' === $option_name ) {
-					$url = "https://www.icegram.com/pricing/?utm_source=in_app&utm_medium=ig_banner&utm_campaign=offer_bfcm_2023";
+				
+				if ( 'ig_offer_bfcm_2024' === $option_name ) {
+					$url = "https://www.icegram.com/pricing/?utm_source=in_app&utm_medium=ig_banner&utm_campaign=offer_bfcm_2024";
 					header( "Location: {$url}" );
 					exit();
 				} elseif( 'ig_new_admin_ui' === $option_name ) {
@@ -262,8 +262,8 @@ if ( ! class_exists( 'Icegram' ) ) {
 				$offer_end_time 	= $current_ist_time;
 				
 				if ( 'bfcm' === $offer_name ) {
-					$offer_start_time = strtotime( '2023-11-21 12:30:00' ); // Offer start time in IST
-					$offer_end_time   = strtotime( '2023-11-30 12:30:00' ); // Offer end time in IST
+					$offer_start_time = strtotime( '2024-11-26 12:30:00' ); // Offer start time in IST
+					$offer_end_time   = strtotime( '2024-12-05 12:30:00' ); // Offer end time in IST
 				}
 	
 				$is_offer_period = $current_ist_time >= $offer_start_time && $current_ist_time <= $offer_end_time;
