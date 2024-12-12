@@ -3,8 +3,8 @@ Contributors: icegram, storeapps, niravmehta, sandhyam, malayladu, putler, kisha
 Donate link: https://www.icegram.com/
 Tags:  WordPress popup plugin, WordPress Popup, Popup builder, Lead generation, opt-in email, Email Newsletters, WP Popup
 Requires at least: 3.9
-Tested up to: 6.6
-Stable tag: 3.1.31
+Tested up to: 6.7.1
+Stable tag: 3.1.32
 License: GPLv3
 
 Create high-converting popups and optins for lead capture, convert subscribers, and boost sales with the most value-driven WordPress popup builder.
@@ -368,11 +368,17 @@ Contact Us, provide as much detail of the problem as you can. We will try to sol
 
 == Upgrade Notice ==
 
-= 3.1.31 =
+= 3.1.32 =
 
-* New: Templates for BFCM
+* Update: WordPress 6.7.1 compatibility check
+* Fix: Improved security related to XSS [Thanks to Patchstack team]
 
 == Changelog ==
+
+**3.1.32 (12.12.2024)**
+
+* Update: WordPress 6.7.1 compatibility check
+* Fix: Improved security related to XSS [Thanks to Patchstack team]
 
 **3.1.31 (14.11.2024)**
 

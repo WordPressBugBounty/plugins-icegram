@@ -1670,7 +1670,7 @@ if ( ! class_exists( 'Icegram' ) ) {
 		}
 
 		/**
-		 * Check if user have 'publish_posts' permission
+		 * Check if user have 'unfiltered_html' permission
 		 * Restrict access to Icegram pages if user don't have permission
 		 * 
 		 * @since 3.1.30
@@ -1689,19 +1689,19 @@ if ( ! class_exists( 'Icegram' ) ) {
 			$engage_cpts   = array( 'ig_campaign', 'ig_message' );
 			$is_engage_cpt = in_array( $post_type, $engage_cpts, true );
 
-			if ( $is_engage_cpt && ! current_user_can('publish_posts') ) {
+			if ( $is_engage_cpt && ! current_user_can('unfiltered_html') ) {
 				wp_die( esc_html__('You do not have permission to access this page.', 'icegram') );
 			}
 		}
 		
 		/**
-		 * Remove plugin menu for users not having publish_posts permission
+		 * Remove plugin menu for users not having unfiltered_html permission
 		 * 
 		 * @since 3.1.30
 		 */
 		public function remove_plugin_menu() {
 			
-			if ( ! current_user_can( 'publish_posts' ) ) {
+			if ( ! current_user_can( 'unfiltered_html' ) ) {
 				remove_menu_page('edit.php?post_type=ig_campaign');
 			}
 		}
@@ -3327,7 +3327,7 @@ if ( ! class_exists( 'Icegram' ) ) {
 		
 			// Strip any event attributes like onerror, onclick, etc.
 			$content = preg_replace('#(<[^>]+?)(on\w+)(\s*=\s*)([\'"][^\'"]+[\'"]|[^\s>]+)#i', '$1', $content);
-		
+			
 			// Remove any `javascript:` protocol
 			$content = preg_replace('#javascript:#is', '', $content);
 		

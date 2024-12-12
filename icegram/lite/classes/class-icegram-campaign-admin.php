@@ -1006,7 +1006,7 @@ if ( ! class_exists( 'Icegram_Campaign_Admin' ) ) {
 
 						$sanitizing_fields = array( 'bg_color', 'text_color', 'cta_bg_color', 'cta_text_color', 'alt_cta_bg_color', 'alt_cta_text_color', 'form_bg_color', 'form_text_color' );
 						
-						$wpkses_fields_sanitization = array( 'post_title', 'title', 'headline', 'label', 'form_header', 'form_footer', 'response_text', 'alt_label' );
+						$wpkses_fields_sanitization = array( 'post_title', 'title', 'headline', 'label', 'form_header', 'form_footer', 'response_text', 'alt_label', 'countdown_timer_text_color', 'countdown_timer_bg_color', 'bg_color', 'text_color', 'cta_bg_color', 'cta_text_color', 'alt_cta_bg_color', 'alt_cta_text_color', 'form_bg_color', 'form_text_color' );
 
 						foreach ( $message_data as $index => $value ) {
 							if( in_array( $index, $sanitizing_fields) ) {
@@ -1016,7 +1016,6 @@ if ( ! class_exists( 'Icegram_Campaign_Admin' ) ) {
 							if( in_array( $index, $wpkses_fields_sanitization) ) {
 								$message_data[ $index ] = wp_kses_post( $message_data[ $index ] );
 							}
-							
 						}
 
 						if( empty( $message_data['rainmaker_form_code'] ) && ! empty( $message_data['form_html_original'] ) && strpos( $message_data['form_html_original'], 'rainmaker_form') )  {

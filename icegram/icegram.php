@@ -3,8 +3,8 @@
  * Plugin Name: Icegram Engage - Popups, Optins, CTAs & lot more...
  * Plugin URI: https://www.icegram.com/
  * Description: All in one solution to inspire, convert and engage your audiences. Action bars, Popup windows, Messengers, Toast notifications and more. Awesome themes and powerful rules.
- * Version: 3.1.31
- * Tested up to: 6.6
+ * Version: 3.1.32
+ * Tested up to: 6.7.1
  * Author: icegram
  * Author URI: https://www.icegram.com/
  * Copyright (c) 2014-23 Icegram
@@ -126,7 +126,7 @@ if ( ! defined( 'IG_PLUGIN_FILE' ) ) {
 }
 
 if ( ! defined( 'IG_PLUGIN_VERSION' ) ) {
-  	define( 'IG_PLUGIN_VERSION', '3.1.31' );
+  	define( 'IG_PLUGIN_VERSION', '3.1.32' );
 }
 
 if ( ! defined( 'IG_PRODUCT_ID' ) ) {
@@ -223,21 +223,22 @@ if ( ! function_exists( 'ig_trigger_deactivation_in_multisite' ) ) {
 register_activation_hook( __FILE__, 'activate_icegram' );
 register_deactivation_hook( __FILE__, 'deactivate_icegram' );
 
-if ( ! function_exists( 'initialize_icegram' ) ) {
-	function initialize_icegram() {
-		/* @var Icegram Object */
-		global $icegram;
-
-		// i18n / l10n - load translations
+add_action( 'init', 'load_icegram_translations' );
+if ( ! function_exists( 'load_icegram_translations' ) ) {
+	function load_icegram_translations() {
 		load_plugin_textdomain( 'icegram', false, IG_PLUGIN_DIR . 'lite/lang/' );
-
-		$icegram = new Icegram();
-
-		do_action( 'icegram_loaded' );
 	}
 }
 
 add_action( 'plugins_loaded', 'initialize_icegram' );
+if ( ! function_exists( 'initialize_icegram' ) ) {
+    function initialize_icegram() {
+        /* @var Icegram Object */
+        global $icegram;
+        $icegram = new Icegram();
+        do_action( 'icegram_loaded' );
+    }
+}
 
 add_filter( 'ig-engage_is_page_for_notifications', 'ig_show_notification');
 

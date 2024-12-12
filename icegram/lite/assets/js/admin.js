@@ -376,7 +376,9 @@ jQuery(function() {
 	jQuery('.campaign_data, #message-settings').on('blur', '.message_form_html_original' , function(event) {
 		//change the button colors and CTA options HERE.
 		var that = this;
-		var buttons = jQuery('<div/>').html(jQuery(that).val()).find('input[type=submit], button, input[type=button]').not('*:disabled');
+		var html = jQuery(that).val();
+		html     = sanitize_html(  html );
+		var buttons = jQuery('<div/>').html(html).find('input[type=submit], button, input[type=button]').not('*:disabled');
 		
 		if(buttons.length > 0){
 			var button = jQuery(buttons[buttons.length-1]);
@@ -391,8 +393,8 @@ jQuery(function() {
 		var parent_node = jQuery(this).closest('p');
 	    jQuery(parent_node).siblings('.message_custom_code_options').slideToggle(this.checked);
 	});
-
 	
+
 	//var message_rows = jQuery(this).parent().siblings('.campaign_target_rules_panel').find('.message-row').length;
 	jQuery('.ajax_chosen_select_messages').chosen();
 	jQuery('.campaign_data, #message-settings, #ig_message_list_table').on('change', '.ajax_chosen_select_messages' , function() {
@@ -728,6 +730,48 @@ jQuery(function() {
 			variation_row.find('.empty_variation_messages').show();
 		} else {
 			variation_row.find('.empty_variation_messages').hide();
+		}
+	}
+
+	function sanitize_html(html_string) {
+		
+		
+		var temp_div = document.createElement('div');
+		temp_div.innerHTML = html_string;
+	
+		sanitize_element(temp_div);
+
+		return temp_div.innerHTML;
+	}
+
+	function sanitize_element(element) {
+		var i, j;
+
+		
+		var scripts = element.getElementsByTagName('script');
+		for (i = scripts.length - 1; i >= 0; i--) {
+			scripts[i].parentNode.removeChild(scripts[i]);
+		}
+
+		var elements = element.getElementsByTagName('*');
+		
+		for (i = 0; i < elements.length; i++) {
+			var el = elements[i];
+
+			// Remove on event handler attributes
+			var attributes = el.attributes;
+			for (j = attributes.length - 1; j >= 0; j--) {
+				if (attributes[j].name.toLowerCase().indexOf('on') === 0) {
+					el.removeAttribute(attributes[j].name);
+				}
+			}
+			
+			if (el.hasAttribute('href') && el.getAttribute('href').toLowerCase().indexOf('javascript:') === 0) {
+				el.removeAttribute('href');
+			}
+			if (el.hasAttribute('src') && el.getAttribute('src').toLowerCase().indexOf('javascript:') === 0) {
+				el.removeAttribute('src');
+			}
 		}
 	}
 });
