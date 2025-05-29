@@ -4,7 +4,7 @@ Donate link: https://www.icegram.com/
 Tags:  WordPress popup plugin, WordPress Popup, Popup builder, Lead generation, opt-in email, Email Newsletters, WP Popup
 Requires at least: 3.9
 Tested up to: 6.7.1
-Stable tag: 3.1.32
+Stable tag: 3.1.33
 License: GPLv3
 
 Create high-converting popups and optins for lead capture, convert subscribers, and boost sales with the most value-driven WordPress popup builder.
@@ -368,12 +368,15 @@ Contact Us, provide as much detail of the problem as you can. We will try to sol
 
 == Upgrade Notice ==
 
-= 3.1.32 =
+= 3.1.33 =
 
-* Update: WordPress 6.7.1 compatibility check
-* Fix: Improved security related to XSS [Thanks to Patchstack team]
+* Fix: Caching disabled when Icegram Engage Premium active
 
 == Changelog ==
+
+**3.1.33 (29.05.2025)**
+
+* Fix: Caching disabled when Icegram Engage Premium active
 
 **3.1.32 (12.12.2024)**
 
