@@ -58,6 +58,11 @@ if ( ! class_exists( 'Icegram' ) ) {
 				add_action( 'icegram_about_changelog', array( &$this, 'es_subscribe_form' ) );
 				add_action( 'icegram_settings_after', array( &$this, 'icegram_houskeeping' ) );
 				add_action( 'admin_notices', array( &$this, 'add_admin_notices' ) );
+				
+				add_action( 'admin_notices', array( &$this, 'show_ig_mailer_promotion_notice' ) );
+				add_action( 'wp_ajax_ig_dismiss_mailer_promotion_notice', array( $this, 'dismiss_ig_mailer_promotion_notice' ) );
+				add_action( 'wp_ajax_ig_mailer_notice_clickable', array( $this, 'mailer_notice_clickable' ) );
+
 				add_filter( 'plugin_action_links_' . plugin_basename( IG_PLUGIN_FILE ), array( $this, 'ig_plugin_settings_link' ), 11, 2 );
 				add_filter( 'plugin_row_meta', array( $this, 'add_plugin_support_links' ), 10, 4 );
 				add_filter( 'manage_edit-ig_campaign_columns', array( $this, 'custom_ig_campaign_column' )  ,10,1);
@@ -187,6 +192,114 @@ if ( ! class_exists( 'Icegram' ) ) {
 					}
 				}
 			}
+		}
+
+		public function show_ig_mailer_promotion_notice() {
+
+			$screen = get_current_screen();
+			if ( ! in_array( $screen->id, array( 'ig_campaign_page_icegram-dashboard', 'ig_campaign', 'ig_message', 'edit-ig_message', 'edit-ig_campaign', 'ig_campaign_page_icegram-reports', 'ig_campaign_page_icegram-gallery', 'ig_campaign_page_icegram-support', 'ig_campaign_page_icegram-settings' ), true ) ) {
+				return;
+			}
+
+			$mailer_plugin_path = 'icegram-mailer/icegram-mailer.php';
+
+			if ( is_plugin_active($mailer_plugin_path) ) { 
+				return;
+			}
+
+			if ( file_exists(WP_PLUGIN_DIR . '/' . $mailer_plugin_path) ) {
+				$optin_url = admin_url( 'plugins.php' );
+				$optin_btn_txt = esc_html('Activate Now →', 'icegram' );
+			} else {
+				$optin_url = admin_url( 'plugin-install.php?s=icegram%2520mailer&tab=search&type=term' );
+				$optin_btn_txt = esc_html('Try Now →', 'icegram' );
+			}
+
+			$fallback_notice_dismissed = 'yes' === get_option( 'ig_mailer_is_promotion_notice_dismissed', 'no' );
+
+			if ( ! $fallback_notice_dismissed ) {
+				?>
+				<div id="ig_es_mailer_promotion_notice" class="notice is-dismissible" style="border-left-width:1px;">
+					<div style="display: flex;gap:0.8em;padding-top:0.5rem;padding-bottom:0.4rem;">
+						<img src="https://ps.w.org/icegram-mailer/assets/icon-128x128.png" style="height:4em;margin-top: 0.1rem;" />
+						<div style="color: rgb(55 65 81);">
+							<p style="font-weight: bolder; font-size:0.8rem; margin:0; font-size:1.1em">
+								<?php echo esc_html__( 'Get 200 Free Emails Every Month!', 'icegram' ); ?>
+							</p>
+
+							<p style="margin:0; font-size:1.1em;font-weight:400;">
+								<?php echo wp_kses_post(
+										sprintf(
+											__( 'Start sending with confidence. No setup needed, no SMTP headaches. Enjoy 200 emails per month absolutely free with <span style="font-weight: 700;">%s</span>.', 'icegram' ),
+											'Icegram Mailer'
+										)
+									); ?>
+								<a href="<?php echo esc_url( $optin_url ); ?>" target="_blank" id="ig_mailer_promo_button" style="margin-left:0.5rem;">
+									<button type="button" style="color: #5850ec; padding:0.25rem 0.75rem 0.25rem 0.75rem; line-height:1.25rem; font-size:0.875rem; font-weight:500; cursor:pointer; background-color: rgba(255,255,255,1); border:1px solid #d2d6dc;border-radius:0.375rem;">
+										<?php echo esc_html__( $optin_btn_txt, 'icegram'); ?>
+									</button>
+								</a>
+							</p>
+						</div>
+					</div>
+				</div>
+				<script>
+					jQuery(document).ready(function($) {
+						jQuery('#ig_es_mailer_promotion_notice').on('click', '.notice-dismiss, #ig-es-mailer-promo-button', function() {
+							jQuery.ajax({
+								method: 'POST',
+								url: "<?php echo admin_url( 'admin-ajax.php' ); ?>",
+								dataType: 'json',
+								data: {
+									action: 'ig_dismiss_mailer_promotion_notice',
+									security: '<?php echo wp_create_nonce( 'ig-dissmiss-mailer-notice' );?>',
+								}
+							}).done(function(response){
+								console.log( 'response: ', response );
+							});
+						});
+
+						jQuery('#ig_es_mailer_promotion_notice').on('click', '#ig_mailer_promo_button', function() {
+							jQuery.ajax({
+								method: 'POST',
+								url: "<?php echo admin_url( 'admin-ajax.php' ); ?>",
+								dataType: 'json',
+								data: {
+									action: 'ig_mailer_notice_clickable',
+									security: '<?php echo wp_create_nonce( 'ig-mailer-notice-clickable' );?>',
+								}
+							}).done(function(response){
+								console.log( 'response: ', response );
+							});
+						});
+					});
+				</script>
+				<?php
+			}
+		}
+
+		public function dismiss_ig_mailer_promotion_notice() {
+			$response = array(
+				'status' => 'success',
+			);
+
+			check_ajax_referer( 'ig-dissmiss-mailer-notice', 'security' );
+
+			update_option( 'ig_mailer_is_promotion_notice_dismissed', 'yes', false );
+
+			wp_send_json( $response );
+		}
+
+		public function mailer_notice_clickable() {
+			$response = array(
+				'status' => 'success',
+			);
+
+			check_ajax_referer( 'ig-mailer-notice-clickable', 'security' );
+
+			update_option( 'ig_mailer_is_tried', 'yes', false );
+
+			wp_send_json( $response );
 		}
 
 		/**
