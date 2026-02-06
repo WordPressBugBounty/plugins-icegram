@@ -1,0 +1,2475 @@
+# Copyright (C) 2025 icegram
+# This file is distributed under the GPLv3.
+msgid ""
+msgstr ""
+"Project-Id-Version: Icegram Engage - Popups, Optins, CTAs & lot more... 3.1.36\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/icegram\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2025-12-11T10:21:16+01:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: icegram\n"
+
+#. Plugin Name of the plugin
+#: icegram.php
+msgid "Icegram Engage - Popups, Optins, CTAs & lot more..."
+msgstr ""
+
+#. Plugin URI of the plugin
+#. Author URI of the plugin
+#: icegram.php
+msgid "https://www.icegram.com/"
+msgstr ""
+
+#. Description of the plugin
+#: icegram.php
+msgid "All in one solution to inspire, convert and engage your audiences. Action bars, Popup windows, Messengers, Toast notifications and more. Awesome themes and powerful rules."
+msgstr ""
+
+#. Author of the plugin
+#: icegram.php
+msgid "icegram"
+msgstr ""
+
+#. translators: %s: Link to Icegram Engage upgrade
+#: icegram.php:57
+#, php-format
+msgid "You are using older version of <strong>Icegram Engage</strong> plugin. It won't work because it needs plugin to be updated. Please update %s plugin."
+msgstr ""
+
+#: icegram.php:58
+#: lite/class-icegram.php:1775
+msgid "Icegram Engage"
+msgstr ""
+
+#: lite/about-icegram.php:135
+msgid "Name"
+msgstr ""
+
+#: lite/about-icegram.php:139
+msgid "E-mail"
+msgstr ""
+
+#: lite/about-icegram.php:143
+msgid "Subject"
+msgstr ""
+
+#: lite/about-icegram.php:147
+#: lite/class-icegram.php:1802
+#: lite/classes/class-icegram-campaign-admin.php:369
+#: lite/classes/class-icegram-campaign-admin.php:387
+#: max/classes/class-ig-split-testing.php:380
+msgid "Message"
+msgstr ""
+
+#: lite/about-icegram.php:195
+msgid "Welcome to Icegram Engage."
+msgstr ""
+
+#: lite/about-icegram.php:196
+msgid "Your sample campaign is ready!"
+msgstr ""
+
+#: lite/about-icegram.php:198
+msgid "Preview Your First Campaign"
+msgstr ""
+
+#: lite/about-icegram.php:199
+msgid "OR"
+msgstr ""
+
+#: lite/about-icegram.php:200
+msgid "Edit & Publish it."
+msgstr ""
+
+#. translators: %s is the plugin version
+#: lite/about-icegram.php:206
+#, php-format
+msgid "Version: %s"
+msgstr ""
+
+#: lite/about-icegram.php:210
+msgid "Questions? Need Help?"
+msgstr ""
+
+#: lite/about-icegram.php:211
+#: lite/about-icegram.php:318
+msgid "Contact Us"
+msgstr ""
+
+#: lite/about-icegram.php:219
+msgid "Do read Icegram Engage's core concepts below to understand how you can use Icegram Engage to "
+msgstr ""
+
+#: lite/about-icegram.php:220
+msgid "inspire, convert and engage"
+msgstr ""
+
+#: lite/about-icegram.php:221
+msgid "your audience."
+msgstr ""
+
+#: lite/about-icegram.php:225
+#: lite/class-icegram.php:1801
+#: lite/class-icegram.php:1807
+#: lite/class-icegram.php:1813
+#: lite/classes/class-icegram-campaign-admin.php:286
+#: lite/classes/class-icegram-campaign-admin.php:299
+msgid "Messages"
+msgstr ""
+
+#: lite/about-icegram.php:227
+msgid "A 'Message' is a communication you want to deliver to your audience."
+msgstr ""
+
+#: lite/about-icegram.php:228
+msgid "And Icegram Engage comes with not one, but four message types."
+msgstr ""
+
+#: lite/about-icegram.php:229
+msgid "Different message types look and behave differently, but they all have many common characteristics. For instance, most message types will allow you to set a headline, a body text, label for the ‘call to action’ button, a link for that button, theme and styling options, animation effect and position on screen where that message should show."
+msgstr ""
+
+#: lite/about-icegram.php:233
+#: lite/gallery.php:395
+msgid "Action Bar"
+msgstr ""
+
+#: lite/about-icegram.php:235
+msgid "An action bar is a proven attention grabber. It shows up as a solid bar either at top or bottom. Use it for your most important messages or time sensitive announcements. Put longer content in it and it acts like a collapsible panel!"
+msgstr ""
+
+#: lite/about-icegram.php:236
+#: lite/gallery.php:411
+msgid "Messenger"
+msgstr ""
+
+#: lite/about-icegram.php:238
+msgid "A messenger is best used to invoke interest while your visitor is reading your content. Users perceive it as something new, important and urgent and are highly likely to click on it."
+msgstr ""
+
+#: lite/about-icegram.php:242
+msgid "Toast Notification"
+msgstr ""
+
+#: lite/about-icegram.php:244
+msgid "Want to alert your visitor about some news, an update from your blog, a social proof or an offer? Use Icegram Engage’s unique toast notification, it will catch their attention, let them click on the message, and disappear after a while."
+msgstr ""
+
+#: lite/about-icegram.php:245
+#: lite/gallery.php:387
+msgid "Popup"
+msgstr ""
+
+#: lite/about-icegram.php:247
+msgid "Lightbox popup windows are most widely used for lead capture, promotions and additional content display. Ask visitors to sign up to your newsletter, or like you on social networks, or tell them about a special offer..."
+msgstr ""
+
+#: lite/about-icegram.php:256
+#: lite/class-icegram.php:129
+#: lite/class-icegram.php:1763
+msgid "Campaigns"
+msgstr ""
+
+#: lite/about-icegram.php:258
+msgid "Campaign = Messages + Rules"
+msgstr ""
+
+#: lite/about-icegram.php:259
+msgid "A campaign allows sequencing multiple messages and defining targeting rules. Create different campaigns for different marketing goals. Icegram Engage supports showing multiple campaigns on any page."
+msgstr ""
+
+#: lite/about-icegram.php:260
+msgid "You can always preview your campaign to ensure campaign works the way you want, before making it live."
+msgstr ""
+
+#: lite/about-icegram.php:264
+msgid "Multiple Messages & Sequencing"
+msgstr ""
+
+#: lite/about-icegram.php:266
+msgid "Add one or as many messages to a campaign as you want. Also choose the number of seconds after which each message should show up. Showing multiple messages for same goal, but with slightly different content / presentation, greatly improves conversions."
+msgstr ""
+
+#: lite/about-icegram.php:270
+msgid "Targeting Rules"
+msgstr ""
+
+#: lite/about-icegram.php:272
+msgid "You can control who sees a campaign – and on what device, which pages does it show on, and what time period will it stay active for. You can run different campaigns with different rules to maximize engagement."
+msgstr ""
+
+#: lite/about-icegram.php:281
+msgid "FAQ / Common Problems"
+msgstr ""
+
+#: lite/about-icegram.php:284
+msgid "Messages look broken / formatting is weird..."
+msgstr ""
+
+#: lite/about-icegram.php:285
+msgid "This is most likely due to CSS conflicts with current theme. We suggest using simple formatting for messages. You can also write custom CSS in your theme to fix any problems."
+msgstr ""
+
+#: lite/about-icegram.php:287
+msgid "Extra Line Breaks / Paragraphs in messages..."
+msgstr ""
+
+#: lite/about-icegram.php:288
+msgid "Go to HTML mode in content editor and pull your custom HTML code all together in one line. Don't leave blank lines between two tags. That should fix it."
+msgstr ""
+
+#: lite/about-icegram.php:290
+msgid "How do I add custom CSS for messages?"
+msgstr ""
+
+#: lite/about-icegram.php:291
+msgid "You can use custom CSS/JS inline in your message HTML. You can also use your theme's custom JS / CSS feature to add your changes."
+msgstr ""
+
+#: lite/about-icegram.php:293
+msgid "Optin Forms / Mailing service integration..."
+msgstr ""
+
+#: lite/about-icegram.php:294
+msgid "You can embed any optin / subscription form to your Icegram Engage messages using 'Embed Form' button above text editor. Paste in form HTML code and let Icegram Engage clean it up! You may even use a shortcode if you are using a WP plugin from your newsletter / lead capture service."
+msgstr ""
+
+#: lite/about-icegram.php:296
+msgid "How many messages should I show on a page?"
+msgstr ""
+
+#: lite/about-icegram.php:297
+msgid "While Icegram Engage provides you lots of different message types and ability to add multiple messages to a campaign, we discourage you to go overboard. We've observed two messages on a page work well, but YMMV!"
+msgstr ""
+
+#: lite/about-icegram.php:303
+msgid "Preview does not work / not refreshing..."
+msgstr ""
+
+#: lite/about-icegram.php:304
+msgid "Doing a browser refresh while previewing will not show your most recent changes. Click 'Preview' button to see a preview with your latest changes."
+msgstr ""
+
+#: lite/about-icegram.php:306
+msgid "Can I use shortcodes in a message?"
+msgstr ""
+
+#: lite/about-icegram.php:307
+msgid "Yes! Messages support shortcodes. You may need to adjust CSS so the shortcode output looks good in your message."
+msgstr ""
+
+#: lite/about-icegram.php:309
+msgid "WPML / Multilingual usage..."
+msgstr ""
+
+#: lite/about-icegram.php:310
+msgid "Go to <code>Messages</code> from Icegram Engage menu. Edit a message and translate it like any other post. Icegram Engage will show translated message where possible. Choose <code>All posts</code> under WPML Language setting - Blog Posts to display, to fall back to default language messages."
+msgstr ""
+
+#: lite/about-icegram.php:314
+msgid "I can't find a way to do X..."
+msgstr ""
+
+#: lite/about-icegram.php:315
+msgid "Icegram Engage is actively developed. If you can't find your favorite feature (or have a suggestion) contact us. We'd love to hear from you."
+msgstr ""
+
+#: lite/about-icegram.php:317
+msgid "I'm facing a problem and can't find a way out..."
+msgstr ""
+
+#: lite/about-icegram.php:318
+msgid ", provide as much detail of the problem as you can. We will try to solve the problem ASAP."
+msgstr ""
+
+#: lite/class-icegram.php:130
+msgid "Docs"
+msgstr ""
+
+#: lite/class-icegram.php:131
+msgid "Go Premium"
+msgstr ""
+
+#: lite/class-icegram.php:156
+msgid "Rate Icegram"
+msgstr ""
+
+#: lite/class-icegram.php:157
+#: lite/classes/class-icegram-pricing.php:836
+msgid "Support"
+msgstr ""
+
+#: lite/class-icegram.php:229
+msgid "Get 200 Free Emails Every Month!"
+msgstr ""
+
+#. translators: %s is the name of the product (Icegram Mailer)
+#: lite/class-icegram.php:236
+#, php-format
+msgid "Start sending with confidence. No setup needed, no SMTP headaches. Enjoy 200 emails per month absolutely free with <span style=\"font-weight: 700;\">%s</span>."
+msgstr ""
+
+#: lite/class-icegram.php:415
+msgid "Free Add-ons, Proven Marketing Tricks and  Updates"
+msgstr ""
+
+#: lite/class-icegram.php:422
+msgid "Get add-ons and tips..."
+msgstr ""
+
+#. translators: %s is a link to the privacy policy
+#: lite/class-icegram.php:438
+#, php-format
+msgid "I have read and agreed to our %s."
+msgstr ""
+
+#: lite/class-icegram.php:439
+msgid "Privacy Policy"
+msgstr ""
+
+#: lite/class-icegram.php:551
+msgid "Your subscription was successful! Kindly check your mailbox and confirm your subscription."
+msgstr ""
+
+#: lite/class-icegram.php:585
+msgid "Housekeeping"
+msgstr ""
+
+#: lite/class-icegram.php:589
+msgid "Remove all Icegram Engage shortcodes"
+msgstr ""
+
+#: lite/class-icegram.php:594
+msgid "Remove all Icegram Engage campaigns and messages"
+msgstr ""
+
+#: lite/class-icegram.php:598
+msgid "Clean Up"
+msgstr ""
+
+#: lite/class-icegram.php:607
+msgid "You won't be able to recover this data once you proceed. Do you really want to perform this action?"
+msgstr ""
+
+#: lite/class-icegram.php:622
+msgid "Done!"
+msgstr ""
+
+#: lite/class-icegram.php:778
+#: lite/ig-dashboard.php:78
+msgid "Dashboard"
+msgstr ""
+
+#: lite/class-icegram.php:782
+msgid "Welcome to Icegram"
+msgstr ""
+
+#: lite/class-icegram.php:783
+msgid "Template Gallery"
+msgstr ""
+
+#: lite/class-icegram.php:785
+msgid "Settings"
+msgstr ""
+
+#: lite/class-icegram.php:787
+msgid "Docs & Support"
+msgstr ""
+
+#: lite/class-icegram.php:797
+msgid "🔥 Go Max"
+msgstr ""
+
+#: lite/class-icegram.php:1161
+msgid "Powered by Icegram"
+msgstr ""
+
+#: lite/class-icegram.php:1205
+msgid "Show More"
+msgstr ""
+
+#: lite/class-icegram.php:1416
+msgid "An error has occured. Please try again later."
+msgstr ""
+
+#: lite/class-icegram.php:1764
+msgid "Campaign"
+msgstr ""
+
+#: lite/class-icegram.php:1765
+#: lite/class-icegram.php:1766
+msgid "Add New Campaign"
+msgstr ""
+
+#: lite/class-icegram.php:1767
+msgid "Edit Campaign"
+msgstr ""
+
+#: lite/class-icegram.php:1768
+msgid "New Campaign"
+msgstr ""
+
+#: lite/class-icegram.php:1769
+msgid "All Campaigns"
+msgstr ""
+
+#: lite/class-icegram.php:1770
+msgid "View Campaign"
+msgstr ""
+
+#: lite/class-icegram.php:1771
+msgid "Search Campaigns"
+msgstr ""
+
+#: lite/class-icegram.php:1772
+msgid "No campaigns found"
+msgstr ""
+
+#: lite/class-icegram.php:1773
+msgid "No campaigns found in Trash"
+msgstr ""
+
+#: lite/class-icegram.php:1803
+msgid "Create New"
+msgstr ""
+
+#: lite/class-icegram.php:1804
+msgid "Create New Message"
+msgstr ""
+
+#: lite/class-icegram.php:1805
+msgid "Edit Message"
+msgstr ""
+
+#: lite/class-icegram.php:1806
+msgid "New Message"
+msgstr ""
+
+#: lite/class-icegram.php:1808
+msgid "View Message"
+msgstr ""
+
+#: lite/class-icegram.php:1809
+msgid "Search Messages"
+msgstr ""
+
+#: lite/class-icegram.php:1810
+msgid "No messages found"
+msgstr ""
+
+#: lite/class-icegram.php:1811
+msgid "No messages found in Trash"
+msgstr ""
+
+#: lite/class-icegram.php:1855
+msgid "You do not have permission to access this page."
+msgstr ""
+
+#: lite/class-icegram.php:2628
+msgid "Copy"
+msgstr ""
+
+#: lite/class-icegram.php:2802
+#: lite/classes/class-icegram-message-admin.php:1031
+msgid "Type"
+msgstr ""
+
+#: lite/class-icegram.php:2806
+msgid "Display Rules Summary"
+msgstr ""
+
+#: lite/class-icegram.php:2811
+msgid "Status"
+msgstr ""
+
+#. translators: 1: number of times to show, 2: time period for not showing the campaign
+#: lite/class-icegram.php:2967
+#, php-format
+msgid "Show %1$s time(s) then do not show for %2$s"
+msgstr ""
+
+#. translators: %s is the time period for not showing the campaign after CTA is clicked
+#: lite/class-icegram.php:2984
+#, php-format
+msgid "Once CTA is clicked, do NOT show this campaign again for %s"
+msgstr ""
+
+#: lite/class-icegram.php:3548
+msgid "Boost WooCommerce Sales Using Icegram Engage"
+msgstr ""
+
+#: lite/class-icegram.php:3552
+msgid "Avoid Intrusive Mobile Pop-Ups & Interstitials Penalty from Google…"
+msgstr ""
+
+#: lite/class-icegram.php:3556
+msgid "Customize Icegram’s Engage Gallery Templates"
+msgstr ""
+
+#: lite/class-icegram.php:3560
+msgid "Which metrics can be split tested with Icegram Engage?"
+msgstr ""
+
+#: lite/class-icegram.php:3564
+msgid "How to Track Analytics in Icegram Engage"
+msgstr ""
+
+#: lite/classes/class-icegram-campaign-admin.php:146
+msgid "Overview"
+msgstr ""
+
+#: lite/classes/class-icegram-campaign-admin.php:153
+msgid "Content & Design"
+msgstr ""
+
+#: lite/classes/class-icegram-campaign-admin.php:160
+msgid "Display Rules"
+msgstr ""
+
+#: lite/classes/class-icegram-campaign-admin.php:173
+msgid "Publish"
+msgstr ""
+
+#: lite/classes/class-icegram-campaign-admin.php:175
+msgid "Save Draft"
+msgstr ""
+
+#: lite/classes/class-icegram-campaign-admin.php:179
+msgid "Update"
+msgstr ""
+
+#: lite/classes/class-icegram-campaign-admin.php:181
+msgid "Switch to Draft"
+msgstr ""
+
+#: lite/classes/class-icegram-campaign-admin.php:184
+#: lite/classes/class-icegram-campaign-admin.php:1179
+#: lite/gallery.php:900
+#: lite/gallery.php:990
+msgid "Preview"
+msgstr ""
+
+#: lite/classes/class-icegram-campaign-admin.php:186
+msgid "Load Display Rules"
+msgstr ""
+
+#: lite/classes/class-icegram-campaign-admin.php:202
+msgid "Load display rules from"
+msgstr ""
+
+#: lite/classes/class-icegram-campaign-admin.php:215
+msgid "Choose a campaign"
+msgstr ""
+
+#: lite/classes/class-icegram-campaign-admin.php:218
+msgid "Select a campaign"
+msgstr ""
+
+#: lite/classes/class-icegram-campaign-admin.php:235
+msgid "Done"
+msgstr ""
+
+#: lite/classes/class-icegram-campaign-admin.php:238
+msgid "Cancel"
+msgstr ""
+
+#: lite/classes/class-icegram-campaign-admin.php:347
+#: lite/classes/class-icegram-campaign-admin.php:893
+msgid "Remove from Campaign"
+msgstr ""
+
+#: lite/classes/class-icegram-campaign-admin.php:360
+#: lite/classes/class-icegram-campaign-admin.php:498
+#: max/classes/class-ig-split-testing.php:371
+msgid "No messages yet. Use search / create bar above to add messages to this campaign."
+msgstr ""
+
+#: lite/classes/class-icegram-campaign-admin.php:372
+msgid "Search to add &hellip;"
+msgstr ""
+
+#: lite/classes/class-icegram-campaign-admin.php:377
+msgid "Add a message"
+msgstr ""
+
+#: lite/classes/class-icegram-campaign-admin.php:467
+#: lite/classes/class-icegram-campaign-admin.php:907
+msgid "Message name"
+msgstr ""
+
+#: lite/classes/class-icegram-campaign-admin.php:469
+#: lite/classes/class-icegram-campaign-admin.php:909
+msgid "Give this message a name for your own reference"
+msgstr ""
+
+#: lite/classes/class-icegram-campaign-admin.php:472
+#: lite/classes/class-icegram-campaign-admin.php:912
+msgid "Show After"
+msgstr ""
+
+#: lite/classes/class-icegram-campaign-admin.php:477
+#: lite/classes/class-icegram-campaign-admin.php:921
+msgid " sec"
+msgstr ""
+
+#: lite/classes/class-icegram-campaign-admin.php:539
+msgid "Where?"
+msgstr ""
+
+#: lite/classes/class-icegram-campaign-admin.php:540
+msgid "Messages in this campaign will be shown when all these rules match..."
+msgstr ""
+
+#: lite/classes/class-icegram-campaign-admin.php:546
+msgid "Sitewide"
+msgstr ""
+
+#: lite/classes/class-icegram-campaign-admin.php:551
+msgid "Select pages to exclude&hellip;"
+msgstr ""
+
+#: lite/classes/class-icegram-campaign-admin.php:565
+msgid "Homepage"
+msgstr ""
+
+#: lite/classes/class-icegram-campaign-admin.php:571
+msgid "Selected pages"
+msgstr ""
+
+#: lite/classes/class-icegram-campaign-admin.php:576
+msgid "Select a page&hellip;"
+msgstr ""
+
+#: lite/classes/class-icegram-campaign-admin.php:593
+msgid "Specific URLs on this site"
+msgstr ""
+
+#: lite/classes/class-icegram-campaign-admin.php:616
+#: max/classes/class-ig-behavior-rules.php:63
+#: max/classes/class-ig-remote.php:142
+#: pro/classes/class-ig-behavior-triggers.php:274
+msgid " Add another"
+msgstr ""
+
+#. translators: shortcode for campaigns
+#: lite/classes/class-icegram-campaign-admin.php:627
+#, php-format
+msgid "Additionally you can insert %s wherever you want to run this campaign."
+msgstr ""
+
+#: lite/classes/class-icegram-campaign-admin.php:636
+msgid "When?"
+msgstr ""
+
+#: lite/classes/class-icegram-campaign-admin.php:641
+msgid "Always"
+msgstr ""
+
+#: lite/classes/class-icegram-campaign-admin.php:647
+msgid "Schedule"
+msgstr ""
+
+#: lite/classes/class-icegram-campaign-admin.php:650
+msgid "From&hellip;"
+msgstr ""
+
+#: lite/classes/class-icegram-campaign-admin.php:653
+msgid "To&hellip;"
+msgstr ""
+
+#: lite/classes/class-icegram-campaign-admin.php:666
+msgid "Device?"
+msgstr ""
+
+#: lite/classes/class-icegram-campaign-admin.php:669
+msgid "Mobile / Smartphones"
+msgstr ""
+
+#: lite/classes/class-icegram-campaign-admin.php:673
+msgid "Tablet"
+msgstr ""
+
+#: lite/classes/class-icegram-campaign-admin.php:677
+msgid "Desktop / Laptop"
+msgstr ""
+
+#: lite/classes/class-icegram-campaign-admin.php:686
+msgid "Who?"
+msgstr ""
+
+#: lite/classes/class-icegram-campaign-admin.php:691
+msgid "All users"
+msgstr ""
+
+#: lite/classes/class-icegram-campaign-admin.php:697
+msgid "Logged in users only"
+msgstr ""
+
+#: lite/classes/class-icegram-campaign-admin.php:710
+msgid "Select a user role&hellip;"
+msgstr ""
+
+#: lite/classes/class-icegram-campaign-admin.php:726
+msgid "Not Logged in users"
+msgstr ""
+
+#: lite/classes/class-icegram-campaign-admin.php:738
+#: pro/classes/class-ig-behavior-triggers.php:427
+msgid "Retargeting"
+msgstr ""
+
+#: lite/classes/class-icegram-campaign-admin.php:743
+msgid "Once shown, do NOT show this campaign again for"
+msgstr ""
+
+#: lite/classes/class-icegram-campaign-admin.php:760
+msgid "Once CTA is clicked, do NOT show this campaign again for"
+msgstr ""
+
+#: lite/classes/class-icegram-campaign-admin.php:1175
+#: lite/classes/class-icegram-message-admin.php:1243
+msgid "Duplicate"
+msgstr ""
+
+#: lite/classes/class-icegram-campaign-admin.php:1199
+#: lite/classes/class-icegram-campaign-admin.php:1212
+msgid "Current Session"
+msgstr ""
+
+#: lite/classes/class-icegram-campaign-admin.php:1200
+#: lite/classes/class-icegram-campaign-admin.php:1211
+msgid "Never"
+msgstr ""
+
+#: lite/classes/class-icegram-campaign-admin.php:1201
+#: lite/classes/class-icegram-campaign-admin.php:1213
+msgid "Today"
+msgstr ""
+
+#: lite/classes/class-icegram-campaign-admin.php:1202
+#: lite/classes/class-icegram-campaign-admin.php:1214
+msgid "One week"
+msgstr ""
+
+#: lite/classes/class-icegram-campaign-admin.php:1203
+#: lite/classes/class-icegram-campaign-admin.php:1215
+msgid "Two weeks"
+msgstr ""
+
+#: lite/classes/class-icegram-campaign-admin.php:1204
+#: lite/classes/class-icegram-campaign-admin.php:1216
+msgid "One Month "
+msgstr ""
+
+#: lite/classes/class-icegram-campaign-admin.php:1205
+#: lite/classes/class-icegram-campaign-admin.php:1217
+msgid "Three Months "
+msgstr ""
+
+#: lite/classes/class-icegram-campaign-admin.php:1206
+#: lite/classes/class-icegram-campaign-admin.php:1218
+msgid "One year"
+msgstr ""
+
+#: lite/classes/class-icegram-campaign-admin.php:1207
+#: lite/classes/class-icegram-campaign-admin.php:1219
+msgid "Two Years"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:44
+msgid "Message Settings"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:128
+msgid "Design/Create"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:135
+msgid "Styling"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:142
+msgid "Behavior"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:162
+msgid "Headline"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:163
+msgid "Shown with highest prominence. Click on idea button on right to get a new headline."
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:169
+msgid "Give Me Another Headline"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:180
+msgid "Icon / Avatar Image"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:181
+msgid "This image will appear in message content."
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:186
+msgid "Upload / Select an image"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:186
+msgid "Upload / Select Image"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:204
+msgid "Message Body"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:223
+msgid "Animation"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:264
+msgid "Form"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:269
+msgid "Use Opt-in / Subscription / Lead capture form"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:293
+msgid "Text / HTML to show before the form"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:318
+#: lite/classes/class-icegram-message-admin.php:335
+msgid "Easily embed using "
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:318
+#: lite/classes/class-icegram-message-admin.php:335
+msgid "or add "
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:323
+msgid "Use Icegram Collect form "
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:325
+#: lite/classes/class-icegram-message-admin.php:341
+#: lite/classes/class-icegram-message-admin.php:363
+msgid "Select form "
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:329
+#: lite/classes/class-icegram-message-admin.php:345
+#: lite/classes/class-icegram-message-admin.php:388
+msgid " or add "
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:339
+msgid "Use Icegram Express form "
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:399
+msgid "form embed code"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:404
+msgid "Paste HTML / shortcode of your form here..."
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:412
+msgid "Show labels above fields"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:417
+msgid "Text / HTML to show after the form"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:422
+msgid "Insert <code>[ig_form]</code> where you want to show this form in message body."
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:445
+#: lite/classes/class-icegram-message-admin.php:446
+msgid "Call To Action"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:449
+msgid "Main Call To Action Button"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:454
+msgid "Your call to action text. Something unusual will increase conversions."
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:457
+#: pro/classes/class-ig-cta-actions.php:178
+msgid "Label"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:477
+#: lite/classes/class-icegram-message-admin.php:481
+msgid "Enter destination URL here. Clicking will redirect to this link."
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:483
+msgid "Target Link"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:516
+msgid "Custom Code"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:517
+msgid "Add custom code for this message"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:521
+msgid "CSS"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:530
+msgid "JS"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:534
+msgid "Add Custom javaScript for this message here..."
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:544
+msgid "Fonts"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:549
+#: lite/classes/class-icegram-message-admin.php:553
+#: lite/classes/class-icegram-message-admin.php:1273
+msgid "Font Family"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:551
+#: lite/classes/class-icegram-message-admin.php:1271
+msgid "Font family"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:573
+msgid "Forms"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:578
+#: pro/classes/class-ig-countdown-timer.php:152
+msgid "Style"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:595
+#: lite/classes/class-icegram-message-admin.php:759
+#: pro/message-types/inline/main.php:185
+msgid "Position"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:605
+#: lite/classes/class-icegram-message-admin.php:608
+msgid "Left"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:628
+#: lite/classes/class-icegram-message-admin.php:631
+msgid "Right"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:644
+#: lite/classes/class-icegram-message-admin.php:647
+#: pro/classes/class-ig-behavior-triggers.php:113
+msgid "Bottom"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:664
+#: lite/classes/class-icegram-message-admin.php:666
+#: lite/gallery.php:419
+#: pro/message-types/inline/main.php:248
+msgid "Inline"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:675
+#: lite/classes/class-icegram-message-admin.php:715
+#: pro/classes/class-ig-countdown-timer.php:179
+msgid "Colors"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:676
+#: lite/classes/class-icegram-message-admin.php:701
+#: lite/classes/class-icegram-message-admin.php:707
+#: pro/classes/class-ig-countdown-timer.php:180
+#: pro/classes/class-ig-cta-actions.php:51
+msgid "Background"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:676
+#: pro/classes/class-ig-countdown-timer.php:180
+msgid "Background Color"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:677
+msgid "Labels"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:677
+#: pro/classes/class-ig-countdown-timer.php:181
+msgid "Text Color"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:700
+msgid "Body"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:702
+#: lite/classes/class-icegram-message-admin.php:708
+#: pro/classes/class-ig-countdown-timer.php:181
+#: pro/classes/class-ig-cta-actions.php:52
+msgid "Text"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:705
+msgid "Button"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:721
+msgid "Use theme's default colors"
+msgstr ""
+
+#. translators: %s: shortcode example
+#: lite/classes/class-icegram-message-admin.php:915
+#, php-format
+msgid "You may add <code>[%s]</code> where you want to show this message."
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:1032
+msgid "Theme"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:1033
+msgid "Thumbnail"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:1185
+msgid "Here Is A Method That Is Helping ____ To ____"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:1186
+msgid "__ Little Known Ways To ____"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:1187
+msgid "Get Rid Of ____ Once And For All"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:1188
+msgid "How To ____ So You Can ____"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:1189
+msgid "They Didn't Think I Could ____, But I Did"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:1190
+msgid "How ____ Made Me ____"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:1191
+msgid "Are You ____ ?"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:1192
+msgid "Warning: ____ !"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:1193
+msgid "Do You Make These Mistakes With ____ ?"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:1194
+msgid "7 Ways To ____"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:1195
+msgid "If You're ____, You Can ____"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:1196
+msgid "Turn your ____ into a ____"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:1197
+msgid "Want To Be A ____?"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:1198
+msgid "The Ugly Truth About Your Beautiful ____"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:1199
+msgid "The Secret to ____ Is Simply ____!"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:1200
+msgid "The Quickest Way I Know To ____"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:1201
+msgid "The Lazy Man's Way To ____"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:1202
+msgid "The Amazing Story Of ____ That Requires So Little Of ____ You Could ____"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:1203
+msgid "The Amazing Secret Of The ____ Genius Who Is Afraid Of ____"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:1204
+msgid "The 10 Wackiest Ideas That ____... And How You Can Too!"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:1205
+msgid "The Inside Secrets To ____ With Crazy, Outlandish And Outrageous ____"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:1206
+msgid "____ Like A ____"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:1207
+msgid "Remember When You Could Have ____, And You Didn't?"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:1208
+msgid "Is The ____ Worth $x To You?"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:1209
+msgid "Increase your ____, reduce ____, maintain ____ and ____ with ____"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:1210
+msgid "If You Can ____ You Can ____"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:1211
+msgid "I Discovered How To ____... Now I'm Revealing My Secret"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:1212
+msgid "How To Turn Your ____ Into The Most ____"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:1213
+msgid "How To Take The Headache Out Of ____"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:1214
+msgid "How To ____ ... Legally"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:1215
+msgid "How To ____ That ____"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:1216
+msgid "How To Discover The ____ That Lies Hidden In Your ____"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:1217
+msgid "How To ____ Even When Your Not ____"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:1218
+msgid "____ With No ____!"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:1219
+msgid "Greatest Goldmine of ____ Ever Jammed Into One Big ____"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:1220
+msgid "Free ____ Tells How To Get Better ____"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:1221
+msgid "FREE ____ Worth $____ for the first 100 People to take Advantage of this Offer"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:1222
+msgid "Don't Try This With Any Other ____"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:1223
+msgid "Do You Honestly Want To ____?"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:1224
+msgid "Discover The Magic ____ That Will Bring You ____ & ____!"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:1225
+msgid "____ Man Reveals A Short-Cut To ____"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:1226
+msgid "Confessions Of A ____"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:1227
+msgid "Are You Ready To ____?"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:1228
+msgid "An Open Letter To Everyone Who ____ More Than ____ Per ____"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:1229
+msgid "An Amazing ____ You Can Carry In Your ____"
+msgstr ""
+
+#: lite/classes/class-icegram-message-admin.php:1230
+msgid "21 Secret ____ that will ____... NOW!"
+msgstr ""
+
+#. translators: %s: Offer text
+#: lite/classes/class-icegram-pricing.php:361
+#, php-format
+msgid "Congratulations! You just unlocked %s on Icegram Engage Premium!"
+msgstr ""
+
+#. translators: %s: Offer text
+#: lite/classes/class-icegram-pricing.php:361
+msgid "25% off"
+msgstr ""
+
+#: lite/classes/class-icegram-pricing.php:366
+msgid "⏰ Limited time offer"
+msgstr ""
+
+#: lite/classes/class-icegram-pricing.php:370
+#: lite/classes/class-icegram-pricing.php:420
+msgid "Pro"
+msgstr ""
+
+#: lite/classes/class-icegram-pricing.php:371
+msgid "1 site (Annual)"
+msgstr ""
+
+#: lite/classes/class-icegram-pricing.php:373
+msgid "$129"
+msgstr ""
+
+#: lite/classes/class-icegram-pricing.php:374
+msgid "$97"
+msgstr ""
+
+#: lite/classes/class-icegram-pricing.php:378
+#: lite/classes/class-icegram-pricing.php:391
+msgid "Buy Now"
+msgstr ""
+
+#: lite/classes/class-icegram-pricing.php:382
+msgid "Best Seller"
+msgstr ""
+
+#: lite/classes/class-icegram-pricing.php:383
+#: lite/classes/class-icegram-pricing.php:423
+msgid "Max"
+msgstr ""
+
+#: lite/classes/class-icegram-pricing.php:384
+msgid "3 sites (Annual)"
+msgstr ""
+
+#: lite/classes/class-icegram-pricing.php:386
+msgid "$229"
+msgstr ""
+
+#: lite/classes/class-icegram-pricing.php:387
+msgid "$172"
+msgstr ""
+
+#: lite/classes/class-icegram-pricing.php:395
+msgid " * Renew at same discounted price"
+msgstr ""
+
+#: lite/classes/class-icegram-pricing.php:401
+msgid "Great tool to get attention!"
+msgstr ""
+
+#: lite/classes/class-icegram-pricing.php:403
+msgid "This tool is helping us keep our organization alive and well in the Covid 19 pandemic. Thanks for making it so easy for us to spread the word to our members. Plus it is easy to use and the free themes are fun to help fit our messages as we need them."
+msgstr ""
+
+#: lite/classes/class-icegram-pricing.php:404
+msgid " - Mimdoc"
+msgstr ""
+
+#: lite/classes/class-icegram-pricing.php:409
+msgid " More powerful features with Icegram Engage premium plans!"
+msgstr ""
+
+#: lite/classes/class-icegram-pricing.php:414
+msgid "Features"
+msgstr ""
+
+#: lite/classes/class-icegram-pricing.php:417
+msgid "Free"
+msgstr ""
+
+#: lite/classes/class-icegram-pricing.php:430
+msgid "Plan Highlights"
+msgstr ""
+
+#: lite/classes/class-icegram-pricing.php:433
+msgid "Unlimited Campaigns, Unlimited Impressions and Unlimited Pageviews"
+msgstr ""
+
+#: lite/classes/class-icegram-pricing.php:436
+msgid "Everything in Free + Exit intent targeting, Countdown timer"
+msgstr ""
+
+#: lite/classes/class-icegram-pricing.php:439
+msgid "Everything in Pro + A/B split testing, Geographical targeting, Animation"
+msgstr ""
+
+#: lite/classes/class-icegram-pricing.php:444
+msgid "Popups"
+msgstr ""
+
+#: lite/classes/class-icegram-pricing.php:458
+msgid "Header/Footer (Action Bars)"
+msgstr ""
+
+#: lite/classes/class-icegram-pricing.php:472
+msgid "Messengers (Slide-ins)"
+msgstr ""
+
+#: lite/classes/class-icegram-pricing.php:486
+msgid "Toasts"
+msgstr ""
+
+#: lite/classes/class-icegram-pricing.php:500
+msgid "Basic targeting rules"
+msgstr ""
+
+#: lite/classes/class-icegram-pricing.php:514
+msgid "Simple design themes"
+msgstr ""
+
+#: lite/classes/class-icegram-pricing.php:528
+msgid "Elegant design templates gallery"
+msgstr ""
+
+#: lite/classes/class-icegram-pricing.php:542
+msgid "100+ high converting themes"
+msgstr ""
+
+#: lite/classes/class-icegram-pricing.php:556
+msgid "Exit Intent targeting"
+msgstr ""
+
+#: lite/classes/class-icegram-pricing.php:570
+msgid "User behavior targeting"
+msgstr ""
+
+#: lite/classes/class-icegram-pricing.php:584
+msgid "Inline message"
+msgstr ""
+
+#: lite/classes/class-icegram-pricing.php:598
+#: lite/gallery.php:427
+#: pro/message-types/badge/main.php:48
+msgid "Badges"
+msgstr ""
+
+#: lite/classes/class-icegram-pricing.php:612
+#: pro/message-types/sticky/main.php:48
+msgid "Stickies"
+msgstr ""
+
+#: lite/classes/class-icegram-pricing.php:626
+#: pro/message-types/ribbon/main.php:49
+msgid "Ribbons"
+msgstr ""
+
+#: lite/classes/class-icegram-pricing.php:640
+msgid "Top 5 message stats"
+msgstr ""
+
+#: lite/classes/class-icegram-pricing.php:654
+msgid "Top 5 campaign stats"
+msgstr ""
+
+#: lite/classes/class-icegram-pricing.php:668
+msgid "Impression v/s Conversion report"
+msgstr ""
+
+#: lite/classes/class-icegram-pricing.php:682
+#: pro/classes/class-ig-countdown-timer.php:38
+#: pro/classes/class-ig-countdown-timer.php:148
+msgid "Countdown Timer"
+msgstr ""
+
+#: lite/classes/class-icegram-pricing.php:696
+msgid "After CTA Click Control"
+msgstr ""
+
+#: lite/classes/class-icegram-pricing.php:710
+msgid "Premium themes"
+msgstr ""
+
+#: lite/classes/class-icegram-pricing.php:724
+msgid "A/B Split Testing"
+msgstr ""
+
+#: lite/classes/class-icegram-pricing.php:738
+msgid "Geographical Targeting"
+msgstr ""
+
+#: lite/classes/class-icegram-pricing.php:752
+msgid "Show / Hide Animation Effects"
+msgstr ""
+
+#: lite/classes/class-icegram-pricing.php:766
+msgid "Overlay (Full-screen Popups)"
+msgstr ""
+
+#: lite/classes/class-icegram-pricing.php:780
+#: lite/gallery.php:467
+#: max/message-types/sidebar/main.php:46
+msgid "Sidebar"
+msgstr ""
+
+#: lite/classes/class-icegram-pricing.php:794
+msgid "Interstitial"
+msgstr ""
+
+#: lite/classes/class-icegram-pricing.php:808
+#: lite/gallery.php:459
+#: max/message-types/tab/main.php:48
+msgid "Tab"
+msgstr ""
+
+#: lite/classes/class-icegram-pricing.php:822
+msgid "Remote (Show Campaigns on Non- WordPress Sites)"
+msgstr ""
+
+#: lite/classes/class-icegram-pricing.php:839
+msgid "WordPress Forum"
+msgstr ""
+
+#: lite/classes/class-icegram-pricing.php:842
+msgid "Premium Support (Email)"
+msgstr ""
+
+#: lite/classes/class-icegram-pricing.php:845
+msgid "VIP Support (Email + Facebook)"
+msgstr ""
+
+#: lite/classes/class-icegram-pricing.php:850
+msgid "Pricing"
+msgstr ""
+
+#: lite/classes/class-icegram-pricing.php:857
+msgid "Buy Pro"
+msgstr ""
+
+#: lite/classes/class-icegram-pricing.php:862
+msgid "Buy Max"
+msgstr ""
+
+#: lite/classes/class-icegram-pricing.php:874
+msgid "Best lead capture have ever seen"
+msgstr ""
+
+#: lite/classes/class-icegram-pricing.php:877
+msgid "This is the best lead capture I’ve ever seen. After try a lot of different plugins I finally found a product that is made with Internet Marketing in mind. You can create different campaigns and test what type of lead capture is the best for a particular offer. I’m about to change every WP site I build to use your solutions. Great job guys!"
+msgstr ""
+
+#: lite/classes/class-icegram-pricing.php:878
+msgid " - SuperDivulga"
+msgstr ""
+
+#: lite/classes/class-icegram-pricing.php:883
+msgid "Great Compliment to ANY site"
+msgstr ""
+
+#: lite/classes/class-icegram-pricing.php:886
+msgid "I found this plug-in as a result of using Email Subscribers & Newsletters. It’s a great add-on to this plug-in. Fairly easy to use, with options to change and implement on your site in almost every way. I’m glad I found it and even more happy to be using it. Highly recommended."
+msgstr ""
+
+#: lite/classes/class-icegram-pricing.php:887
+msgid "- Chris Richard"
+msgstr ""
+
+#: lite/classes/class-icegram-pricing.php:893
+msgid "Hours left to grab this deal!"
+msgstr ""
+
+#: lite/classes/class-icegram-pricing.php:894
+msgid "Don’t miss your growth opportunity: Unlock the full potential of your website visitors with Icegram Engage, transforming them into valuable customers and maximizing your success."
+msgstr ""
+
+#: lite/classes/class-icegram-pricing.php:896
+msgid "SELECT A PLAN NOW"
+msgstr ""
+
+#: lite/classes/feedback.php:133
+msgid "Subscription forms and CTAs??"
+msgstr ""
+
+#: lite/classes/feedback.php:140
+msgid "Yes"
+msgstr ""
+
+#: lite/classes/feedback.php:147
+msgid "No"
+msgstr ""
+
+#: lite/classes/feedback.php:153
+msgid "Additional feedback"
+msgstr ""
+
+#: lite/classes/feedback.php:162
+msgid "Send my feedback to <b>Icegram team</b>"
+msgstr ""
+
+#: lite/classes/feedback.php:269
+msgid "Send"
+msgstr ""
+
+#: lite/classes/feedback.php:270
+msgid "Allow Icegram Engage to track plugin usage. It will help us to understand your issue better. We guarantee no sensitive data is collected."
+msgstr ""
+
+#: lite/classes/ig-upsale-admin.php:36
+#: plus/classes/class-ig-analytics.php:60
+#: plus/classes/class-ig-analytics.php:61
+msgid "Statistics"
+msgstr ""
+
+#: lite/gallery.php:403
+msgid "Toast"
+msgstr ""
+
+#: lite/gallery.php:435
+#: max/message-types/overlay/main.php:48
+msgid "Overlay"
+msgstr ""
+
+#: lite/gallery.php:443
+msgid "Sticky"
+msgstr ""
+
+#: lite/gallery.php:451
+msgid "Ribbon"
+msgstr ""
+
+#: lite/gallery.php:478
+msgid "Grow audience"
+msgstr ""
+
+#: lite/gallery.php:479
+msgid "Build your lists with newsletter subscription opt-ins"
+msgstr ""
+
+#: lite/gallery.php:486
+msgid "Guide visitors"
+msgstr ""
+
+#: lite/gallery.php:487
+msgid "Call to actions to nudge people to visit a page or link"
+msgstr ""
+
+#: lite/gallery.php:493
+msgid "Giveaway downloadable resources"
+msgstr ""
+
+#: lite/gallery.php:494
+msgid "Have a lead magnet? Deliver it when people sign up to your list"
+msgstr ""
+
+#: lite/gallery.php:500
+msgid "Make announcements"
+msgstr ""
+
+#: lite/gallery.php:501
+msgid "Show important information or news to visitors"
+msgstr ""
+
+#: lite/gallery.php:507
+msgid "Grow revenue"
+msgstr ""
+
+#: lite/gallery.php:508
+msgid "Make special offers, show coupons and reduce cart abandonment"
+msgstr ""
+
+#: lite/gallery.php:514
+msgid "Get inbound leads"
+msgstr ""
+
+#: lite/gallery.php:515
+msgid "Show phone call back, text SMS or mail contact information easily"
+msgstr ""
+
+#: lite/gallery.php:521
+msgid "Increase social media followers"
+msgstr ""
+
+#: lite/gallery.php:522
+msgid "Show elegant social media icons to gain followers"
+msgstr ""
+
+#: lite/gallery.php:528
+msgid "Collect feedback"
+msgstr ""
+
+#: lite/gallery.php:529
+msgid "Run a mini survey with Yes/No campaign and drive people to act"
+msgstr ""
+
+#: lite/gallery.php:535
+msgid "Build your own"
+msgstr ""
+
+#: lite/gallery.php:536
+msgid "Start with a blank template and customize it your way"
+msgstr ""
+
+#: lite/gallery.php:546
+msgid "Lock your content"
+msgstr ""
+
+#: lite/gallery.php:573
+msgid "Goal for this campaign"
+msgstr ""
+
+#: lite/gallery.php:575
+msgid "What should this campaign help you achieve? Please select a primary goal or more"
+msgstr ""
+
+#: lite/gallery.php:615
+#: lite/gallery.php:674
+msgid "Continue →"
+msgstr ""
+
+#: lite/gallery.php:627
+msgid "Message placement"
+msgstr ""
+
+#: lite/gallery.php:629
+msgid "What message types would you like to use in this campaign? Select all that you like - or just continue without selecting if you’re not sure."
+msgstr ""
+
+#: lite/gallery.php:693
+msgid "Start your trial today!"
+msgstr ""
+
+#. translators: %s: Template name in HTML <strong> tag
+#: lite/gallery.php:697
+#, php-format
+msgid "Get 14 days trial and try %s premium Icegram template for free: No obligation!"
+msgstr ""
+
+#: lite/gallery.php:699
+msgid "Sign up for free trial, pick a template and click on unlock"
+msgstr ""
+
+#: lite/gallery.php:711
+msgid "Choose a template"
+msgstr ""
+
+#: lite/gallery.php:739
+msgid "Skip Trial"
+msgstr ""
+
+#: lite/gallery.php:741
+msgid "Unlock this template →"
+msgstr ""
+
+#: lite/gallery.php:766
+msgid "Choose a design"
+msgstr ""
+
+#: lite/gallery.php:766
+msgid "Icegram Engage design templates"
+msgstr ""
+
+#: lite/gallery.php:775
+msgid "Here's some gallery templates filtered out for you. Simply "
+msgstr ""
+
+#. translators: %1$s: "your goals", %2$s: "message type"
+#: lite/gallery.php:779
+#, php-format
+msgid "Filter out the templates based on %1$s and %2$s and then simply"
+msgstr ""
+
+#: lite/gallery.php:780
+msgid "your goals"
+msgstr ""
+
+#: lite/gallery.php:781
+msgid "message type"
+msgstr ""
+
+#. translators: %s: "Use This" link text
+#: lite/gallery.php:786
+#, php-format
+msgid " click to %s and the campaign will automatically appear in your Icegram Engage dashboard. No coding or special skills required."
+msgstr ""
+
+#: lite/gallery.php:787
+#: lite/gallery.php:933
+msgid "Use This"
+msgstr ""
+
+#: lite/gallery.php:853
+msgid "Any campaign"
+msgstr ""
+
+#: lite/gallery.php:869
+msgid "Filter Templates"
+msgstr ""
+
+#: lite/gallery.php:872
+msgid "Show All"
+msgstr ""
+
+#. translators: %s: Template ID
+#: lite/gallery.php:903
+#, php-format
+msgid "By %s"
+msgstr ""
+
+#: lite/gallery.php:930
+msgid "Close"
+msgstr ""
+
+#: lite/gallery.php:931
+msgctxt "Button label for a theme"
+msgid "Previous"
+msgstr ""
+
+#: lite/gallery.php:932
+msgctxt "Button label for a theme"
+msgid "Next"
+msgstr ""
+
+#: lite/gallery.php:936
+msgid "Get The Max Plan"
+msgstr ""
+
+#: lite/gallery.php:938
+msgid "Get The Pro Plan"
+msgstr ""
+
+#. translators: %s: Plugin author name
+#: lite/gallery.php:948
+#, php-format
+msgid "- By %s"
+msgstr ""
+
+#: lite/gallery.php:967
+msgid "Would you like to personalize this template to fit your brand?"
+msgstr ""
+
+#: lite/gallery.php:969
+msgid "Personalize It Now"
+msgstr ""
+
+#: lite/gallery.php:977
+msgid "This template is available in the 'Max Plan'"
+msgstr ""
+
+#: lite/gallery.php:979
+msgid "This template is available in the 'Pro Plan'"
+msgstr ""
+
+#: lite/gallery.php:983
+msgid "Collapse Sidebar"
+msgstr ""
+
+#: lite/gallery.php:985
+msgid "Collapse"
+msgstr ""
+
+#: lite/ig-dashboard.php:39
+msgid "Welcome your visitors with an exclusive offer"
+msgstr ""
+
+#: lite/ig-dashboard.php:45
+msgid "Get more followers for your lead magnet"
+msgstr ""
+
+#: lite/ig-dashboard.php:51
+msgid "Create an elegant subscription box"
+msgstr ""
+
+#: lite/ig-dashboard.php:57
+msgid "Lock your page with a gated-content optin"
+msgstr ""
+
+#: lite/ig-dashboard.php:99
+msgid "Active Campaigns"
+msgstr ""
+
+#: lite/ig-dashboard.php:110
+msgid "Last 60 days"
+msgstr ""
+
+#: lite/ig-dashboard.php:117
+msgid "Average conversion rate"
+msgstr ""
+
+#: lite/ig-dashboard.php:124
+msgid "Most conversion campaign"
+msgstr ""
+
+#: lite/ig-dashboard.php:134
+msgid "How To's"
+msgstr ""
+
+#: lite/ig-dashboard.php:176
+msgid "Add now"
+msgstr ""
+
+#: lite/ig-dashboard.php:190
+msgid "Marketing Tips & Updates"
+msgstr ""
+
+#: lite/ig-dashboard.php:204
+msgid "Recent Campaigns"
+msgstr ""
+
+#: lite/ig-dashboard.php:233
+#: max/classes/class-ig-split-testing.php:685
+#: plus/classes/class-ig-analytics.php:145
+msgid "Impressions"
+msgstr ""
+
+#: lite/ig-dashboard.php:241
+msgid "CTA Clicks"
+msgstr ""
+
+#: lite/ig-dashboard.php:250
+msgid "Conversion Rate"
+msgstr ""
+
+#: lite/notices/admin-trial-upsale-notices.php:36
+msgid "day"
+msgid_plural "days"
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: 1. Remaining trial days. 2. day or days text based on number of remaining trial days.
+#: lite/notices/admin-trial-upsale-notices.php:43
+#, php-format
+msgid "Your free trial is going to <strong>expire in %1$s %2$s</strong>."
+msgstr ""
+
+#: lite/notices/admin-trial-upsale-notices.php:45
+msgid "Today is the <strong>last day</strong> of your free trial."
+msgstr ""
+
+#. translators: 1. Discount % 2. Premium coupon code
+#: lite/notices/admin-trial-upsale-notices.php:50
+#, php-format
+msgid "Get flat %1$s discount if you upgrade now!<br/>Use coupon code %2$s during checkout."
+msgstr ""
+
+#: lite/notices/admin-trial-upsale-notices.php:52
+msgid "Upgrade now"
+msgstr ""
+
+#: lite/notices/admin-trial-upsale-notices.php:54
+msgid "No, it's ok"
+msgstr ""
+
+#. translators: 1. Trial expiration message. 2. Discount message.
+#: lite/notices/admin-trial-upsale-notices.php:63
+#, php-format
+msgid "Hi there,<br/>Hope you are enjoying <strong>Icegram</strong>.<br/>%1$s<br/>Upgrade now to continue using the trial template <br/>%2$s"
+msgstr ""
+
+#: lite/settings.php:26
+msgid "Icegram Engage Settings"
+msgstr ""
+
+#: lite/settings.php:30
+msgid "Share Icegram"
+msgstr ""
+
+#: lite/settings.php:34
+msgid "Show \"Powered by\" link"
+msgstr ""
+
+#: lite/settings.php:39
+msgid "Cache Friendly?"
+msgstr ""
+
+#: lite/settings.php:43
+msgid "Turn on \"Lazy Load\" - load Icegram scripts and messages after page load to avoid caching problems."
+msgstr ""
+
+#: lite/settings.php:52
+msgid "Plugin Usage Tracking"
+msgstr ""
+
+#: lite/settings.php:56
+msgid "Enable Tracking Usage - Help us to improve Icegram by opting in to share non-sensitive plugin usage data."
+msgstr ""
+
+#: max/classes/class-ig-animations-pack.php:51
+msgid "CTA"
+msgstr ""
+
+#: max/classes/class-ig-animations-pack.php:53
+msgid "Effects"
+msgstr ""
+
+#: max/classes/class-ig-behavior-rules.php:47
+msgid "After the visitor came from"
+msgstr ""
+
+#: max/classes/class-ig-remote.php:124
+msgid "Specific URLs from other sites"
+msgstr ""
+
+#: max/classes/class-ig-split-testing.php:274
+msgid "Show Stats"
+msgstr ""
+
+#: max/classes/class-ig-split-testing.php:300
+msgid "Click to "
+msgstr ""
+
+#: max/classes/class-ig-split-testing.php:306
+msgid "Add a new variation"
+msgstr ""
+
+#: max/classes/class-ig-split-testing.php:310
+msgid "Add Variation"
+msgstr ""
+
+#: max/classes/class-ig-split-testing.php:352
+#: max/classes/class-ig-split-testing.php:529
+msgid "Declare as the Winner"
+msgstr ""
+
+#: max/classes/class-ig-split-testing.php:578
+#: max/classes/class-ig-split-testing.php:611
+#: max/classes/class-ig-split-testing.php:632
+msgid "Variation Name"
+msgstr ""
+
+#: max/classes/class-ig-split-testing.php:684
+msgid "Variation"
+msgstr ""
+
+#: max/classes/class-ig-split-testing.php:686
+#: plus/classes/class-ig-analytics.php:149
+msgid "Conversions"
+msgstr ""
+
+#: max/classes/class-ig-split-testing.php:687
+msgid "Improvement"
+msgstr ""
+
+#: max/classes/class-ig-split-testing.php:724
+msgid "Significance: "
+msgstr ""
+
+#: max/message-types/interstitial/main.php:45
+msgid "Please wait for"
+msgstr ""
+
+#: max/message-types/interstitial/main.php:46
+msgid "Continue"
+msgstr ""
+
+#: max/message-types/interstitial/main.php:50
+msgid "\"Wait bar\" Title"
+msgstr ""
+
+#: max/message-types/interstitial/main.php:54
+msgid "Wait Time"
+msgstr ""
+
+#: max/message-types/interstitial/main.php:58
+msgid "5 seconds"
+msgstr ""
+
+#: max/message-types/interstitial/main.php:59
+msgid "10 seconds"
+msgstr ""
+
+#: max/message-types/interstitial/main.php:60
+msgid "20 seconds"
+msgstr ""
+
+#: max/message-types/interstitial/main.php:61
+msgid "25 seconds"
+msgstr ""
+
+#: max/message-types/interstitial/main.php:62
+msgid "30 seconds"
+msgstr ""
+
+#: max/message-types/interstitial/main.php:63
+msgid "40 seconds"
+msgstr ""
+
+#: max/message-types/interstitial/main.php:64
+msgid "45 seconds"
+msgstr ""
+
+#: max/message-types/interstitial/main.php:65
+msgid "50 seconds"
+msgstr ""
+
+#: max/message-types/interstitial/main.php:66
+msgid "1 minute"
+msgstr ""
+
+#: max/message-types/interstitial/main.php:67
+msgid "2 minutes"
+msgstr ""
+
+#: max/message-types/interstitial/main.php:68
+msgid "3 minutes"
+msgstr ""
+
+#: max/message-types/interstitial/main.php:69
+msgid "5 minutes"
+msgstr ""
+
+#: max/message-types/interstitial/main.php:79
+msgid "\"Wait for\" Countdown Message"
+msgstr ""
+
+#: max/message-types/interstitial/main.php:83
+msgid "\"Continue\" Button Label"
+msgstr ""
+
+#: max/message-types/interstitial/main.php:87
+msgid "Sticky?"
+msgstr ""
+
+#: max/message-types/interstitial/main.php:90
+msgid "User must wait till countdown finishes, and click \"Continue\" to proceed"
+msgstr ""
+
+#: max/message-types/overlay/main.php:50
+msgid "Capture complete attention with elegant full screen messages. Overlays show on top of page content and block it until closed. Yet they work extremely well."
+msgstr ""
+
+#: max/message-types/overlay/main.php:60
+msgid "Display As"
+msgstr ""
+
+#: max/message-types/overlay/main.php:61
+msgid " Welcome Overlay - Will appear as soon as the visitor lands on the page"
+msgstr ""
+
+#: max/message-types/sidebar/main.php:48
+msgid "Sliding sidebar panels on left or right of a page make clever use of screen space, catch a new design trend and give you ample room for message content. Proven to convert."
+msgstr ""
+
+#: max/message-types/tab/main.php:50
+msgid "Sliding tab panels on edges of a page are non-distractive and easy to reveal whenever user wants. Great for two step Call To Actions"
+msgstr ""
+
+#: plus/classes/class-ig-analytics.php:54
+msgid "Reports"
+msgstr ""
+
+#: plus/classes/class-ig-analytics.php:79
+msgid "<div class='ig_analytics_admin_notice ig_analytics_is-dismissible'>"
+msgstr ""
+
+#: plus/classes/class-ig-analytics.php:120
+#: plus/classes/class-ig-analytics.php:520
+msgid "No analytics data available."
+msgstr ""
+
+#: plus/classes/class-ig-analytics.php:153
+msgid "%&nbsp;Conversion"
+msgstr ""
+
+#: plus/classes/class-ig-analytics.php:156
+msgid "Reset Analytics Data"
+msgstr ""
+
+#: plus/classes/class-ig-analytics.php:707
+#: plus/classes/class-ig-analytics.php:716
+msgid "Quick Stats"
+msgstr ""
+
+#: pro/classes/class-ig-behavior-triggers.php:25
+msgid "Time On Page"
+msgstr ""
+
+#: pro/classes/class-ig-behavior-triggers.php:26
+msgid "Time On Site"
+msgstr ""
+
+#: pro/classes/class-ig-behavior-triggers.php:27
+msgid "Exit Intent"
+msgstr ""
+
+#: pro/classes/class-ig-behavior-triggers.php:28
+msgid "User Inactivity"
+msgstr ""
+
+#: pro/classes/class-ig-behavior-triggers.php:29
+msgid "Scroll Position"
+msgstr ""
+
+#: pro/classes/class-ig-behavior-triggers.php:30
+msgid "Using JavaScript"
+msgstr ""
+
+#: pro/classes/class-ig-behavior-triggers.php:34
+msgid "Button Click"
+msgstr ""
+
+#: pro/classes/class-ig-behavior-triggers.php:35
+msgid "Time Delay"
+msgstr ""
+
+#: pro/classes/class-ig-behavior-triggers.php:36
+msgid "Another Message"
+msgstr ""
+
+#: pro/classes/class-ig-behavior-triggers.php:109
+msgid "On Click"
+msgstr ""
+
+#: pro/classes/class-ig-behavior-triggers.php:112
+msgid "Middle"
+msgstr ""
+
+#: pro/classes/class-ig-behavior-triggers.php:121
+msgid "Show Trigger"
+msgstr ""
+
+#: pro/classes/class-ig-behavior-triggers.php:134
+msgid "seconds after page is loaded"
+msgstr ""
+
+#: pro/classes/class-ig-behavior-triggers.php:135
+msgid "seconds after user arrives on site, and thereafter"
+msgstr ""
+
+#: pro/classes/class-ig-behavior-triggers.php:138
+#, php-format
+msgid "For link, use <code class=\"select-all\">%s</code>"
+msgstr ""
+
+#: pro/classes/class-ig-behavior-triggers.php:142
+#, php-format
+msgid "For button, use <code class=\"select-all\">%s</code>"
+msgstr ""
+
+#: pro/classes/class-ig-behavior-triggers.php:146
+msgid "  User is about to leave the page"
+msgstr ""
+
+#: pro/classes/class-ig-behavior-triggers.php:147
+msgid "  After "
+msgstr ""
+
+#: pro/classes/class-ig-behavior-triggers.php:147
+msgid "seconds of inactivity"
+msgstr ""
+
+#: pro/classes/class-ig-behavior-triggers.php:148
+#, php-format
+msgid "Use <code>%s</code>"
+msgstr ""
+
+#: pro/classes/class-ig-behavior-triggers.php:149
+msgid "user scrolls to"
+msgstr ""
+
+#: pro/classes/class-ig-behavior-triggers.php:165
+msgid "Hide Trigger"
+msgstr ""
+
+#: pro/classes/class-ig-behavior-triggers.php:176
+msgid "User clicks close / call to action"
+msgstr ""
+
+#: pro/classes/class-ig-behavior-triggers.php:177
+msgid "seconds after this message is shown"
+msgstr ""
+
+#: pro/classes/class-ig-behavior-triggers.php:180
+msgid "of same type"
+msgstr ""
+
+#: pro/classes/class-ig-behavior-triggers.php:181
+msgid "of any type"
+msgstr ""
+
+#: pro/classes/class-ig-behavior-triggers.php:182
+msgid "is shown"
+msgstr ""
+
+#: pro/classes/class-ig-behavior-triggers.php:256
+msgid "Do not show on these URLs"
+msgstr ""
+
+#: pro/classes/class-ig-behavior-triggers.php:314
+msgid "Selected Post Types"
+msgstr ""
+
+#: pro/classes/class-ig-behavior-triggers.php:320
+msgid "Select post type to include"
+msgstr ""
+
+#: pro/classes/class-ig-behavior-triggers.php:391
+msgid "After visitor has viewed"
+msgstr ""
+
+#: pro/classes/class-ig-behavior-triggers.php:391
+msgid "pages in a session"
+msgstr ""
+
+#: pro/classes/class-ig-behavior-triggers.php:420
+msgid "once"
+msgstr ""
+
+#: pro/classes/class-ig-behavior-triggers.php:421
+msgid "twice"
+msgstr ""
+
+#: pro/classes/class-ig-behavior-triggers.php:422
+msgid "thrice"
+msgstr ""
+
+#: pro/classes/class-ig-behavior-triggers.php:423
+msgid "5 times"
+msgstr ""
+
+#: pro/classes/class-ig-behavior-triggers.php:424
+msgid "10 times"
+msgstr ""
+
+#: pro/classes/class-ig-behavior-triggers.php:431
+msgid " Show "
+msgstr ""
+
+#: pro/classes/class-ig-behavior-triggers.php:439
+msgid " then do NOT show for "
+msgstr ""
+
+#: pro/classes/class-ig-behavior-triggers.php:494
+msgid "Show between this time "
+msgstr ""
+
+#: pro/classes/class-ig-behavior-triggers.php:496
+msgid "to"
+msgstr ""
+
+#: pro/classes/class-ig-behavior-triggers.php:504
+msgid "Show on these days of the week "
+msgstr ""
+
+#: pro/classes/class-ig-behavior-triggers.php:521
+msgid "If you don't select any specific day(s), the campaign will show throughout the week"
+msgstr ""
+
+#: pro/classes/class-ig-content-locker.php:37
+msgid "Content Locker"
+msgstr ""
+
+#: pro/classes/class-ig-content-locker.php:47
+#, php-format
+msgid "Add <code>[%s]</code> shortcode where you want to show this message."
+msgstr ""
+
+#: pro/classes/class-ig-countdown-timer.php:43
+msgid "Enable Timer"
+msgstr ""
+
+#: pro/classes/class-ig-countdown-timer.php:50
+msgid "Start "
+msgstr ""
+
+#: pro/classes/class-ig-countdown-timer.php:68
+msgid "End "
+msgstr ""
+
+#: pro/classes/class-ig-countdown-timer.php:76
+#, php-format
+msgid "You can insert <code>[%s]</code> anywhere in the message body in order to show the timer."
+msgstr ""
+
+#: pro/classes/class-ig-countdown-timer.php:157
+msgid "None"
+msgstr ""
+
+#: pro/classes/class-ig-countdown-timer.php:158
+msgid "Square Background"
+msgstr ""
+
+#: pro/classes/class-ig-countdown-timer.php:159
+msgid "Dotted Borders"
+msgstr ""
+
+#: pro/classes/class-ig-countdown-timer.php:160
+msgid "Block"
+msgstr ""
+
+#: pro/classes/class-ig-countdown-timer.php:161
+msgid "Circle Background"
+msgstr ""
+
+#: pro/classes/class-ig-cta-actions.php:49
+msgid "Alternate CTA"
+msgstr ""
+
+#: pro/classes/class-ig-cta-actions.php:69
+#: pro/classes/class-ig-cta-actions.php:142
+msgid "Open a link"
+msgstr ""
+
+#: pro/classes/class-ig-cta-actions.php:70
+msgid "Submit the form"
+msgstr ""
+
+#: pro/classes/class-ig-cta-actions.php:71
+msgid "Submit the form via AJAX"
+msgstr ""
+
+#: pro/classes/class-ig-cta-actions.php:72
+msgid "Show another message"
+msgstr ""
+
+#: pro/classes/class-ig-cta-actions.php:73
+#: pro/classes/class-ig-cta-actions.php:141
+msgid "Hide this message"
+msgstr ""
+
+#: pro/classes/class-ig-cta-actions.php:83
+msgid "hide this message"
+msgstr ""
+
+#: pro/classes/class-ig-cta-actions.php:84
+msgid "redirect to a link"
+msgstr ""
+
+#: pro/classes/class-ig-cta-actions.php:85
+msgid "do nothing"
+msgstr ""
+
+#: pro/classes/class-ig-cta-actions.php:108
+#: pro/classes/class-ig-cta-actions.php:154
+msgid "Actions"
+msgstr ""
+
+#: pro/classes/class-ig-cta-actions.php:110
+#: pro/classes/class-ig-cta-actions.php:111
+#: pro/classes/class-ig-cta-actions.php:157
+msgid "in new tab"
+msgstr ""
+
+#: pro/classes/class-ig-cta-actions.php:113
+msgid " and on success "
+msgstr ""
+
+#: pro/classes/class-ig-cta-actions.php:115
+msgid " show response message"
+msgstr ""
+
+#: pro/classes/class-ig-cta-actions.php:117
+msgid "Add text/HTML to show as custom response message"
+msgstr ""
+
+#: pro/classes/class-ig-cta-actions.php:119
+msgid " and  "
+msgstr ""
+
+#: pro/classes/class-ig-cta-actions.php:123
+#: pro/classes/class-ig-cta-actions.php:124
+#: pro/classes/class-ig-cta-actions.php:161
+msgid "Enter link URL here"
+msgstr ""
+
+#: pro/classes/class-ig-cta-actions.php:166
+msgid "Your alternate call to action."
+msgstr ""
+
+#: pro/classes/class-ig-cta-actions.php:167
+msgid "Add Alternate/ Negative CTA as"
+msgstr ""
+
+#: pro/classes/class-ig-cta-actions.php:204
+msgid "Select a message &hellip;"
+msgstr ""
+
+#: pro/classes/class-ig-cta-actions.php:311
+msgid "Submission successful"
+msgstr ""
+
+#: pro/message-types/badge/main.php:50
+msgid "Badges and emblems are signs of progress, achievement and honor. They create authority and are visually attractive."
+msgstr ""
+
+#: pro/message-types/inline/main.php:51
+msgid "Before Header"
+msgstr ""
+
+#: pro/message-types/inline/main.php:52
+msgid "Before Page Content"
+msgstr ""
+
+#: pro/message-types/inline/main.php:53
+msgid "After Page Content"
+msgstr ""
+
+#: pro/message-types/inline/main.php:54
+msgid "Before Post Content"
+msgstr ""
+
+#: pro/message-types/inline/main.php:55
+msgid "After Post Content"
+msgstr ""
+
+#: pro/message-types/inline/main.php:56
+msgid "After Footer"
+msgstr ""
+
+#: pro/message-types/inline/main.php:58
+msgid "Anywhere, using Shortcode"
+msgstr ""
+
+#: pro/message-types/inline/main.php:205
+#, php-format
+msgid "Add <code>[%s]</code> where you want to show this message."
+msgstr ""
+
+#: pro/message-types/inline/main.php:250
+msgid "Inline messages feel part of your content and can be shown in header, footer or within page content. With a shortcode you can place them wherever you want. This increases conversion because messages don't feel like advertisements."
+msgstr ""
+
+#: pro/message-types/ribbon/main.php:51
+msgid "Add an air of celebration and community with ribbons. Show a small message in style!"
+msgstr ""
+
+#: pro/message-types/sticky/main.php:50
+msgid "Stick notes on pages. Different positions, themes and animations add more value to this unmissable message type."
+msgstr ""

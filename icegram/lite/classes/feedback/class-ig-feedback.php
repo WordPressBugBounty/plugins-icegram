@@ -4,21 +4,23 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
-if ( ! class_exists( 'IG_Feedback_V_1_2_8' ) ) {
+if ( ! class_exists( 'IG_Feedback_V_1_2_9' ) ) {
 	/**
 	 * IG Feedback
 	 *
 	 * The IG Feedback class adds functionality to get quick interactive feedback from users.
 	 * There are different types of feedabck widget like Stars, Emoji, Thubms Up/ Down, Number etc.
 	 *
-	 * @class       IG_Feedback_V_1_2_8
+	 * @class       IG_Feedback_V_1_2_9
 	 * @since       1.0.0
 	 * @copyright   Copyright (c) 2019, Icegram
 	 * @license     https://opensource.org/licenses/gpl-license GNU Public License
 
 	 * @package     feedback
 	 */
-	class IG_Feedback_V_1_2_8 {
+	
+	// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedClassFound
+	class IG_Feedback_V_1_2_9 {
 
 		/**
 		 * Version of Feedback Library
@@ -27,7 +29,7 @@ if ( ! class_exists( 'IG_Feedback_V_1_2_8' ) ) {
 		 * @var string
 
 		 */
-		public $version = '1.2.8';
+		public $version = '1.2.9';
 		/**
 		 * The API URL where we will send feedback data.
 		 *
@@ -131,6 +133,7 @@ if ( ! class_exists( 'IG_Feedback_V_1_2_8' ) ) {
 
 			if ( ! defined( 'DOING_AJAX' ) && is_admin() ) {
 
+		        // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.DynamicHooknameFound
 				$enable_review_notice = apply_filters( $this->plugin_abbr . '_enable_review_notice', true );
 
 				$can_ask_user_for_review = true;
@@ -190,6 +193,7 @@ if ( ! class_exists( 'IG_Feedback_V_1_2_8' ) ) {
 						'already_did_time_value' => $already_did_time_value,
 					);
 
+					// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.DynamicHooknameFound
 					$can_ask_user_for_review = apply_filters( $this->plugin_abbr . '_can_ask_user_for_review', $can_ask_user_for_review, $review_data );
 
 					if ( $can_ask_user_for_review ) {
@@ -237,6 +241,7 @@ if ( ! class_exists( 'IG_Feedback_V_1_2_8' ) ) {
 							$review_url = "https://wordpress.org/support/plugin/{$this->plugin}/reviews/";
 							$icon_url   = plugin_dir_url( __FILE__ ) . 'assets/images/icon-64.png';
 							/* translators: %s: Plugin name */
+							// phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText, WordPress.WP.I18n.NonSingularStringLiteralDomain
 							$message = __( sprintf( "<span><p>We hope you're enjoying <b>%s</b> plugin! Could you please do us a BIG favor and give us a 5-star rating on WordPress to help us spread the word and boost our motivation?</p>", $this->name ), $this->plugin );
 
 							$message_data = array(
@@ -245,6 +250,7 @@ if ( ! class_exists( 'IG_Feedback_V_1_2_8' ) ) {
 								'message'    => $message,
 							);
 
+							// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.DynamicHooknameFound
 							$message_data = apply_filters( $this->plugin_abbr . '_review_message_data', $message_data );
 
 							$message    = ! empty( $message_data['message'] ) ? $message_data['message'] : '';
@@ -294,8 +300,10 @@ if ( ! class_exists( 'IG_Feedback_V_1_2_8' ) ) {
 							echo wp_kses_post( $message );
 							echo "<ul class='ig-feedback-notice-links'>";
 							echo sprintf(
-								'<li><a href="%s" class="px-4 py-2 ml-6 mr-2 align-middle cursor-pointer button button-primary bg-indigo-600" target="_blank" data-rated="' . esc_attr__(
+							    '<li><a href="%s" class="px-4 py-2 ml-6 mr-2 align-middle cursor-pointer button button-primary bg-indigo-600" target="_blank" data-rated="' . 
+								esc_attr__( 
 									'Thank You :) ',
+									// phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralDomain
 									$this->plugin
 								) . '"><span class="dashicons dashicons-external"></span>&nbsp;&nbsp;Ok, you deserve it</a></li> <li><a href="%s"><span class="dashicons dashicons-calendar-alt"></span>&nbsp;&nbsp;Maybe later</a></li><li><a href="%s"><span class="dashicons dashicons-smiley"></span>&nbsp;&nbsp;I already did!</a></li><li><a href="%s"><span class="dashicons dashicons-no"></span>&nbsp;&nbsp;Don\'t ask me again</a></li>',
 								esc_url( $review_url ),
@@ -362,6 +370,7 @@ if ( ! class_exists( 'IG_Feedback_V_1_2_8' ) ) {
 		 */
 		public function enqueue_scripts() {
 
+			// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.DynamicHooknameFound
 			$can_load = apply_filters( $this->plugin_abbr . '_can_load_sweetalert_js', false );
 
 			if ( $can_load ) {
@@ -376,7 +385,7 @@ if ( ! class_exists( 'IG_Feedback_V_1_2_8' ) ) {
 		 */
 		public function enqueue_styles() {
 
-
+			// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.DynamicHooknameFound
 			$can_load = apply_filters( $this->plugin_abbr . '_can_load_sweetalert_css', false );
 
 			if ( $can_load ) {
@@ -545,7 +554,7 @@ if ( ! class_exists( 'IG_Feedback_V_1_2_8' ) ) {
 								Swal.fire({
 									type: 'success',
 									width: <?php echo esc_js( $params['width'] ); ?>,
-									title: '<?php echo esc_attr__( 'Thank You!', $this->plugin ); ?>',
+									title: '<?php echo esc_attr__( 'Thank You!', $this->plugin ); // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralDomain ?>',
 									showConfirmButton: false,
 									position: '<?php echo esc_js( $params['position'] ); ?>',
 									timer: 1500,
@@ -790,7 +799,7 @@ if ( ! class_exists( 'IG_Feedback_V_1_2_8' ) ) {
 								Swal.fire({
 									type: 'success',
 									width: <?php echo esc_js( $params['width'] ); ?>,
-									title: '<?php echo esc_attr__( 'Thank You!', $this->plugin ); ?>',
+									title: '<?php echo esc_attr__( 'Thank You!', $this->plugin ); // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralDomain ?>',
 									showConfirmButton: false,
 									position: '<?php echo esc_js( $params['position'] ); ?>',
 									timer: 1500,
@@ -997,7 +1006,7 @@ if ( ! class_exists( 'IG_Feedback_V_1_2_8' ) ) {
 										id="feedback_text"
 										name="feedback[feedback_text]"
 										class="form-textarea text-sm w-2/3 mt-3 mb-1 border-gray-400 w-3/5 hidden"
-										placeholder="<?php echo esc_attr__( 'Tell us more about your desired feature', $this->plugin ); ?>"></textarea>
+										placeholder="<?php echo esc_attr__( 'Tell us more about your desired feature', $this->plugin ); // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralDomain ?>"></textarea>
 								</div>
 								<?php
 							}
@@ -1009,7 +1018,7 @@ if ( ! class_exists( 'IG_Feedback_V_1_2_8' ) ) {
 						?>
 						<button type="submit" class="button">
 							<?php
-								echo esc_html__( 'Submit your feedback', $this->plugin );
+								echo esc_html__( 'Submit your feedback', $this->plugin ); // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralDomain
 							?>
 						</button>
 						<br/>
@@ -1141,14 +1150,14 @@ if ( ! class_exists( 'IG_Feedback_V_1_2_8' ) ) {
 						var request = doSend( form_data );
 						request.done(response => {
 							if (response.status && response.status === 'success') {
-								let success_text = '<?php echo esc_html__( 'Your feedback submitted successfully.', $this->plugin ); ?>';
+								let success_text = '<?php echo esc_html__( 'Your feedback submitted successfully.', $this->plugin ); // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralDomain ?>';
 								$('.ig-feedback-notice').html('<p>' + success_text + '</p>');
 							} else {
-								let error_text = '<?php echo esc_html__( 'An error has occured. Please try again.', $this->plugin ); ?>';
+								let error_text = '<?php echo esc_html__( 'An error has occured. Please try again.', $this->plugin ); // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralDomain ?>';
 								$('.ig-feedback-notice').removeClass('notice-success').addClass('notice-error').append('<p>' + error_text + '</p>');
 							}
 						}).fail( response => {
-							let error_text = '<?php echo esc_html__( 'An error has occured. Please try again.', $this->plugin ); ?>';
+							let error_text = '<?php echo esc_html__( 'An error has occured. Please try again.', $this->plugin ); // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralDomain ?>';
 									$('.ig-feedback-notice').removeClass('notice-success').addClass('notice-error').append('<p>' + error_text + '</p>');
 						});
 					});
@@ -1200,7 +1209,7 @@ if ( ! class_exists( 'IG_Feedback_V_1_2_8' ) ) {
 							var $overlay = $('#ig-general-feedback-<?php echo esc_js( $this->plugin ); ?>');
 							var $form = $overlay.find('form');
 							if ( ! jQuery($form)[0].checkValidity()) {
-								Swal.showValidationMessage('<?php echo esc_html__( 'Please select option', $this->plugin ); ?>');
+								Swal.showValidationMessage('<?php echo esc_html__( 'Please select option', $this->plugin ); // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralDomain ?>');
 								return;
 							}
 
@@ -1225,7 +1234,7 @@ if ( ! class_exists( 'IG_Feedback_V_1_2_8' ) ) {
 						Swal.fire({
 							type: 'success',
 							width: <?php echo esc_js( $params['width'] ); ?>,
-							title: '<?php echo esc_attr__( 'Thank You!', $this->plugin ); ?>',
+							title: '<?php echo esc_attr__( 'Thank You!', $this->plugin ); // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralDomain ?>',
 							showConfirmButton: false,
 							position: '<?php echo esc_js( $params['position'] ); ?>',
 							timer: 1500,
@@ -1359,7 +1368,7 @@ if ( ! class_exists( 'IG_Feedback_V_1_2_8' ) ) {
 						event.preventDefault();
 						loader(true);
 						if (!$form.find('input[type=radio]:checked').val()) {
-							$form.find('.ig-deactivate-survey-footer').prepend('<span class="error"><?php echo esc_js( __( 'Please select an option', $this->plugin ) ); ?></span>');
+							$form.find('.ig-deactivate-survey-footer').prepend('<span class="error"><?php echo esc_js( __( 'Please select an option', $this->plugin ) ); // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralDomain ?></span>');
 							return;
 						}
 
@@ -1555,34 +1564,37 @@ if ( ! class_exists( 'IG_Feedback_V_1_2_8' ) ) {
 
 			$options = array(
 				1 => array(
-					'title' => esc_html__( 'I no longer need the plugin', $this->plugin ),
+					'title' => esc_html__( 'I no longer need the plugin', $this->plugin ), // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralDomain
 					'slug'  => 'i-no-longer-need-the-plugin',
 				),
 				2 => array(
-					'title'   => esc_html__( 'I\'m switching to a different plugin', $this->plugin ),
+					'title'   => esc_html__( 'I\'m switching to a different plugin', $this->plugin ), // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralDomain
 					'slug'    => 'i-am-switching-to-a-different-plugin',
-					'details' => esc_html__( 'Please share which plugin', $this->plugin ),
+					'details' => esc_html__( 'Please share which plugin', $this->plugin ), // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralDomain
 				),
 				3 => array(
-					'title' => esc_html__( 'I couldn\'t get the plugin to work', $this->plugin ),
+					'title' => esc_html__( 'I couldn\'t get the plugin to work', $this->plugin ), // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralDomain
 					'slug'  => 'i-could-not-get-the-plugin-to-work',
 				),
 				4 => array(
-					'title' => esc_html__( 'It\'s a temporary deactivation', $this->plugin ),
+					'title' => esc_html__( 'It\'s a temporary deactivation', $this->plugin ), // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralDomain
 					'slug'  => 'it-is-a-temporary-deactivation',
 				),
 				5 => array(
-					'title'   => esc_html__( 'Other', $this->plugin ),
+					'title'   => esc_html__( 'Other', $this->plugin ), // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralDomain
 					'slug'    => 'other',
-					'details' => esc_html__( 'Please share the reason', $this->plugin ),
+					'details' => esc_html__( 'Please share the reason', $this->plugin ), // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralDomain
 				),
 			);
 			?>
 			<div class="ig-deactivate-survey-modal" id="ig-deactivate-survey-<?php echo esc_js( $this->plugin ); ?>">
 				<div class="ig-deactivate-survey-wrap">
 					<form class="ig-deactivate-survey" method="post">
-						<span class="ig-deactivate-survey-title"><span class="dashicons dashicons-testimonial"></span><?php echo ' ' . esc_html__( 'Quick Feedback', $this->plugin ); ?></span>
-						<span class="ig-deactivate-survey-desc"><?php echo esc_html__( sprintf( 'If you have a moment, please share why you are deactivating %s:', $this->name ), $this->plugin ); ?></span>
+						<span class="ig-deactivate-survey-title"><span class="dashicons dashicons-testimonial"></span><?php echo ' ' . esc_html__( 'Quick Feedback', $this->plugin ); // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralDomain ?></span>
+						<span class="ig-deactivate-survey-desc"><?php 
+							// phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText, WordPress.WP.I18n.NonSingularStringLiteralDomain
+							echo esc_html__( sprintf( 'If you have a moment, please share why you are deactivating %s:', $this->name ), $this->plugin ); ?>
+						</span>
 						<div class="ig-deactivate-survey-options">
 							<?php foreach ( $options as $id => $option ) : ?>
 								<div class="ig-deactivate-survey-option">
@@ -1597,7 +1609,10 @@ if ( ! class_exists( 'IG_Feedback_V_1_2_8' ) ) {
 							<?php endforeach; ?>
 						</div>
 						<div class="ig-deactivate-survey-help-consent">
-							<input id="ig-deactivate-survey-help-consent-<?php echo esc_attr( $this->plugin ); ?>" class="ig-deactivate-survey-option-input" type="checkbox" name="code" data-option-slug="<?php echo esc_attr( $option['slug'] ); ?>"/><b><?php echo esc_html__( 'Yes, I give my consent to track plugin usage and contact me back to make this plugin works!', $this->plugin ); ?></b>
+							<input id="ig-deactivate-survey-help-consent-<?php 
+							// phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralDomain
+							echo esc_attr( $this->plugin ); ?>" 
+							class="ig-deactivate-survey-option-input" type="checkbox" name="code" data-option-slug="<?php echo esc_attr( $option['slug'] ); ?>"/><b><?php echo esc_html__( 'Yes, I give my consent to track plugin usage and contact me back to make this plugin works!', $this->plugin ); // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralDomain ?></b>
 						</div>
 						<div class="ig-deactivate-survey-info-data">
 
@@ -1605,9 +1620,19 @@ if ( ! class_exists( 'IG_Feedback_V_1_2_8' ) ) {
 							<input type="text" class="ig-deactivate-survey-info-email-address" id="ig-deactivate-survey-info-email-address" name="ig-deactivate-survey-info-email-address" value="<?php echo esc_js( $email ); ?>"/>
 						</div>
 						<div class="ig-deactivate-survey-footer">
-							<button type="submit" class="ig-deactivate-survey-submit button button-primary button-large"><?php echo sprintf( esc_html__( 'Submit %s Deactivate', $this->plugin ), '&amp;' ); ?></button>
+							<button type="submit" class="ig-deactivate-survey-submit button button-primary button-large">
+								<?php 
+								/* translators: %s: Ampersand symbol */
+								echo sprintf( esc_html__( 'Submit %s Deactivate', $this->plugin ), '&amp;' ); // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralDomain
+								?>
+							</button>
 							<img class="ig-deactivate-survey-loader" id="ig-deactivate-survey-loader" src="<?php echo esc_url( plugin_dir_url( __FILE__ ) ); ?>/assets/images/loading.gif"/>
-							<a href="#" class="ig-deactivate-survey-deactivate"><?php echo sprintf( esc_html__( 'Skip %s Deactivate', $this->plugin ), '&amp;' ); ?></a>
+						    <a href="#" class="ig-deactivate-survey-deactivate">
+								<?php 
+								/* translators: %s: Ampersand symbol */
+								echo sprintf( esc_html__( 'Skip %s Deactivate', $this->plugin ), '&amp;' ); // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralDomain 
+								?>
+							</a>
 						</div>
 					</form>
 				</div>
@@ -1883,6 +1908,8 @@ if ( ! class_exists( 'IG_Feedback_V_1_2_8' ) ) {
 			$meta_info = wp_parse_args( $meta_info, $default_meta_info );
 
 			$additional_info = array();
+
+			// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.DynamicHooknameFound
 			$additional_info = apply_filters( $plugin_abbr . '_additional_feedback_meta_info', $additional_info, $system_info ); // Get Additional meta information
 
 			if ( is_array( $additional_info ) && count( $additional_info ) > 0 ) {
@@ -1924,6 +1951,7 @@ if ( ! class_exists( 'IG_Feedback_V_1_2_8' ) ) {
 		 * @return array $ig_es_escape_allowed_tags
 		 */
 		public function get_escape_allowed_tags() {
+			// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.DynamicHooknameFound
 			$ig_escape_allowed_tags = apply_filters( $this->plugin_abbr . '_escape_allowed_tags', array() );
 			return $ig_escape_allowed_tags;
 		}

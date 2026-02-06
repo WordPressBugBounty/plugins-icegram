@@ -1,3 +1,8 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+ ?>
 <style type="text/css">
 	.ig-gallery-wrap .theme-browser .theme{
 		border-radius: 5px;
@@ -373,7 +378,7 @@
 		<?php 
 		global $icegram;
 
-		$campaign_types = array(
+		$icegram_campaign_types = array(
 			'popup' 	  => array(
 				'term-id' 	=> 25,
 				'category'  => 'message-type',
@@ -464,9 +469,9 @@
 			),
 		);
 
-		$campaign_types = apply_filters( 'ig_get_widget_message_types' , $campaign_types );
+		$icegram_campaign_types = apply_filters( 'icegram_get_widget_message_types' , $icegram_campaign_types );
 
-		$onboarding_campaign_goal = array(
+		$icegram_onboarding_campaign_goal = array(
 			'newsletter' => array(
 				'term-id' 	=> 55,
 				'category'  => 'use-case',
@@ -534,229 +539,231 @@
 			),
 		);
 
-		$campaign_goal = array_merge( array(
+		$icegram_campaign_goal = array_merge( array(
 		  	'lock_content' => array(
 				'term-id' 	=> 65,
 				'category'  => 'use-case',
 				'title'   	=> __('Lock your content', 'icegram'),
 			),
-		), $onboarding_campaign_goal);
+		), $icegram_onboarding_campaign_goal);
 		
-		$show_onboarding = $icegram->show_campaign_creation_guide();
+		$icegram_show_onboarding = $icegram->show_campaign_creation_guide();
 
-		if ( $show_onboarding ) {
+		if ( $icegram_show_onboarding ) {
 
 			// Import data if not done already
 			if ( false === get_option( 'icegram_sample_data_imported' ) ) {
 				$icegram->import_sample_data( $icegram->get_sample_data() );
 			}
-		?>
+			?>
 	
-	<div class="select-item icegram_tw">
-		<div class="mx-auto mt-6 sm:mt-5 ig-logo">
-			<img src="<?php echo esc_url( IG_PLUGIN_URL . 'lite/assets/images/icegram_logo.svg' ); ?>" class="mx-auto h-6 border-0" alt="Icegram" />
-		</div>
-
-		<div id="slider-wrapper" class="font-sans">
-			<div id="slider">
-				<div class="ig-onboarding-campaign-goal" style="">
-					<section class="mx-auto my-6 sm:my-7">
-						<div class="w-full h-full overflow-hidden bg-white lg:flex md:rounded-lg md:shadow-xl md:mx-auto lg:max-w-3xl xl:max-w-4xl">
-							<div class="flex-1 ">
-								<div class="p-5 md:px-8 md:py-5">
-									<h3	class="text-center mb-1 text-2xl font-bold leading-snug text-gray-800">
-										<?php echo esc_html__( 'Goal for this campaign', 'icegram' ); ?>
-									</h3>
-									<p class="text-center title-font text-base text-gray-800 mb-3"><?php echo esc_html__( 'What should this campaign help you achieve? Please select a primary goal or more', 'icegram' ); ?></p>
-									<div class="select-item py-2">
-										<div class="inline-block p-2 overflow-hidden text-left align-bottom sm:w-full">
-											<div class="container px-5 py-2 mx-auto ig-section-sub">
-												<div class="flex flex-wrap -m-4">
-													<?php
-													foreach ($onboarding_campaign_goal as $goal) {
-														$bg_css = isset( $goal['allow-multiple-goal'] ) && 'no' === $goal['allow-multiple-goal']  ? 'bg-teal-50 single-goal' : '';
-														?>
-														<div class="xl:w-1/3 md:w-1/2 p-4 h-full ig-select-sub ">
-															<label class="cursor-pointer hover:shadow-lg hover:border-transparent">
-																<input type="checkbox" name="ig-campaign-goal" class="absolute w-0 h-0 opacity-0" category="usecase" usecase="<?php echo esc_attr( $goal['term-id'] ) ?>" value="<?php echo esc_html( $goal['title'] ) ?>" <?php echo isset( $goal['checked'] ) ? 'checked' : '' ?> allow-multiple-goal="<?php echo isset( $goal['allow-multiple-goal'] ) ? esc_html( $goal['allow-multiple-goal'] ) : 'yes' ?>" >
-
-																<div class="border border-gray-200 p-4 rounded-lg ig-sub-selection-goal <?php echo esc_html($bg_css) ?>">
-																	<p>
-																		<svg id="usecase_<?php echo esc_attr( $goal['term-id'] ) ?>" class="selected_goals hidden float-right h-6 w-6 text-indigo-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-																		  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-																		</svg>
-																	</p>
-																	<div class="w-8 h-8 inline-flex items-center justify-center rounded-full bg-purple-100 text-purple-500 mb-4">
-																		<?php echo $goal['icon']; 
-																		?>
-																	</div>
-																	<p class="text-lg text-gray-900 font-medium title-font inline break-words relative bottom-1"><?php echo esc_html( $goal['title'] ) ?></p>
-																	<p class="leading-relaxed text-base"><?php echo esc_html( $goal['desc'] ) ?></p>
-																</div>
-															</label>
-														</div>
-														<?php
-													}
-													?>
-												</div>
-											</div>
-										</div>
-
-									</div>										
-								</div>
-								<div class="px-4 py-3 text-right bg-gray-50 md:px-8 -mt-5">
-									<button
-									type="button" id="ig-select-goal" class="relative inline-flex items-center px-2 py-1 text-base font-medium leading-5 text-white bg-indigo-800 border border-transparent rounded-md hover:bg-indigo-600 focus:outline-none focus:shadow-outline">
-									<?php echo esc_html__( 'Continue →', 'icegram' ); ?>
-								</button>
-							</div>
-						</div>
-					</section>
+			<div class="select-item icegram_tw">
+				<div class="mx-auto mt-6 sm:mt-5 ig-logo">
+					<img src="<?php echo esc_url( IG_PLUGIN_URL . 'lite/assets/images/icegram_logo.svg' ); ?>" class="mx-auto h-6 border-0" alt="Icegram" />
 				</div>
-				<div class="ig-onboarding-campaign-type" style="display: none">
-					<section class="mx-auto my-6 sm:my-7">
-						<div class="w-full h-full overflow-hidden bg-white lg:flex md:rounded-lg md:shadow-xl md:mx-auto lg:max-w-3xl xl:max-w-4xl">
-							<div class="flex-1">
-								<div class="p-5 md:px-8 md:py-5">
-									<h3 class=" text-center mb-2 text-2xl font-bold leading-snug text-gray-800 sm:text-3xl">
-										<?php echo esc_html__( 'Message placement', 'icegram' ); ?>
-									</h3>
-									<p class="px-5 text-center title-font text-base text-gray-800 mb-3"><?php echo esc_html__( 'What message types would you like to use in this campaign? Select all that you like - or just continue without selecting if you’re not sure.', 'icegram' ); ?></p>
-									<div class="select-item py-2">
-										<div class="inline-block p-2 overflow-hidden text-left align-bottom sm:w-full">
-											<div class="container px-5 py-2 mx-auto">
-												<ul role="list" class="grid gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8">
-													<?php
-													foreach ($campaign_types as $campaign_type) {
-														?>
-														<li class="relative cursor-pointer radio-select ig-selection-section" >
-															<label class="inline items-center cursor-pointer">
-																<input type="checkbox" name="ig-campaign-type" class="absolute w-0 h-0 opacity-0" category="message-type" message-type="<?php echo esc_attr( $campaign_type['term-id']) ?>" value="<?php echo esc_html( $campaign_type['title'] ) ?>">
-																<div class="ig-select-campaign-type text-center border border-gray-100 rounded-lg px-4 py-2">
-																	<p class="h-6">
-																		<svg id="message-type_<?php echo esc_attr( $campaign_type['term-id'] ) ?>" class="hidden float-right h-6 w-6 text-indigo-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-																		  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-																		</svg>
-																	</p>
-																	<div class="group w-full aspect-w-10 aspect-h-7 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-offset-gray-100 focus-within:ring-indigo-500 overflow-hidden">
 
-																		<img src="<?php echo esc_url( IG_PLUGIN_URL . $campaign_type['img-path'] ); ?>" alt="" class="w-full pointer-events-none">
-
-																	</div>
-																	<?php
-																	if( ( $icegram->is_pro() && ! $icegram->is_max() && 'max' === $campaign_type['plan'] ) || ( ! $icegram->is_premium() && in_array( $campaign_type['plan'], array('max', 'pro') ) ) ) {
-
-																		?>
-																		<span class="float-right border border-blue rounded py-0.5 px-2 bg-blue-700 text-white -ml-12 -mr-1"><?php echo esc_html( ucfirst( $campaign_type['plan'] ) ); ?></span>
-																		<?php
-																	}
-																	?>
-																	<span class="text-center block text-sm font-medium text-gray-900 truncate pointer-events-none"><?php echo esc_html( $campaign_type['title']) ?></span>
-																</div>
-															</label>
-														</li>
-														<?php
-													}
-													?>
-												</ul>
-											</div>
-										</div>
-									</div>
-
-								</div>
-								<div class="px-4 py-3 text-right bg-gray-50 md:px-8">
-									<button type="button" id="ig-message-type" class="ig-message-type-select relative inline-flex items-center px-3 py-1 text-base font-medium leading-5 text-white bg-indigo-800 border border-transparent rounded-md hover:bg-indigo-600 focus:outline-none focus:shadow-outline">
-										<?php echo esc_html__( 'Continue →', 'icegram' ); ?>
-									</button>
-								</div>
-							</div>
-						</div>
-					</section>
-				</div>
-				<?php
-				$current_user   = wp_get_current_user();
-				$customer_email = $current_user->user_email;	
-				if( ! $icegram->is_premium() && ! get_option('ig_opted_trial') ){
-				?>
-				<div class="ig-onboarding-campaign-trial" style="display: none">
-					<section class="mx-auto my-6 sm:my-7">
-						<div class="w-full h-full overflow-hidden bg-white lg:flex md:rounded-lg md:shadow-xl md:mx-auto lg:max-w-3xl xl:max-w-4xl">
-							<form method="get" name="ig_trial_subscription" id="ig-subscription-form">
-								<div class="flex-1">
-									<div class="p-5 md:px-8 md:py-5">
-										<h3 class="text-center mb-1 text-2xl font-bold leading-snug text-gray-800">
-											<?php echo esc_html__( 'Start your trial today!', 'icegram' ); ?>
-										</h3>
-										<p class="text-center title-font text-base text-gray-800 mb-3"><?php echo sprintf( esc_html__( 'Get 14 days trial and try %s premium Icegram template for free: No obligation!', 'icegram'), '<strong>one</strong>'  ); ?></p>
-										<div class="select-item px-5 py-2 title-font text-gray-700 mb-3">
-											<p class="text-base font-medium mt-5 mb-2"><?php echo esc_html__('Sign up for free trial, pick a template and click on unlock', 'icegram') ?>
-												
-											</p>
-											
-											<input type="hidden"  id="sign-up-list" name="list" value="afab885c7e85"/>
-										    <input type="hidden" id="sign-up-form-source" name="form-source" value=""/>
-											<input class="ltr form-input py-1" type="text" name="ig_trial_name" id="ig-sign-up-name" placeholder="Name"/>
-					                        <input class="regular-text ltr form-input py-1 ml-1" type="text" name="ig_trial_email" id="ig-sign-up-email" placeholder="Email" value="<?php echo $customer_email ?>"/>
-
-					                        <br><br>
-											<div class="select-item py-2 ig-trial-templates">
-												<div class="inline-block py-2 text-left align-bottom sm:w-full">
-													<p class="text-base font-medium mt-2 mb-1"><?php echo esc_html__('Choose a template','icegram') ?></p>
-													<div class="container py-2 mx-auto">
-														<ul role="list" class="grid gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-6 lg:grid-cols-3 xl:gap-x-6">
-														<?php
-															$templates =  json_decode( $ig_gallery_items, true );
-															foreach ($templates as $template => $data) {
-																if( 99 == $data['plan'] ) {
+				<div id="slider-wrapper" class="font-sans">
+					<div id="slider">
+						<div class="ig-onboarding-campaign-goal" style="">
+							<section class="mx-auto my-6 sm:my-7">
+								<div class="w-full h-full overflow-hidden bg-white lg:flex md:rounded-lg md:shadow-xl md:mx-auto lg:max-w-3xl xl:max-w-4xl">
+									<div class="flex-1 ">
+										<div class="p-5 md:px-8 md:py-5">
+											<h3	class="text-center mb-1 text-2xl font-bold leading-snug text-gray-800">
+												<?php echo esc_html__( 'Goal for this campaign', 'icegram' ); ?>
+											</h3>
+											<p class="text-center title-font text-base text-gray-800 mb-3"><?php echo esc_html__( 'What should this campaign help you achieve? Please select a primary goal or more', 'icegram' ); ?></p>
+											<div class="select-item py-2">
+												<div class="inline-block p-2 overflow-hidden text-left align-bottom sm:w-full">
+													<div class="container px-5 py-2 mx-auto ig-section-sub">
+														<div class="flex flex-wrap -m-4">
+															<?php
+															foreach ($onboarding_campaign_goal as $icegram_goal) {
+																$icegram_bg_css = isset( $icegram_goal['allow-multiple-goal'] ) && 'no' === $icegram_goal['allow-multiple-goal']  ? 'bg-teal-50 single-goal' : '';
 																?>
-																<li class="relative cursor-pointer">
+																<div class="xl:w-1/3 md:w-1/2 p-4 h-full ig-select-sub ">
+																	<label class="cursor-pointer hover:shadow-lg hover:border-transparent">
+																		<input type="checkbox" name="ig-campaign-goal" class="absolute w-0 h-0 opacity-0" category="usecase" usecase="<?php echo esc_attr( $icegram_goal['term-id'] ) ?>" value="<?php echo esc_html( $icegram_goal['title'] ) ?>" <?php echo isset( $icegram_goal['checked'] ) ? 'checked' : '' ?> allow-multiple-goal="<?php echo isset( $icegram_goal['allow-multiple-goal'] ) ? esc_html( $icegram_goal['allow-multiple-goal'] ) : 'yes' ?>" >
+
+																		<div class="border border-gray-200 p-4 rounded-lg ig-sub-selection-goal <?php echo esc_html($icegram_bg_css) ?>">
+																			<p>
+																				<svg id="usecase_<?php echo esc_attr( $icegram_goal['term-id'] ) ?>" class="selected_goals hidden float-right h-6 w-6 text-indigo-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+																				<path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+																				</svg>
+																			</p>
+																			<div class="w-8 h-8 inline-flex items-center justify-center rounded-full bg-purple-100 text-purple-500 mb-4">
+																				<?php echo esc_html( $icegram_goal['icon'] ); 
+																				?>
+																			</div>
+																			<p class="text-lg text-gray-900 font-medium title-font inline break-words relative bottom-1"><?php echo esc_html( $icegram_goal['title'] ) ?></p>
+																			<p class="leading-relaxed text-base"><?php echo esc_html( $icegram_goal['desc'] ) ?></p>
+																		</div>
+																	</label>
+																</div>
+																<?php
+															}
+															?>
+														</div>
+													</div>
+												</div>
+
+											</div>										
+										</div>
+										<div class="px-4 py-3 text-right bg-gray-50 md:px-8 -mt-5">
+											<button
+											type="button" id="ig-select-goal" class="relative inline-flex items-center px-2 py-1 text-base font-medium leading-5 text-white bg-indigo-800 border border-transparent rounded-md hover:bg-indigo-600 focus:outline-none focus:shadow-outline">
+											<?php echo esc_html__( 'Continue →', 'icegram' ); ?>
+										</button>
+									</div>
+								</div>
+							</section>
+						</div>
+						<div class="ig-onboarding-campaign-type" style="display: none">
+							<section class="mx-auto my-6 sm:my-7">
+								<div class="w-full h-full overflow-hidden bg-white lg:flex md:rounded-lg md:shadow-xl md:mx-auto lg:max-w-3xl xl:max-w-4xl">
+									<div class="flex-1">
+										<div class="p-5 md:px-8 md:py-5">
+											<h3 class=" text-center mb-2 text-2xl font-bold leading-snug text-gray-800 sm:text-3xl">
+												<?php echo esc_html__( 'Message placement', 'icegram' ); ?>
+											</h3>
+											<p class="px-5 text-center title-font text-base text-gray-800 mb-3"><?php echo esc_html__( 'What message types would you like to use in this campaign? Select all that you like - or just continue without selecting if you’re not sure.', 'icegram' ); ?></p>
+											<div class="select-item py-2">
+												<div class="inline-block p-2 overflow-hidden text-left align-bottom sm:w-full">
+													<div class="container px-5 py-2 mx-auto">
+														<ul role="list" class="grid gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8">
+															<?php
+															foreach ($icegram_campaign_types as $icegram_campaign_type) {
+																?>
+																<li class="relative cursor-pointer radio-select ig-selection-section" >
 																	<label class="inline items-center cursor-pointer">
-																		<input type="radio" name="ig-select-trial-template" class="absolute w-0 h-0 opacity-0" data-campaign-id="<?php echo $data['campaign_id'] ?>" data-gallery-item="<?php echo $data['slug'] ?>">
-																		<div class="ig-select-trial-template text-center border border-gray-100 rounded-lg">
-																			<img src="<?php echo $data['image']['guid']; ?>" alt="" class="rounded-lg w-full">
-																			
+																		<input type="checkbox" name="ig-campaign-type" class="absolute w-0 h-0 opacity-0" category="message-type" message-type="<?php echo esc_attr( $icegram_campaign_type['term-id']) ?>" value="<?php echo esc_html( $icegram_campaign_type['title'] ) ?>">
+																		<div class="ig-select-campaign-type text-center border border-gray-100 rounded-lg px-4 py-2">
+																			<p class="h-6">
+																				<svg id="message-type_<?php echo esc_attr( $icegram_campaign_type['term-id'] ) ?>" class="hidden float-right h-6 w-6 text-indigo-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+																				<path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+																				</svg>
+																			</p>
+																			<div class="group w-full aspect-w-10 aspect-h-7 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-offset-gray-100 focus-within:ring-indigo-500 overflow-hidden">
+
+																				<img src="<?php echo esc_url( IG_PLUGIN_URL . $icegram_campaign_type['img-path'] ); ?>" alt="" class="w-full pointer-events-none">
+
+																			</div>
+																			<?php
+																			if( ( $icegram->is_pro() && ! $icegram->is_max() && 'max' === $icegram_campaign_type['plan'] ) || ( ! $icegram->is_premium() && in_array( $icegram_campaign_type['plan'], array('max', 'pro') ) ) ) {
+
+																				?>
+																				<span class="float-right border border-blue rounded py-0.5 px-2 bg-blue-700 text-white -ml-12 -mr-1"><?php echo esc_html( ucfirst( $icegram_campaign_type['plan'] ) ); ?></span>
+																				<?php
+																			}
+																			?>
+																			<span class="text-center block text-sm font-medium text-gray-900 truncate pointer-events-none"><?php echo esc_html( $icegram_campaign_type['title']) ?></span>
 																		</div>
 																	</label>
 																</li>
 																<?php
-																}
 															}
 															?>
 														</ul>
 													</div>
 												</div>
 											</div>
+
+										</div>
+										<div class="px-4 py-3 text-right bg-gray-50 md:px-8">
+											<button type="button" id="ig-message-type" class="ig-message-type-select relative inline-flex items-center px-3 py-1 text-base font-medium leading-5 text-white bg-indigo-800 border border-transparent rounded-md hover:bg-indigo-600 focus:outline-none focus:shadow-outline">
+												<?php echo esc_html__( 'Continue →', 'icegram' ); ?>
+											</button>
 										</div>
 									</div>
-									<div class="px-4 py-3 text-right bg-gray-50 md:px-8 -mt-5">
-										<a href="#" id="ig-onboarding-gallery" class="px-4 hover:underline text-gray-400"><?php echo esc_html__( 'Skip Trial', 'icegram' ); ?></a>
-										<a id="ig-trial-optin" href="?action=fetch_messages&campaign_id=&gallery_item=&ig_trial=1" class=" p-1.5 mb-1 px-3 py-1 text-base font-medium leading-5 text-white bg-indigo-800 border border-transparent rounded-md hover:bg-indigo-600 focus:outline-none focus:shadow-outline theme-install">
-										<?php echo esc_html__( 'Unlock this template →', 'icegram' ); ?>
-										<svg style="display: none;" class="ig-spinner inline-block animate-spin mx-1 mb-1 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-      </svg>
-										    
-										</a>
-									</div>
 								</div>
-							</form>
+							</section>
 						</div>
-					</section>
+						<?php
+						$current_user   = wp_get_current_user();
+						$icegram_customer_email = $current_user->user_email;	
+						if( ! $icegram->is_premium() && ! get_option('ig_opted_trial') ){
+							?>
+							<div class="ig-onboarding-campaign-trial" style="display: none">
+								<section class="mx-auto my-6 sm:my-7">
+									<div class="w-full h-full overflow-hidden bg-white lg:flex md:rounded-lg md:shadow-xl md:mx-auto lg:max-w-3xl xl:max-w-4xl">
+										<form method="get" name="ig_trial_subscription" id="ig-subscription-form">
+											<div class="flex-1">
+												<div class="p-5 md:px-8 md:py-5">
+													<h3 class="text-center mb-1 text-2xl font-bold leading-snug text-gray-800">
+														<?php echo esc_html__( 'Start your trial today!', 'icegram' ); ?>
+													</h3>
+													<p class="text-center title-font text-base text-gray-800 mb-3"><?php 
+													/* translators: %s: Template name in HTML <strong> tag */
+													echo sprintf( esc_html__( 'Get 14 days trial and try %s premium Icegram template for free: No obligation!', 'icegram'), '<strong>one</strong>'  ); ?></p>
+													<div class="select-item px-5 py-2 title-font text-gray-700 mb-3">
+														<p class="text-base font-medium mt-5 mb-2"><?php echo esc_html__('Sign up for free trial, pick a template and click on unlock', 'icegram') ?>
+															
+														</p>
+														
+														<input type="hidden"  id="sign-up-list" name="list" value="afab885c7e85"/>
+														<input type="hidden" id="sign-up-form-source" name="form-source" value=""/>
+														<input class="ltr form-input py-1" type="text" name="ig_trial_name" id="ig-sign-up-name" placeholder="Name"/>
+														<input class="regular-text ltr form-input py-1 ml-1" type="text" name="ig_trial_email" id="ig-sign-up-email" placeholder="Email" value="<?php echo esc_attr( $icegram_customer_email ); ?>"/>
+
+														<br><br>
+														<div class="select-item py-2 ig-trial-templates">
+															<div class="inline-block py-2 text-left align-bottom sm:w-full">
+																<p class="text-base font-medium mt-2 mb-1"><?php echo esc_html__('Choose a template','icegram') ?></p>
+																<div class="container py-2 mx-auto">
+																	<ul role="list" class="grid gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-6 lg:grid-cols-3 xl:gap-x-6">
+																	<?php
+																		$icegram_templates =  json_decode( $ig_gallery_items, true );
+																		foreach ($icegram_templates as $icegram_template => $icegram_data) {
+																			if( 99 == $icegram_data['plan'] ) {
+																			?>
+																			<li class="relative cursor-pointer">
+																				<label class="inline items-center cursor-pointer">
+																					<input type="radio" name="ig-select-trial-template" class="absolute w-0 h-0 opacity-0" data-campaign-id="<?php echo esc_attr( $icegram_data['campaign_id'] ); ?>" data-gallery-item="<?php echo esc_attr( $icegram_data['slug'] ); ?>">
+																					<div class="ig-select-trial-template text-center border border-gray-100 rounded-lg">
+																						<img src="<?php echo esc_url( $icegram_data['image']['guid'] ); ?>" alt="" class="rounded-lg w-full">
+																						
+																					</div>
+																				</label>
+																			</li>
+																			<?php
+																			}
+																		}
+																		?>
+																	</ul>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="px-4 py-3 text-right bg-gray-50 md:px-8 -mt-5">
+													<a href="#" id="ig-onboarding-gallery" class="px-4 hover:underline text-gray-400"><?php echo esc_html__( 'Skip Trial', 'icegram' ); ?></a>
+													<a id="ig-trial-optin" href="?action=fetch_messages&campaign_id=&gallery_item=&ig_trial=1" class=" p-1.5 mb-1 px-3 py-1 text-base font-medium leading-5 text-white bg-indigo-800 border border-transparent rounded-md hover:bg-indigo-600 focus:outline-none focus:shadow-outline theme-install">
+													<?php echo esc_html__( 'Unlock this template →', 'icegram' ); ?>
+														<svg style="display: none;" class="ig-spinner inline-block animate-spin mx-1 mb-1 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+														<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+														<path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+														</svg>
+														
+													</a>
+												</div>
+											</div>
+										</form>
+									</div>
+								</section>
+							</div>
+							<?php 
+						}
+						?>
+					</div>
 				</div>
-				<?php 
-				}
-				?>
 			</div>
-		</div>
-	</div>
-	<?php
-}
-?>
+			<?php
+		}
+		?>
 <!--  Sidebar - quick filtering and searching -->
-<div class="description" style="padding-bottom:2em; <?php echo ( $show_onboarding ) ? 'display: none' : '' ?>">
+<div class="description" style="padding-bottom:2em; <?php echo ( $icegram_show_onboarding ) ? 'display: none' : '' ?>">
 	<h2 style="font-size:17px;font-weight: 500">
-		<?php echo ( $show_onboarding ) ? esc_html__('Choose a design', 'icegram') : esc_html__( 'Icegram Engage design templates', 'icegram' ) ?>
+		<?php echo ( $icegram_show_onboarding ) ? esc_html__('Choose a design', 'icegram') : esc_html__( 'Icegram Engage design templates', 'icegram' ) ?>
 		
 	</h2>
 	<div style="padding-bottom:3px;font-size:14px">
@@ -764,21 +771,23 @@
 	</div>
 	<div style="font-size:14px">
     <?php 
-    if ( $show_onboarding ) {
+    if ( $icegram_show_onboarding ) {
         echo esc_html__('Here\'s some gallery templates filtered out for you. Simply ', 'icegram');
     } else {
         echo sprintf(
+            /* translators: %1$s: "your goals", %2$s: "message type" */
             esc_html__('Filter out the templates based on %1$s and %2$s and then simply', 'icegram'),
             '<strong>' . esc_html__('your goals', 'icegram') . '</strong>',
             '<strong>' . esc_html__('message type', 'icegram') . '</strong>'
         );
     }
     echo sprintf(
+        /* translators: %s: "Use This" link text */
         esc_html__(' click to %s and the campaign will automatically appear in your Icegram Engage dashboard. No coding or special skills required.', 'icegram'),
         '<strong>' . esc_html__('Use This', 'icegram') . '</strong>'
     );
     ?>
-</div>
+	</div>
 
 </div>
 <div class="igg-sidebar" style="display:none">
@@ -788,43 +797,70 @@
 		<ul><li class="category-type" category="reset">Reset</li></ul>
 	</div>
 	<?php  
-	foreach ($cat_list as $category) {
-		$not_have_sub_cat = (empty($category['list'])) ? 'not_have_sub_cat' : '';
+	foreach ( $cat_list as $icegram_category ) {
+		
+		$icegram_category_slug  = isset( $icegram_category['slug'] ) ? sanitize_html_class( $icegram_category['slug'] ) : '';
+		
+		$icegram_category_name  = isset( $icegram_category['name'] ) ? $icegram_category['name'] : '';
+
+		$icegram_category_term_id = isset( $icegram_category['term_id'] ) ? (int) $icegram_category['term_id'] : 0;
+
+		$icegram_not_have_sub_cat = empty( $icegram_category['list'] ) ? 'not_have_sub_cat' : '';
 		?>
-		<div class="category <?php echo $category['slug']?> <?php echo $not_have_sub_cat?>" category="<?php echo $category['slug']?>"  <?php echo $category['slug']?>="<?php echo $category['term_id']?>" >
-			<h2><?php  _e($category['name'], 'icegram')?></h2>
+		
+		<div 
+			class="category <?php echo esc_attr( $icegram_category_slug ); ?> <?php echo esc_attr( $icegram_not_have_sub_cat ); ?>" 
+			category="<?php echo esc_attr( $icegram_category_slug ); ?>"
+			<?php echo esc_attr( $icegram_category_slug ); ?>="<?php echo esc_attr( $icegram_category_term_id ); ?>"
+		>
+			<h2><?php echo esc_html( $icegram_category_name ); ?></h2>
+
 			<ul>
 				<?php 
-				if(!empty($category['list'])){
-					foreach ($category['list'] as $sub_cat) {
+				if ( ! empty( $icegram_category['list'] ) ) {
+					
+					foreach ( $icegram_category['list'] as $icegram_sub_cat ) {
+
+						$icegram_sub_cat_term_id = isset( $icegram_sub_cat['term_id'] ) ? (int) $icegram_sub_cat['term_id'] : 0;
+						
+						$icegram_sub_cat_name = isset( $icegram_sub_cat['name'] ) ? $icegram_sub_cat['name'] : '';
 						?>
-						<li class="category-type" category="<?php echo $category['slug']?>" <?php echo $category['slug']?>="<?php echo $sub_cat['term_id']?>" ><?php _e($sub_cat['name'], 'icegram')?></li>
+						
+						<li 
+							class="category-type" 
+							category="<?php echo esc_attr( $icegram_category_slug ); ?>" 
+							<?php echo esc_attr( $icegram_category_slug ); ?>="<?php echo esc_attr( $icegram_sub_cat_term_id ); ?>"
+						>
+							<?php echo esc_html( $icegram_sub_cat_name ); ?>
+						</li>
+
 						<?php
 					}
 				}
 				?>
 			</ul>
 		</div>
+
 		<?php
 	}
 
 	?>
 </div>
 
-<div class="igg-filters campaign_filters align-right icegram_tw" style="<?php echo ( $show_onboarding ) ? 'display: none' : '' ?>">
+<div class="igg-filters campaign_filters align-right icegram_tw" style="<?php echo ( $icegram_show_onboarding ) ? 'display: none' : '' ?>">
 	<div class="inline-block ml-6 w-11/12 inline mb-2 campaign-goal">
 		<select class="gallery_campaign_goal select2-hidden-accessible overflow-hidden" multiple="multiple" name="gallery_campaign_goal" tabindex="-1" aria-hidden="true" placeholder="Select goal">
 			<option value=""><?php echo esc_html__( 'Any campaign', 'icegram' ); ?></option>
 			<?php 
-			foreach ($campaign_goal as $goal) { ?>
-				<option class="goal_options" category="<?php echo esc_attr( $goal['category'] ) ?>" use-case="<?php echo esc_attr( $goal['term-id'] ) ?>" value="<?php echo esc_attr( $goal['title'] ) ?>"><?php echo esc_html( $goal['title']); ?></option>
+			foreach ($icegram_campaign_goal as $icegram_goal) { ?>
+				<option class="goal_options" category="<?php echo esc_attr( $icegram_goal['category'] ) ?>" use-case="<?php echo esc_attr( $icegram_goal['term-id'] ) ?>" value="<?php echo esc_attr( $icegram_goal['title'] ) ?>"><?php echo esc_html( $icegram_goal['title']); ?></option>
 			<?php } 
 			?>
 		</select>
 		<select class="gallery_message_type select2-hidden-accessible" multiple="" name="gallery_message_type" tabindex="-1" aria-hidden="true" placeholder="Select message type">
 			<?php 
-			foreach ($campaign_types as $campaign_type) { ?>
-				<option class="message_type_options" category="<?php echo esc_attr( $campaign_type['category'] ) ?>" message-type="<?php echo esc_attr( $campaign_type['term-id'] ) ?>" value="<?php echo esc_attr( $campaign_type['title'] ) ?>"><?php echo esc_html( $campaign_type['title']); ?></option>
+			foreach ($icegram_campaign_types as $icegram_campaign_type) { ?>
+				<option class="message_type_options" category="<?php echo esc_attr( $icegram_campaign_type['category'] ) ?>" message-type="<?php echo esc_attr( $icegram_campaign_type['term-id'] ) ?>" value="<?php echo esc_attr( $icegram_campaign_type['title'] ) ?>"><?php echo esc_html( $icegram_campaign_type['title']); ?></option>
 			<?php } 
 			?>
 		</select>
@@ -839,7 +875,7 @@
 
 </div>
 <hr style="margin:1.5rem 0;">
-<div class="igg-content" style="width: 100%; <?php echo ( $show_onboarding ) ? 'display: none' : '' ?>">
+<div class="igg-content" style="width: 100%; <?php echo ( $icegram_show_onboarding ) ? 'display: none' : '' ?>">
 	
 	<div class="theme-browser">
 		<div class="themes wp-clearfix"></div>
@@ -861,8 +897,10 @@
 	<# } else { #>
 	<div class="theme-screenshot blank"></div>
 	<# } #>
-	<span class="more-details" id="{{ data.id }}-action"><?php _e( 'Preview' ); ?></span>
-	<div class="theme-author"><?php printf( __( 'By %s' ), '{{{ data.id }}}' ); ?></div>
+	<span class="more-details" id="{{ data.id }}-action"><?php esc_html_e( 'Preview', 'icegram' ); ?></span>
+	<div class="theme-author"><?php 
+	/* translators: %s: Template ID */
+	printf( esc_html__( 'By %s', 'icegram' ), '{{{ data.id }}}' ); ?></div>
 	<div class="theme-id-container">
 		<div class="theme-name wp-clearfix">
 			<!-- <span>Active:</span> -->
@@ -889,28 +927,27 @@
 <script id="tmpl-theme-preview" type="text/template">
 	<div class="wp-full-overlay-sidebar igg-preview-sidebar">
 		<div class="wp-full-overlay-header">
-			<a href="#" class="close-full-overlay"><span class="screen-reader-text"><?php _e( 'Close' ); ?></span></a>
-			<a href="#" class="previous-theme"><span class="screen-reader-text"><?php _ex( 'Previous', 'Button label for a theme' ); ?></span></a>
-			<a href="#" class="next-theme"><span class="screen-reader-text"><?php _ex( 'Next', 'Button label for a theme' ); ?></span></a>
-			<a href="?action=fetch_messages&campaign_id={{data.campaign_id}}&gallery_item={{data.slug}}" class="btn purple theme-install" style="display:none"><?php _e( 'Use This', 'icegram' ); ?></a>
+			<a href="#" class="close-full-overlay"><span class="screen-reader-text"><?php esc_html_e( 'Close', 'icegram' ); ?></span></a>
+			<a href="#" class="previous-theme"><span class="screen-reader-text"><?php echo esc_html_x( 'Previous', 'Button label for a theme', 'icegram' ); ?></span></a>
+			<a href="#" class="next-theme"><span class="screen-reader-text"><?php echo esc_html_x( 'Next', 'Button label for a theme', 'icegram' ); ?></span></a>
+			<a href="?action=fetch_messages&campaign_id={{data.campaign_id}}&gallery_item={{data.slug}}" class="btn purple theme-install" style="display:none"><?php esc_html_e( 'Use This', 'icegram' ); ?></a>
 			<a href="https://www.icegram.com/pricing/?utm_source=ig_inapp&utm_medium=ig_gallery&utm_campaign=get_pro" target="_blank" class="ig-get-pro btn green" style="display:none;">
 				<# if(data.plan === '3') { #>
-				<span><?php _e("Get The Max Plan", 'icegram') ?></span>
+				<span><?php esc_html_e("Get The Max Plan", 'icegram') ?></span>
 				<# } else if(data.plan === '2') { #>
-				<span><?php _e("Get The Pro Plan", 'icegram') ?></span>
+				<span><?php esc_html_e("Get The Pro Plan", 'icegram') ?></span>
 				<# } #>	
 			</a>
 		</div>
-		<div class="wp-full-overlay-sidebar-content">
-			<div class="install-theme-info">
-				<h3 class="theme-name">{{ data.title.rendered }}</h3>
-				<span class="theme-by">
-					<a href="https://www.icegram.com/" target="_blank"><?php printf( __( '- By %s' ), 'Icegram Engage' ); ?></a>
-				</span>
-
-				<img class="theme-screenshot" src="{{ data.image.guid }}" alt="">
-
-				<div class="theme-details">
+	<div class="wp-full-overlay-sidebar-content">
+		<div class="install-theme-info">
+		<h3 class="theme-name">{{ data.title.rendered }}</h3>
+		<span class="theme-by">
+			<a href="https://www.icegram.com/" target="_blank"><?php 
+			/* translators: %s: Plugin author name */
+			printf( esc_html__( '- By %s', 'icegram' ), 'Icegram Engage' ); ?></a>
+		</span>				
+		<img class="theme-screenshot" src="{{ data.image.guid }}" alt="">				<div class="theme-details">
 					<div class="theme-description">{{ data.description }}</div>
 					<div class="tags">
 						<!-- plan-name -->
@@ -927,9 +964,9 @@
 					</div>
 					<!-- <div class="theme-info">Liked this template? <br/>Here's how you can customize it further </div> -->
 					<div class="theme-info" style="padding:0.2em;height:auto;">
-						<p style="border-top: 1px solid #f3f3f3;padding: 1em 0;margin:0.5em 0;"><?php _e( 'Would you like to personalize this template to fit your brand?', 'icegram' );?></p>
+						<p style="border-top: 1px solid #f3f3f3;padding: 1em 0;margin:0.5em 0;"><?php esc_html_e( 'Would you like to personalize this template to fit your brand?', 'icegram' );?></p>
 						<div>
-							<a href="https://www.icegram.com/documentation/customize-icegrams-gallery-templates/?utm_source=ig_gallery&utm_medium=ig_inapp_promo&utm_campaign=ig_custom_css" target="_blank" class="" style="margin-top:0.4em;"><?php _e( 'Personalize It Now' , 'icegram'); ?></a>
+							<a href="https://www.icegram.com/documentation/customize-icegrams-gallery-templates/?utm_source=ig_gallery&utm_medium=ig_inapp_promo&utm_campaign=ig_custom_css" target="_blank" class="" style="margin-top:0.4em;"><?php esc_html_e( 'Personalize It Now' , 'icegram'); ?></a>
 						</div>
 					</div>
 				</div>
@@ -937,24 +974,22 @@
 		</div>
 		<div class="wp-full-overlay-footer ig-get-pro ig-get-pro-footer " style="display:none">
 			<# if(data.plan === '3') { #>
-			<span><?php _e("This template is available in the 'Max Plan'", 'icegram') ?></span>
+			<span><?php esc_html_e("This template is available in the 'Max Plan'", 'icegram') ?></span>
 			<# } else if(data.plan === '2') { #>
-			<span><?php _e("This template is available in the 'Pro Plan'", 'icegram') ?></span>
+			<span><?php esc_html_e("This template is available in the 'Pro Plan'", 'icegram') ?></span>
 			<# } #>
 		</div>
 		<div class="wp-full-overlay-footer">
-			<button type="button" class="collapse-sidebar button-secondary" aria-expanded="true" aria-label="<?php esc_attr_e( 'Collapse Sidebar' ); ?>">
+			<button type="button" class="collapse-sidebar button-secondary" aria-expanded="true" aria-label="<?php esc_attr_e( 'Collapse Sidebar', 'icegram' ); ?>">
 				<span class="collapse-sidebar-arrow"></span>
-				<span class="collapse-sidebar-label"><?php _e( 'Collapse' ); ?></span>
-			</button>
-		</div>
+				<span class="collapse-sidebar-label"><?php esc_html_e( 'Collapse', 'icegram' ); ?></span>
+		</button>
 	</div>
-	<div class="wp-full-overlay-main">
-		<iframe src="{{ data.link }}?utm_source=ig_inapp&utm_campaign=ig_gallery&utm_medium={{data.campaign_id}}" title="<?php esc_attr_e( 'Preview' ); ?>" />
-		</div>
-	</script>
-
-	<script type="text/javascript">
+</div>
+<div class="wp-full-overlay-main">
+	<iframe src="{{ data.link }}?utm_source=ig_inapp&utm_campaign=ig_gallery&utm_medium={{data.campaign_id}}" title="<?php esc_attr_e( 'Preview', 'icegram' ); ?>" />
+	</div>
+</script>	<script type="text/javascript">
 		jQuery(document).ready(function() {
 
 			jQuery('.category-type').on('click', function() {
@@ -965,3 +1000,4 @@
 		});
 
 	</script>
+

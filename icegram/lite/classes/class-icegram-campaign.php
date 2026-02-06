@@ -27,13 +27,15 @@ if ( ! class_exists( 'Icegram_Campaign' ) ) {
 				$meta_key                      = apply_filters( 'icegram_campaign_meta_key', 'messages', $this->_post->ID );
 				$this->messages                = get_post_meta( $this->_post->ID, $meta_key, true );
 				$this->rules                   = get_post_meta( $this->_post->ID, 'icegram_campaign_target_rules', true );
+				
 				$this->rules_summary['where']  = array(
 					'homepage'   => ( ! empty( $this->rules['homepage'] ) ) ? $this->rules['homepage'] : '',
 					'other_page' => ( ! empty( $this->rules['other_page'] ) && $this->rules['other_page'] == 'yes' && ! empty( $this->rules['page_id'] ) ) ? $this->rules['page_id'] : '',
 					'blog'       => ( ! empty( $this->rules['blog'] ) ) ? $this->rules['blog'] : '',
 					'sitewide'   => ( ! empty( $this->rules['sitewide'] ) ) ? $this->rules['sitewide'] : '',
 					'local_url'  => ( ! empty( $this->rules['local_url'] ) ) ? $this->rules['local_url'] : ''
-				);
+				);  
+
 				$this->rules_summary['when']   = array(
 					'when' => ( ! empty( $this->rules['when'] ) ) ? $this->rules['when'] : '',
 					'from' => ( ! empty( $this->rules['from'] ) ) ? $this->rules['from'] : '',
@@ -141,10 +143,12 @@ if ( ! class_exists( 'Icegram_Campaign' ) ) {
 
 		function _is_valid_page( $campaign_valid, $campaign, $options ) {
 
-			$page_id = Icegram::get_current_page_id();
+			$page_id = Icegram::get_current_page_id(); 
+			 
 			if ( ! $campaign_valid || ! empty( $options['skip_page_check'] ) ) {
 				return $campaign_valid;
 			}
+  
 			if ( ( ! empty( $campaign->rules_summary['where']['sitewide'] ) && $campaign->rules_summary['where']['sitewide'] == 'yes' ) ) {
 				if ( ! empty( $campaign->rules['exclude_page_id'] ) && in_array( $page_id, $campaign->rules['exclude_page_id'] ) ) {
 					return false;
@@ -152,22 +156,31 @@ if ( ! class_exists( 'Icegram_Campaign' ) ) {
 					return true;
 				}
 			}
-			if ( ! empty( $campaign->rules_summary['where']['homepage'] ) && $campaign->rules_summary['where']['homepage'] == 'yes' && ( ( isset( $_REQUEST['is_home'] ) && $_REQUEST['is_home'] === 'true' ) || is_home() || is_front_page() ) ) {
+
+			$is_home_request = icegram_get_request_data( 'is_home', '', false );
+			
+			if ( ! empty( $campaign->rules_summary['where']['homepage'] ) && $campaign->rules_summary['where']['homepage'] == 'yes' && ( $is_home_request === 'true' || is_home() || is_front_page() ) ) {
 				return true;
 			}
+ 
 			if ( ! empty( $page_id ) ) {
-				if ( ! empty( $campaign->rules_summary['where']['other_page'] ) && in_array( $page_id, $campaign->rules_summary['where']['other_page'] ) ) {
+				if ( ! empty( $campaign->rules_summary['where']['other_page'] ) && in_array( $page_id, $campaign->rules_summary['where']['other_page'] ) ) {					
 					return true;
 				}
 			}
+			
 			if ( ( ! empty( $campaign->rules_summary['where']['local_url'] ) && $campaign->rules_summary['where']['local_url'] == 'yes' ) ) {
 
 				$current_page_url = Icegram::get_current_page_url();
 				// TODO::change this check with remote mode 
 				//return if call made from remote url
-				if ( ! empty( $_POST['ig_remote_url'] ) ) {
-					return;
-				}
+
+				$ig_remote_url = icegram_get_request_data( 'ig_remote_url', '', false );
+
+				if ( ! empty( $ig_remote_url ) ) {
+					return false;
+				} 
+
 				foreach ( $campaign->rules['local_urls'] as $local_url_pattern ) {
 					if ( empty( $local_url_pattern ) ) {
 						$local_url_pattern = home_url() . '/';
@@ -179,8 +192,8 @@ if ( ! class_exists( 'Icegram_Campaign' ) ) {
 						continue;
 					}
 				}
-			}
-
+			} 
+			
 			$campaign_valid = false;
 
 			//Validating campaign for Post Types.

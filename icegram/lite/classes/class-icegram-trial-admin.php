@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * The trial-specific functionality of the plugin.
  */
-class IG_Trial {
+class Icegram_Trial {
 
 	public static $trial_days = 14;
 
@@ -17,8 +17,8 @@ class IG_Trial {
 		add_action('admin_init', array( &$this, 'handle_trial_plan' ));
 		add_action('admin_notices', array( &$this, 'show_trial_notices' ));
 		
-		add_action('save_trial_campaign_message_ids', array( &$this, 'save_trial_campaign_message_ids' ));
-		add_action('handle_trial_features', array( &$this, 'handle_trial_features' ));
+		add_action('icegram_save_trial_campaign_message_ids', array( &$this, 'save_trial_campaign_message_ids' ));
+		add_action('icegram_handle_trial_features', array( &$this, 'handle_trial_features' ));
 		
 
 	}
@@ -26,6 +26,14 @@ class IG_Trial {
 	public static function enable_trial(){
 		global $icegram;
 		if( isset( $_POST['ig_trial'] ) ){
+			// Verify nonce - check POST 
+			$nonce = isset( $_POST['ig_trial_nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['ig_trial_nonce'] ) ) : '' ;
+			if ( empty( $nonce ) || ! wp_verify_nonce( $nonce, 'ig_enable_trial' ) ) {
+				return;
+			}
+			if ( ! current_user_can( 'manage_options' )){
+				return;
+			}
 			set_transient( 'ig_trial', true, ( 60*60*24* self::$trial_days ) );
 			//Flag that keeps a track that user had opted for trial
 			update_option('ig_trial_started_at', time());
@@ -57,7 +65,7 @@ class IG_Trial {
 
 				} else if( $is_trial_expired &&  'pending' == $trial_feature_update_status ) {
 					//Recover custom css from trial message once user has updated to premium plan later
-					do_action('handle_trial_features', 'update');
+					do_action('icegram_handle_trial_features', 'update');
 					
 				}
 			}		
@@ -71,7 +79,7 @@ class IG_Trial {
 			$icegram->set_icegram_plan('lite');
 			
 			//Remove custom css from trial message
-			do_action('handle_trial_features', 'delete');
+			do_action('icegram_handle_trial_features', 'delete');
 		}	
 	}
 
@@ -198,12 +206,12 @@ class IG_Trial {
 		$is_trial             			= $icegram->is_trial();
 		$is_premium           			= $icegram->is_premium();
 		$is_premium_installed 			= $icegram->is_premium_installed();
-		$ig_is_page_for_notifications   = apply_filters( 'ig-engage_is_page_for_notifications', false );
+		$icegram_is_page_for_notifications   = apply_filters( 'icegram-engage_is_page_for_notifications', false );
 		
 		$show_offer_notice = false;
 		
 		// Add upgrade to premium nudging notice if user has opted for trial and is not a premium user and premium plugin is not installed on site and is not dashboard page.
-		if ( $is_trial && ! $is_premium && ! $is_premium_installed && $ig_is_page_for_notifications ) {
+		if ( $is_trial && ! $is_premium && ! $is_premium_installed && $icegram_is_page_for_notifications ) {
 
 			// Start nudging the user on following days before trial expiration.
 			$nudging_days    = array( 1, 3 );
@@ -253,9 +261,9 @@ class IG_Trial {
 		}
 		
 		if ( $show_offer_notice ) {
-			include_once IG_PLUGIN_DIR . 'lite/notices/admin-trial-upsale-notices.php';
+			include_once ICEGRAM_PLUGIN_DIR . 'lite/notices/admin-trial-upsale-notices.php';
 		} 
 	}
 }
 
-new IG_Trial();
+new Icegram_Trial();

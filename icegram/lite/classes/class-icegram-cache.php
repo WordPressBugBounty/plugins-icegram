@@ -91,8 +91,9 @@ if ( ! class_exists( 'Icegram_Cache' ) ) {
 				$uploads_base_dir = trailingslashit( $uploads['basedir'] );
 				$this->base_dir = $uploads_base_dir . 'igcache/';
 			}
-
+			
 			if (!is_dir( $this->base_dir )) {
+				// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_mkdir
 				if ( false === mkdir( $this->base_dir ) ) {
 					$this->enabled = false;
 					return;

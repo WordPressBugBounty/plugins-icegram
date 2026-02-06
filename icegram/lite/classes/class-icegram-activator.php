@@ -29,6 +29,6 @@ class Icegram_Activator {
 		// Redirect to welcome screen
 		delete_option( '_icegram_activation_redirect' );
 		add_option( '_icegram_activation_redirect', 'pending' );
-		do_action( 'ig_activated' );
+		do_action( 'icegram_activated' );
 	}
 }

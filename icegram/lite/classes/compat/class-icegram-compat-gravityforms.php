@@ -11,14 +11,15 @@ if ( ! class_exists( 'Icegram_Compat_gravityforms' ) ) {
 			parent::__construct();
 			
 			if($icegram->cache_compatibility === 'yes') {
-				add_filter( 'gform_form_tag', 'change_form_action_url', 10, 2 );
-				function change_form_action_url( $form_tag, $form ) {
-				    $form_tag = preg_replace( "|action='(.*?)'|", "action='".Icegram::get_current_page_url()."'", $form_tag );
-				    return $form_tag;
-				}
+				add_filter( 'gform_form_tag', array( $this, 'change_form_action_url' ), 10, 2 );
 			    
 			}
 			add_filter('icegram_get_form_list', array( &$this, 'get_form_list'), 10, 1);
+		}
+
+		function change_form_action_url( $form_tag, $form ) {
+			$form_tag = preg_replace( "|action='(.*?)'|", "action='".Icegram::get_current_page_url()."'", $form_tag );
+			return $form_tag;
 		}
 
 		function get_form_list( $forms ){

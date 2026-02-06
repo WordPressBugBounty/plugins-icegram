@@ -1,4 +1,5 @@
 try {
+	
 		// load icegram scripts and css
 		function load_scripts_and_css(icegram_data){
 			var pending_scripts = {};
@@ -73,7 +74,7 @@ try {
 				 */
 				delete icegram_pre_data.post_obj['add-to-cart'];
 			}
-
+  
 			jQuery.ajax({
 				url: icegram_pre_data.ajax_url,
 				type: "POST",

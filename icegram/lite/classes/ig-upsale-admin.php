@@ -51,7 +51,7 @@ if ( ! class_exists( 'Icegram_upsale' ) ) {
 
 			if( $icegram->can_upsell_features( array('lite', 'plus') ) ){
 			?>
-				<a class="ig_cta_upsale" href="https://www.icegram.com/pricing/?utm_source=in_app_new&utm_medium=cta_actions&utm_campaign=ig_upsell" target="_blank"><img class="" src="<?php echo $icegram->plugin_url ?>/assets/images/upsell/cta_actions.png"/></a>
+				<a class="ig_cta_upsale" href="https://www.icegram.com/pricing/?utm_source=in_app_new&utm_medium=cta_actions&utm_campaign=ig_upsell" target="_blank"><img class="" src="<?php echo esc_url( $icegram->plugin_url . '/assets/images/upsell/cta_actions.png' ); ?>"/></a>
 			<?php
 			}
 
@@ -63,7 +63,7 @@ if ( ! class_exists( 'Icegram_upsale' ) ) {
 			
 			if( $icegram->can_upsell_features( array('lite', 'plus', 'pro') ) ){
 			?>
-				<a class="" href="https://www.icegram.com/pricing/?utm_source=in_app_new&utm_medium=cta_animations&utm_campaign=ig_upsell" target="_blank"><img src="<?php echo $icegram->plugin_url ?>/assets/images/upsell/cta_effects.png"/></a>
+				<a class="" href="https://www.icegram.com/pricing/?utm_source=in_app_new&utm_medium=cta_animations&utm_campaign=ig_upsell" target="_blank"><img src="<?php echo esc_url( $icegram->plugin_url . '/assets/images/upsell/cta_effects.png' ); ?>"/></a>
 			
 			<?php
 			}
@@ -74,7 +74,7 @@ if ( ! class_exists( 'Icegram_upsale' ) ) {
 
 			if( $icegram->can_upsell_features( array('lite', 'plus') ) ){
 			?>
-				<a class="" href="https://www.icegram.com/pricing/?utm_source=in_app_new&utm_medium=behavior_trigger&utm_campaign=ig_upsell" target="_blank"><img class="" src="<?php echo $icegram->plugin_url ?>/assets/images/upsell/behavior_triggers.png"/></a>
+				<a class="" href="https://www.icegram.com/pricing/?utm_source=in_app_new&utm_medium=behavior_trigger&utm_campaign=ig_upsell" target="_blank"><img class="" src="<?php echo esc_url( $icegram->plugin_url . '/assets/images/upsell/behavior_triggers.png' ); ?>"/></a>
 			<?php
 			}
 		}
@@ -84,13 +84,13 @@ if ( ! class_exists( 'Icegram_upsale' ) ) {
 
 			if( $icegram->can_upsell_features( array('lite', 'plus') ) ){
 			?>
-				<a class="" href="https://www.icegram.com/pricing/?utm_source=in_app_new&utm_medium=where_not_rule&utm_campaign=ig_upsell" target="_blank"><img class="-ml-2" src="<?php echo $icegram->plugin_url ?>/assets/images/upsell/do_not_show_urls.png"/></a>
+				<a class="" href="https://www.icegram.com/pricing/?utm_source=in_app_new&utm_medium=where_not_rule&utm_campaign=ig_upsell" target="_blank"><img class="-ml-2" src="<?php echo esc_url( $icegram->plugin_url . '/assets/images/upsell/do_not_show_urls.png' ); ?>"/></a>
 			<?php
 			}
 
 			if( $icegram->can_upsell_features( array('lite', 'plus', 'pro') ) ){
 			?>
-				<a class="" href="https://www.icegram.com/pricing/?utm_source=in_app_new&utm_medium=remote_site_rule&utm_campaign=ig_upsell" target="_blank"><img class="-ml-1.5" src="<?php echo $icegram->plugin_url ?>/assets/images/upsell/remote_sites.png"/></a>
+				<a class="" href="https://www.icegram.com/pricing/?utm_source=in_app_new&utm_medium=remote_site_rule&utm_campaign=ig_upsell" target="_blank"><img class="-ml-1.5" src="<?php echo esc_url( $icegram->plugin_url . '/assets/images/upsell/remote_sites.png' ); ?>"/></a>
 			<?php
 			}
 		}
@@ -100,13 +100,13 @@ if ( ! class_exists( 'Icegram_upsale' ) ) {
 
 			if( $icegram->can_upsell_features( array('lite', 'plus') ) ){
 			?>
-				<a href="https://www.icegram.com/pricing/?utm_source=in_app_new&utm_medium=when_rule&utm_campaign=ig_upsell" target="_blank"><img class="-ml-2" src="<?php echo $icegram->plugin_url ?>/assets/images/upsell/when_rules.png"/></a>
+				<a href="https://www.icegram.com/pricing/?utm_source=in_app_new&utm_medium=when_rule&utm_campaign=ig_upsell" target="_blank"><img class="-ml-2" src="<?php echo esc_url( $icegram->plugin_url . '/assets/images/upsell/when_rules.png' ); ?>"/></a>
 			<?php
 			}
 
 			if( $icegram->can_upsell_features( array('lite', 'plus', 'pro') ) ){
 			?>
-				<a href="https://www.icegram.com/pricing/?utm_source=in_app_new&utm_medium=when_rule&utm_campaign=ig_upsell" target="_blank"><img class="-ml-1" src="<?php echo $icegram->plugin_url ?>/assets/images/upsell/visitor-from-x-page.png"/></a>
+				<a href="https://www.icegram.com/pricing/?utm_source=in_app_new&utm_medium=when_rule&utm_campaign=ig_upsell" target="_blank"><img class="-ml-1" src="<?php echo esc_url( $icegram->plugin_url . '/assets/images/upsell/visitor-from-x-page.png' ); ?>"/></a>
 			<?php
 			}
 		}
@@ -117,7 +117,7 @@ if ( ! class_exists( 'Icegram_upsale' ) ) {
 			if( $icegram->can_upsell_features( array('lite', 'plus') ) ){
 			?>
 				<div class="options_group">
-					<a class="" href="https://www.icegram.com/pricing/?utm_source=in_app_new&utm_medium=countdown_timer&utm_campaign=ig_upsell" target="_blank"><img class="ml-3" src="<?php echo $icegram->plugin_url ?>/assets/images/upsell/countdown_timer.png"/></a>
+					<a class="" href="https://www.icegram.com/pricing/?utm_source=in_app_new&utm_medium=countdown_timer&utm_campaign=ig_upsell" target="_blank"><img class="ml-3" src="<?php echo esc_url( $icegram->plugin_url . '/assets/images/upsell/countdown_timer.png' ); ?>" /></a>
 				</div>
 			<?php
 			}
@@ -128,7 +128,7 @@ if ( ! class_exists( 'Icegram_upsale' ) ) {
 
 			if( $icegram->can_upsell_features( array('lite', 'plus', 'pro') ) ){
 			?>
-				<a class="" href="https://www.icegram.com/pricing/?utm_source=in_app_new&utm_medium=geo_targeting&utm_campaign=ig_upsell" target="_blank"><img class="mt-2" src="<?php echo $icegram->plugin_url ?>/assets/images/upsell/geo-targeting.png"/></a>	
+				<a class="" href="https://www.icegram.com/pricing/?utm_source=in_app_new&utm_medium=geo_targeting&utm_campaign=ig_upsell" target="_blank"><img class="mt-2" src="<?php echo esc_url( $icegram->plugin_url . '/assets/images/upsell/geo-targeting.png' ); ?>"/></a>	
 			<?php
 			}
 		}
@@ -138,7 +138,7 @@ if ( ! class_exists( 'Icegram_upsale' ) ) {
 
 			if( $icegram->can_upsell_features( array('lite', 'plus', 'pro') ) ){
 			?>
-				<a class="" href="https://www.icegram.com/pricing/?utm_source=in_app_new&utm_medium=split_testing&utm_campaign=ig_upsell" target="_blank"><img src="<?php echo $icegram->plugin_url ?>/assets/images/upsell/split_testing.png"/></a>	
+				<a class="" href="https://www.icegram.com/pricing/?utm_source=in_app_new&utm_medium=split_testing&utm_campaign=ig_upsell" target="_blank"><img src="<?php echo esc_url( $icegram->plugin_url . '/assets/images/upsell/split_testing.png' ); ?>"/></a>	
 			<?php
 			}
 		}
@@ -148,7 +148,7 @@ if ( ! class_exists( 'Icegram_upsale' ) ) {
 			
 			if( $icegram->can_upsell_features( array('lite', 'plus') ) ){
 			?>
-				<a class="" href="https://www.icegram.com/pricing/?utm_source=in_app_new&utm_medium=split_testing&utm_campaign=ig_upsell" target="_blank"><img src="<?php echo $icegram->plugin_url ?>/assets/images/upsell/content_locker.png"/></a>
+				<a class="" href="https://www.icegram.com/pricing/?utm_source=in_app_new&utm_medium=split_testing&utm_campaign=ig_upsell" target="_blank"><img src="<?php echo esc_url( $icegram->plugin_url . '/assets/images/upsell/content_locker.png' ); ?>"/></a>
 			<?php
 			}
 		}
@@ -158,7 +158,7 @@ if ( ! class_exists( 'Icegram_upsale' ) ) {
 			
 			if( $icegram->can_upsell_features( array('lite', 'plus') ) ){
 			?>
-				<a class="" href="https://www.icegram.com/pricing/?utm_source=in_app_new&utm_medium=split_testing&utm_campaign=ig_upsell" target="_blank"><img class="-ml-2" src="<?php echo $icegram->plugin_url ?>/assets/images/upsell/selected-post-types.png"/></a>
+				<a class="" href="https://www.icegram.com/pricing/?utm_source=in_app_new&utm_medium=split_testing&utm_campaign=ig_upsell" target="_blank"><img class="-ml-2" src="<?php echo esc_url( $icegram->plugin_url . '/assets/images/upsell/selected-post-types.png' ); ?>"/></a>
 			<?php
 			}
 		}

@@ -4,15 +4,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
-if ( ! class_exists( 'IG_Tracker_V_1_2_8' ) ) {
+if ( ! class_exists( 'IG_Tracker_V_1_2_9' ) ) {
 
 	/**
-	 * Class IG_Tracker_V_1_2_8
+	 * Class IG_Tracker_V_1_2_9
 	 *
 	 * Icegram tracker handler class is responsible for sending anonymous plugin
 	 * data to Icegram servers for users that actively allowed data tracking.
 	 *
-	 * @class       IG_Tracker_V_1_2_8
+	 * @class       IG_Tracker_V_1_2_9
 	 * @since       1.0.0
 	 *
 	 * @copyright   Copyright (c) 2019, Icegram
@@ -20,8 +20,9 @@ if ( ! class_exists( 'IG_Tracker_V_1_2_8' ) ) {
 	 * @author      Icegram
 	 * @package     feedback
 	 */
-	class IG_Tracker_V_1_2_8 {
 
+	// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedClassFound
+	class IG_Tracker_V_1_2_9 {
 	
 
 		/**
@@ -185,15 +186,7 @@ if ( ! class_exists( 'IG_Tracker_V_1_2_8' ) ) {
 					'author'     => $theme_data->get( 'Author' ),
 					'author_uri' => $theme_data->get( 'AuthorURI' )
 				);
-			} elseif ( function_exists( 'get_theme_data' ) ) {
-				$theme_data    = get_theme_data( get_stylesheet_directory() . '/style.css' );
-				$current_theme = array(
-					'name'       => $theme_data['Name'],
-					'version'    => $theme_data['Version'],
-					'author'     => $theme_data['Author'],
-					'author_uri' => $theme_data['AuthorURI']
-				);
-			}
+			}  
 
 			return $current_theme;
 		}
@@ -211,8 +204,8 @@ if ( ! class_exists( 'IG_Tracker_V_1_2_8' ) ) {
 			$server_info = array(
 				'php_version'                  => PHP_VERSION,
 				'mysql_version'                => $wpdb->db_version(),
-				'web_server_info'              => $_SERVER['SERVER_SOFTWARE'],
-				'user_agent'                   => $_SERVER['HTTP_USER_AGENT'],
+				'web_server_info'              => isset( $_SERVER['SERVER_SOFTWARE'] ) ? sanitize_text_field( wp_unslash( $_SERVER['SERVER_SOFTWARE'] ) ) : 'Unknown',
+				'user_agent' 				   => isset( $_SERVER['HTTP_USER_AGENT'] ) ? sanitize_text_field( wp_unslash( $_SERVER['HTTP_USER_AGENT'] ) ) : 'Unknown',
 				'php_memory_limit'             => ini_get( 'memory_limit' ),
 				'php_post_max_size'            => ini_get( 'post_max_size' ),
 				'php_upload_max_file_size'     => ini_get( 'upload_max_filesize' ),
@@ -307,7 +300,7 @@ if ( ! class_exists( 'IG_Tracker_V_1_2_8' ) ) {
 			$is_premium_plan = $ig->is_premium();
 
 			$plugin_meta_info = array(
-				'version' 				=> IG_PLUGIN_VERSION,
+				'version' 				=> ICEGRAM_PLUGIN_VERSION,
 				'installed_on' 			=> get_option('ig_installed_on', ''),
 				'is_premium' 			=> ( $is_premium_plan ) ? 'yes' : 'no',
 				'plan' 					=> ( $is_premium_plan ) ? $ig->get_plan() : 'lite',

@@ -4,19 +4,19 @@
  * Get additional system & plugin specific information for feedback
 
  */
-if ( ! function_exists( 'ig_get_additional_info' ) ) {
+if ( ! function_exists( 'icegram_get_additional_info' ) ) {
 
 
-	function ig_get_additional_info( $additional_info, $system_info = false ) {
-		global $icegram, $ig_tracker;
+	function icegram_get_additional_info( $additional_info, $system_info = false ) {
+		global $icegram, $icegram_tracker;
 		$additional_info['version'] = $icegram->version;
 		if ( $system_info ) {
 
-			$additional_info['active_plugins']   = implode( ', ', $ig_tracker::get_active_plugins() );
-			$additional_info['inactive_plugins'] = implode( ', ', $ig_tracker::get_inactive_plugins() );
-			$additional_info['current_theme']    = $ig_tracker::get_current_theme_info();
-			$additional_info['wp_info']          = $ig_tracker::get_wp_info();
-			$additional_info['server_info']      = $ig_tracker::get_server_info();
+			$additional_info['active_plugins']   = implode( ', ', $icegram_tracker::get_active_plugins() );
+			$additional_info['inactive_plugins'] = implode( ', ', $icegram_tracker::get_inactive_plugins() );
+			$additional_info['current_theme']    = $icegram_tracker::get_current_theme_info();
+			$additional_info['wp_info']          = $icegram_tracker::get_wp_info();
+			$additional_info['server_info']      = $icegram_tracker::get_server_info();
 
 			// IG Specific information
 			$additional_info['plugin_meta_info'] = Icegram::get_ig_meta_info();
@@ -28,9 +28,9 @@ if ( ! function_exists( 'ig_get_additional_info' ) ) {
 
 }
 
-add_filter( 'ig_additional_feedback_meta_info', 'ig_get_additional_info', 10, 2 );
+add_filter( 'ig_additional_feedback_meta_info', 'icegram_get_additional_info', 10, 2 );
 
-if ( ! function_exists( 'ig_review_message_data' ) ) {
+if ( ! function_exists( 'icegram_review_message_data' ) ) {
 	/**
 	 * Filter 5 star review data
 	 *
@@ -40,10 +40,10 @@ if ( ! function_exists( 'ig_review_message_data' ) ) {
 	 *
 	 * @since 1.10.36
 	 */
-	function ig_review_message_data( $review_data ) {
+	function icegram_review_message_data( $review_data ) {
 
 		$review_url = 'https://wordpress.org/support/plugin/icegram/reviews/';
-		$icon_url   = IG_PLUGIN_URL . 'lite/assets/images/icon-64.png';
+		$icon_url   = ICEGRAM_PLUGIN_URL . 'lite/assets/images/icon-64.png';
 
 		$review_data['review_url'] = $review_url;
 		$review_data['icon_url']   = $icon_url;
@@ -52,9 +52,9 @@ if ( ! function_exists( 'ig_review_message_data' ) ) {
 	}
 }
 
-add_filter( 'ig_review_message_data', 'ig_review_message_data', 10 );
+add_filter( 'ig_review_message_data', 'icegram_review_message_data', 10 );
 
-if ( ! function_exists( 'ig_can_ask_user_for_review' ) ) {
+if ( ! function_exists( 'icegram_can_ask_user_for_review' ) ) {
 	/**
 	 * Can we ask user for 5 star review?
 	 *
@@ -62,7 +62,7 @@ if ( ! function_exists( 'ig_can_ask_user_for_review' ) ) {
 	 *
 	 * @since 1.10.36
 	 */
-	function ig_can_ask_user_for_review( $enable, $review_data ) {
+	function icegram_can_ask_user_for_review( $enable, $review_data ) {
 
 		if ( $enable ) {
 
@@ -87,16 +87,16 @@ if ( ! function_exists( 'ig_can_ask_user_for_review' ) ) {
 	}
 }
 
-add_filter( 'ig_can_ask_user_for_review', 'ig_can_ask_user_for_review', 50, 2 );
+add_filter( 'ig_can_ask_user_for_review', 'icegram_can_ask_user_for_review', 50, 2 );
 
 /**
  * Render Icegram-Email Subscribers merge feedback widget.
  *
  * @since 1.10.38
  */
-function ig_render_iges_merge_feedback() {
+function icegram_render_iges_merge_feedback() {
 
-	global $ig_feedback, $icegram;
+	global $icegram_feedback, $icegram;
 
 	if ( is_admin() ) {
 
@@ -122,7 +122,7 @@ function ig_render_iges_merge_feedback() {
 			$event = 'poll.merge_iges';
 
 			// If user has already given feedback on Email Subscribers page, don't ask them again
-			$is_event_tracked = $ig_feedback->is_event_tracked( 'ig_es', $event );
+			$is_event_tracked = $icegram_feedback->is_event_tracked( 'ig_es', $event );
 
 			if ( $is_event_tracked ) {
 				return;
@@ -130,27 +130,27 @@ function ig_render_iges_merge_feedback() {
 
 			$params = array(
 				'type'              => 'poll',
-				'title'             => __( 'Subscription forms and CTAs??', 'email-subscribers' ),
+				'title'             => __( 'Subscription forms and CTAs??', 'icegram' ),
 				'event'             => $event,
 				'desc'              => '<div><p>You use <a href="https://wordpress.org/plugins/icegram" target="_blank"><b>Icegram</b></a> to show onsite campaigns like popups and action bars.</p> <p>Would you like us to include email campaigns in the plugin as well? This way you can <b>convert visitors to subscribers, drive traffic and run email marketing from a single plugin</b>.</p> <p>Why do we ask?</p> <p>Our <a href="https://wordpress.org/plugins/email-subscribers" target="_blank"><b>Email Subscribers</b></a> plugin already does email campaigns. We are thinking of merging Icegram & Email Subscribers into a single plugin.</p> <p><b>Will a comprehensive ConvertKit / MailChimp like email + onsite campaign plugin be useful to you?</b></p> </div>',
 				'fields' => array(
 					array(
 						'type' => 'radio',
 						'name' => 'poll_options',
-						'label'	   => __( 'Yes', 'email-subscribers' ),
+						'label'	   => __( 'Yes', 'icegram' ),
 						'value'	=> 'yes',
 						'required' => true,
 					),
 					array(
 						'type' => 'radio',
 						'name' => 'poll_options',
-						'label'	   => __( 'No', 'email-subscribers' ),
+						'label'	   => __( 'No', 'icegram' ),
 						'value'	=> 'no',
 					),
 					array(
 						'type' => 'textarea',
 						'name' => 'details',
-						'placeholder' => __( 'Additional feedback', 'email-subscribers' ),
+						'placeholder' => __( 'Additional feedback', 'icegram' ),
 						'value'  => '',
 					),
 				),
@@ -159,7 +159,7 @@ function ig_render_iges_merge_feedback() {
 				'width'             => 400,
 				'delay'             => 2, // seconds
 				'display_as'		=> 'popup',
-				'confirmButtonText' => __( 'Send my feedback to <b>Icegram team</b>', 'email-subscribers' ),
+				'confirmButtonText' => __( 'Send my feedback to <b>Icegram team</b>', 'icegram' ),
 				'show_once'         => true,
 			);
 
@@ -169,7 +169,7 @@ function ig_render_iges_merge_feedback() {
 	}
 }
 
-add_action( 'admin_footer', 'ig_render_iges_merge_feedback' );
+add_action( 'admin_footer', 'icegram_render_iges_merge_feedback' );
 
 /**
  * Can load sweetalert js file
@@ -180,7 +180,7 @@ add_action( 'admin_footer', 'ig_render_iges_merge_feedback' );
  *
  * @since 1.10.38
  */
-function ig_can_load_sweetalert_js( $load = false ) {
+function icegram_can_load_sweetalert_js( $load = false ) {
 
 	$screen = get_current_screen();
 	if ( in_array( $screen->id, array( 'ig_campaign', 'ig_message', 'edit-ig_message', 'edit-ig_campaign' ), true ) ) {
@@ -190,9 +190,9 @@ function ig_can_load_sweetalert_js( $load = false ) {
 	return $load;
 }
 
-add_filter( 'ig_can_load_sweetalert_js', 'ig_can_load_sweetalert_js', 10, 1 );
+add_filter( 'ig_can_load_sweetalert_js', 'icegram_can_load_sweetalert_js', 10, 1 );
 
-if ( ! function_exists('ig_can_load_sweetalert_css') ) {
+if ( ! function_exists('icegram_can_load_sweetalert_css') ) {
 	/**
 	 * Can load sweetalert css
 	 *
@@ -202,7 +202,7 @@ if ( ! function_exists('ig_can_load_sweetalert_css') ) {
 	 *
 	 * @since 
 	 */
-	function ig_can_load_sweetalert_css( $load = false ) {
+	function icegram_can_load_sweetalert_css( $load = false ) {
 
 		$screen = get_current_screen();
 		if ( in_array( $screen->id, array( 'ig_campaign', 'ig_message', 'edit-ig_message', 'edit-ig_campaign' ), true ) ) {
@@ -213,9 +213,9 @@ if ( ! function_exists('ig_can_load_sweetalert_css') ) {
 	}
 }
 
-add_filter( 'ig_can_load_sweetalert_css', 'ig_can_load_sweetalert_css', 10, 1 );
+add_filter( 'ig_can_load_sweetalert_css', 'icegram_can_load_sweetalert_css', 10, 1 );
 
-if ( ! function_exists( 'ig_show_plugin_usage_tracking_notice' ) ) {
+if ( ! function_exists( 'icegram_show_plugin_usage_tracking_notice' ) ) {
 
 	/**
 	 * Can we show tracking usage optin notice?
@@ -224,7 +224,7 @@ if ( ! function_exists( 'ig_show_plugin_usage_tracking_notice' ) ) {
 	 *
 	 * 
 	 */
-	function ig_show_plugin_usage_tracking_notice( $enable ) {
+	function icegram_show_plugin_usage_tracking_notice( $enable ) {
 
 		// Show notice only to IG dashboard page.
 		
@@ -239,12 +239,12 @@ if ( ! function_exists( 'ig_show_plugin_usage_tracking_notice' ) ) {
 	}
 }
 
-add_filter( 'ig_show_plugin_usage_tracking_notice', 'ig_show_plugin_usage_tracking_notice' );
+add_filter( 'ig_show_plugin_usage_tracking_notice', 'icegram_show_plugin_usage_tracking_notice' );
 
 /**
  * Render general feedback on click of "Feedback" button from IG sidebar
  */
-function ig_render_general_feedback_widget() {
+function icegram_render_general_feedback_widget() {
 	global $icegram;
 	if ( is_admin() ) {
 
@@ -275,5 +275,5 @@ function ig_render_general_feedback_widget() {
 	}
 }
 
-add_action( 'admin_footer', 'ig_render_general_feedback_widget' );
+add_action( 'admin_footer', 'icegram_render_general_feedback_widget' );
 

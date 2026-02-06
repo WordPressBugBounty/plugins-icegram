@@ -1,19 +1,23 @@
-=== Icegram Engage – Ultimate WP Popup Builder, Lead Generation, Optins, and CTA ===
+=== Icegram Engage - Popups, Optins, CTAs & lot more... ===
 Contributors: icegram, storeapps, niravmehta, sandhyam, malayladu, putler, kishanranawat, asmipatel
 Donate link: https://www.icegram.com/
 Tags:  WordPress popup plugin, WordPress Popup, Popup builder, Lead generation, opt-in email, Email Newsletters, WP Popup
 Requires at least: 3.9
-Tested up to: 6.7.1
-Stable tag: 3.1.34
+Tested up to: 6.8
+Stable tag: 3.1.38
 License: GPLv3
 
-Create high-converting popups and optins for lead capture, convert subscribers, and boost sales with the most value-driven WordPress popup builder.
+Create popups, opt-in forms, and call-to-action messages to capture leads and engage visitors on your WordPress site.
 
 == Description ==
 
-### Proven WordPress popups and high converting opt-ins that capture leads, grow your email list and boost sales. Icegram Engage is your go-to toolkit to transform your website into a conversion powerhouse without coding requirements.
+### Icegram Engage helps you create popups, opt-in forms, and call-to-action (CTA) messages to capture leads and communicate with visitors—without requiring coding skills.
 
-**THE BEST WORDPRESS LEAD GENERATION AND EMAIL LIST BUILDING PLUGIN**
+The plugin provides multiple message types such as popups, header and footer bars, slide-ins, inline messages, and overlays. You can control when and where messages appear using display rules like page targeting, time delays, scroll position, and user actions.
+
+Icegram Engage is suitable for bloggers, small businesses, online stores, and content-driven websites that want to grow email lists, highlight announcements, or guide visitors toward specific actions.
+
+**LEAD GENERATION AND EMAIL LIST BUILDING PLUGIN**
 
 
 [Icegram Engage](https://www.icegram.com/engage/?utm_source=ig_engage_wp_readme&utm_medium=ig_engage_anchor_text&utm_campaign=ig_engage_wp_readme_traffic) is your ultimate toolkit for transforming website visitors into loyal subscribers and customers. 
@@ -323,6 +327,16 @@ Many more to come! We are continually working to add goal-based features that em
 2. Activate the plugin through the 'Plugins' menu in WordPress
 3. Click on 'Icegram Engage' option within WordPress admin sidebar menu
 
+== External services ==
+
+Icegram Engage connects to Icegram services for gallery items and feedback.
+
+Gallery (icegram.com/gallery): Fetches campaign templates.
+
+Feedback (api.icegram.com): Sends user-submitted feedback and optional details.
+
+Data is sent only when these features are used and handled per [Icegram’s privacy policy](https://www.icegram.com/privacy-policy/).
+
 == Frequently Asked Questions ==
 
 = Messages look broken / formatting is weird... =
@@ -368,11 +382,27 @@ Contact Us, provide as much detail of the problem as you can. We will try to sol
 
 == Upgrade Notice ==
 
-= 3.1.34 =
+= 3.1.38 =
 
-* Update: UI improvements
+* Fix: Add new Campaign button not working in some cases
 
 == Changelog ==
+
+**3.1.38 (08.01.2026)**
+
+* Fix: Add new Campaign button not working in some cases
+
+**3.1.37 (18.12.2025)**
+
+* Fix: Improved security related to XSS [Thanks to Patchstack team]
+
+**3.1.36 (09.12.2025)**
+
+* Update: WordPress 6.8 compatibility check
+
+**3.1.35 (10.11.2025)**
+
+* Update: UI improvements
 
 **3.1.34 (19.06.2025)**
 

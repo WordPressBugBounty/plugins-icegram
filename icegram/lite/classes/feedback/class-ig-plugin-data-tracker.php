@@ -4,20 +4,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; 
 }
 
-if ( ! class_exists( 'Icegram_Plugin_Usage_Tracker_V_1_0_1' ) ) {
+if ( ! class_exists( 'Icegram_Plugin_Usage_Tracker_V_1_0_2' ) ) {
 	
 	/**
-	 * Class Icegram_Plugin_Usage_Tracker_V_1_0_1
+	 * Class Icegram_Plugin_Usage_Tracker_V_1_0_2
 	 *
 	 * Icegram tracker handler class is responsible for sending anonymous plugin
 	 * data to Icegram servers for users that actively allowed data tracking.
 	 *
-	 * @class       Icegram_Plugin_Usage_Tracker_V_1_0_1
+	 * @class       Icegram_Plugin_Usage_Tracker_V_1_0_2
 	 * @since       1.0.0
 	 *
 	 * @package     feedback
 	 */
-	class Icegram_Plugin_Usage_Tracker_V_1_0_1 {
+	class Icegram_Plugin_Usage_Tracker_V_1_0_2 {
 
 		/**
 		 * SDK version
@@ -122,7 +122,7 @@ if ( ! class_exists( 'Icegram_Plugin_Usage_Tracker_V_1_0_1' ) ) {
 			// Using icegram loaded hook instead of register activation hook
 			add_action( 'icegram_loaded', array( $this, 'do_activation_setup' ) , 9 );
 			
-			add_action( 'ig_deactivated', array( $this, 'do_deactivation_cleanup' ) );
+			add_action( 'icegram_deactivated', array( $this, 'do_deactivation_cleanup' ) );
 
 			$tracking_option_name = $this->get_tracking_option_name();
 			
@@ -202,8 +202,11 @@ if ( ! class_exists( 'Icegram_Plugin_Usage_Tracker_V_1_0_1' ) ) {
 		 */
 		public function do_deactivation_cleanup() {
 			$this->clear_scheduled_cron();
-			$survey_status = $_REQUEST['survey_status'];
-		
+
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended 
+			$survey_status = isset( $_REQUEST['survey_status'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['survey_status'] ) ) : '';
+
+			
 			if ( ! empty( $survey_status ) && 'skipped' === $survey_status ) {
 	
 				 $extra_params = array(
@@ -229,6 +232,7 @@ if ( ! class_exists( 'Icegram_Plugin_Usage_Tracker_V_1_0_1' ) ) {
 			if ( empty( $schedules['weekly'] ) ) {
 				$schedules['weekly'] = array(
 					'interval' => DAY_IN_SECONDS * 7,
+				    // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralDomain
 					'display'  => __( 'Once Weekly', $this->text_domain ),
 				);
 		
@@ -296,13 +300,19 @@ if ( ! class_exists( 'Icegram_Plugin_Usage_Tracker_V_1_0_1' ) ) {
 			</style>
 			<div id="ig-plugin-usage-tracker-notice" class="notice notice-success" style="background: #ffefd5;">
 				<p>
-				<span class="dashicons dashicons-megaphone" style="color: #5850EC;"></span>
+				<span class="dashicons dashicons-megaphone" style="color: #5850EC;"></span> 
 				<?php
-					/* translators: %s. Plugin name. */
-					echo sprintf( esc_html__( 'Help us to improve %s by opting in to share non-sensitive plugin usage data. No personal data is tracked or stored.', $this->text_domain ), '<strong>' . esc_html( $this->name ) . '</strong>' );
+				/* translators: %s: Plugin name */
+				echo sprintf(
+					// phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralDomain, WordPress.WP.I18n.MissingTranslatorsComment
+					esc_html__( 'Help us to improve %s by opting in to share non-sensitive plugin usage data. No personal data is tracked or stored.', $this->text_domain ),
+					'<strong>' . esc_html( $this->name ) . '</strong>'
+				);
 				?>
 				<a class="<?php echo esc_js( $this->plugin_abbr ); ?>-show-tracked-data-list" href="#">
-					<?php echo esc_html__( 'What we collect?', $this->text_domain ); ?>
+					<?php 
+					// phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralDomain
+					echo esc_html__( 'What we collect?', $this->text_domain ); ?>
 				</a>
 				</p>
 				
@@ -326,11 +336,13 @@ if ( ! class_exists( 'Icegram_Plugin_Usage_Tracker_V_1_0_1' ) ) {
 				<p class="ml-4">
 					<a href="<?php echo esc_url( $optin_url ); ?>" class="button button-primary">
 						<?php
+							// phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralDomain
 							echo esc_html__( 'Yes, count me in!', $this->text_domain );
 						?>
 					</a>
 					<a href="<?php echo esc_url( $optout_url ); ?>" class="text-gray-500 hover:text-gray-600 hover:underline ml-3">
 						<?php
+							// phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralDomain
 							echo esc_html__( 'No thanks', $this->text_domain );
 						?>
 					</a>
@@ -351,7 +363,7 @@ if ( ! class_exists( 'Icegram_Plugin_Usage_Tracker_V_1_0_1' ) ) {
 		 * @return array
 		 */
 		public function get_tracked_data_list() {
-
+		    // phpcs:disable WordPress.WP.I18n.NonSingularStringLiteralDomain
 			$data = apply_filters( $this->plugin_abbr . '_tracked_data_list', array(
 				__( 'Server environment details (PHP, MYSQL, Server name etc.)', $this->text_domain ),
 				__( 'WordPress environment details (Site URL, Site language, Timezone, WordPress version etc.)', $this->text_domain ),
@@ -359,7 +371,8 @@ if ( ! class_exists( 'Icegram_Plugin_Usage_Tracker_V_1_0_1' ) ) {
 				__( 'Active theme details', $this->text_domain ),
 				__( 'Admin name and email address', $this->text_domain ),
 			) );
-
+			// phpcs:enable WordPress.WP.I18n.NonSingularStringLiteralDomain
+	
 			return $data;
 		}
 

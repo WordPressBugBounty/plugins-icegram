@@ -10,46 +10,51 @@ promo_image -> icon
 */
 global $wpdb, $wp_rewrite;
 
-$results = $wpdb->get_results( "SELECT * FROM {$wpdb->postmeta} WHERE meta_key LIKE 'icegram_message_%'" );
+// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+$icegram_meta_results = $wpdb->get_results( "SELECT * FROM {$wpdb->postmeta} WHERE meta_key LIKE 'icegram_message_%'" );
 
-foreach ( $results as $result ) {
+foreach ( $icegram_results as $icegram_result ) {
 
-    $message_data = unserialize( $result->meta_value );
-    if( is_array( $message_data ) && !empty( $message_data ) ) {        
-        $message_type = $message_data['type'];
-        if( isset( $message_data['theme'] ) && is_array( $message_data['theme'] ) && !empty( $message_data['theme'][$message_type] ) ) {
-            $message_data['theme'] = $message_data['theme'][$message_type];
+    $icegram_message_data = unserialize( $icegram_result->meta_value );
+    if( is_array( $icegram_message_data ) && !empty( $icegram_message_data ) ) {        
+        $icegram_message_type = $icegram_message_data['type'];
+        if( isset( $icegram_message_data['theme'] ) && is_array( $icegram_message_data['theme'] ) && !empty( $icegram_message_data['theme'][$icegram_message_type] ) ) {
+            $icegram_message_data['theme'] = $icegram_message_data['theme'][$icegram_message_type];
         }
-        if( isset( $message_data['animation'] ) && is_array( $message_data['animation'] ) ) {
-            if( !empty( $message_data['animation'][$message_type] ) ) {
-                $message_data['animation'] = $message_data['animation'][$message_type];
+        if( isset( $icegram_message_data['animation'] ) && is_array( $icegram_message_data['animation'] ) ) {
+            if( !empty( $icegram_message_data['animation'][$icegram_message_type] ) ) {
+                $icegram_message_data['animation'] = $icegram_message_data['animation'][$icegram_message_type];
             } else {
-                unset( $message_data['animation'] );
+                unset( $icegram_message_data['animation'] );
             }
         }
-        if( isset( $message_data['title'] ) ) {
-            $message_data['headline'] = $message_data['title'];
-            unset( $message_data['title'] );
+        if( isset( $icegram_message_data['title'] ) ) {
+            $icegram_message_data['headline'] = $icegram_message_data['title'];
+            unset( $icegram_message_data['title'] );
         }
-        if( isset( $message_data['promo_image'] ) ) {
-            $message_data['icon'] = $message_data['promo_image'];
-            unset( $message_data['promo_image'] );
+        if( isset( $icegram_message_data['promo_image'] ) ) {
+            $icegram_message_data['icon'] = $icegram_message_data['promo_image'];
+            unset( $icegram_message_data['promo_image'] );
         }
-        update_post_meta( $result->post_id, $result->meta_key, $message_data );
+        update_post_meta( $icegram_result->post_id, $icegram_result->meta_key, $icegram_message_data );
     }
 
 }
 
 // Change post_type for messages and campaigns
-$old_post_types = array('message', 'campaign');
-foreach ($old_post_types as $type) {
+ $icegram_old_post_types = array('message', 'campaign');
+foreach ($icegram_old_post_types as $icegram_type) {
+        
+    $icegram_query = 'numberposts=-1&post_status=any&post_type='.$icegram_type;
     
-    $q = 'numberposts=-1&post_status=any&post_type='.$type;
-    $items = get_posts($q);
-    foreach ($items as $item) {
-        $update['ID'] = $item->ID;
-        $update['post_type'] = "ig_{$type}";
-        wp_update_post( $update );
+    $icegram_items = get_posts($icegram_query);
+    
+    foreach ($icegram_items as $icegram_item) {
+        
+        $icegram_update['ID'] = $icegram_item->ID;
+        
+        $icegram_update['post_type'] = "ig_{$icegram_type}";
+        wp_update_post( $icegram_update );
     }
 
     /*

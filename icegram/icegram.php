@@ -3,8 +3,8 @@
  * Plugin Name: Icegram Engage - Popups, Optins, CTAs & lot more...
  * Plugin URI: https://www.icegram.com/
  * Description: All in one solution to inspire, convert and engage your audiences. Action bars, Popup windows, Messengers, Toast notifications and more. Awesome themes and powerful rules.
- * Version: 3.1.34
- * Tested up to: 6.7.1
+ * Version: 3.1.38
+ * Tested up to: 6.8
  * Author: icegram
  * Author URI: https://www.icegram.com/
  * Copyright (c) 2014-23 Icegram
@@ -12,19 +12,19 @@
  * License URI: http://www.gnu.org/licenses/gpl-3.0.html
  *
  * Text Domain: icegram
- * Domain Path: /lang/
+ * Domain Path: /lite/lang/
 */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-if ( ! defined( 'IG_FEEDBACK_TRACKER_VERSION' ) ) {
-	define( 'IG_FEEDBACK_TRACKER_VERSION', '1.2.8' );
+if ( ! defined( 'ICEGRAM_FEEDBACK_TRACKER_VERSION' ) ) {
+	define( 'ICEGRAM_FEEDBACK_TRACKER_VERSION', '1.2.9' );
 }
 
-if ( ! defined( 'IG_USAGE_TRACKER_VERSION' ) ) {
-	define( 'IG_USAGE_TRACKER_VERSION', '1.0.1' );
+if ( ! defined( 'ICEGRAM_USAGE_TRACKER_VERSION' ) ) {
+	define( 'ICEGRAM_USAGE_TRACKER_VERSION', '1.0.2' );
 }
 
 /* ***************************** Initial Compatibility Work (Start) ******************* */
@@ -32,23 +32,22 @@ if ( ! defined( 'IG_USAGE_TRACKER_VERSION' ) ) {
 /* =========== Do not edit this code unless you know what you are doing ========= */
 
 /*
- * Note: We are not using IG_PLUGIN_DIR constant at this moment because there are chances
+ * Note: We are not using ICEGRAM_PLUGIN_DIR constant at this moment because there are chances
  * It might be defined from older version of IG
  */
 require plugin_dir_path( __FILE__ ) . 'lite/classes/feedback/class-ig-tracker.php';
 
-global $ig_tracker;
+global $icegram_tracker;
 
-$ig_tracker = 'IG_Tracker_V_' . str_replace( '.', '_', IG_FEEDBACK_TRACKER_VERSION );
+$icegram_tracker = 'IG_Tracker_V_' . str_replace( '.', '_', ICEGRAM_FEEDBACK_TRACKER_VERSION );
 
-
-if ( ! function_exists( 'ig_show_upgrade_pro_notice' ) ) {
+if ( ! function_exists( 'icegram_show_upgrade_pro_notice' ) ) {
 	/**
 	 * Show IG Premium Upgrade Notice
 	 *
 	 * @since 1.11.0
-	 */
-	function ig_show_upgrade_pro_notice() {
+	 */    
+	function icegram_show_upgrade_pro_notice() {
 		$url = admin_url( 'plugins.php?plugin_status=upgrade' );
 		?>
 		<div class="notice notice-error">
@@ -68,14 +67,15 @@ if ( ! function_exists( 'deactivate_plugins' ) ) {
 	require_once ABSPATH . 'wp-admin/includes/plugin.php';
 }
 
-$ig_plan = 'lite';
+$icegram_plan = 'lite';
 if ( 'icegram-engage.php' === basename( __FILE__ ) ) {
-	$ig_plan = 'premium';
+	$icegram_plan = 'premium';
 } 
-$current_active_plugins = $ig_tracker::get_active_plugins();
 
-if ( 'premium' === $ig_plan ) {
-	if ( in_array( 'icegram/icegram.php', $current_active_plugins, true ) ) {
+$icegram_current_active_plugins = $icegram_tracker::get_active_plugins();
+
+if ( 'premium' === $icegram_plan ) {
+	if ( in_array( 'icegram/icegram.php', $icegram_current_active_plugins, true ) ) {
 		deactivate_plugins( 'icegram/icegram.php', true );
 	}
 } else {
@@ -86,26 +86,27 @@ if ( 'premium' === $ig_plan ) {
 	 * - If It's installed & It's >= 2.0.0 => return
 	 */
 
-	//- If It's installed & It's < 2.0.0 => Show Upgrade Notice
-	$all_plugins = $ig_tracker::get_plugins( 'all', true );
+	//- If It's installed & It's < 2.0.0 => Show Upgrade Notice	
+	$icegram_all_plugins = $icegram_tracker::get_plugins( 'all', true );
+	
+	$icegram_prem_plugin         = 'icegram-engage/icegram-engage.php';
+	
+	$icegram_prem_plugin_version = ! empty( $icegram_all_plugins[ $icegram_prem_plugin ] ) ? $icegram_all_plugins[ $icegram_prem_plugin ]['version'] : '';
 
-	$ig_prem_plugin         = 'icegram-engage/icegram-engage.php';
-	$ig_prem_plugin_version = ! empty( $all_plugins[ $ig_prem_plugin ] ) ? $all_plugins[ $ig_prem_plugin ]['version'] : '';
-
-	if ( ! empty( $ig_prem_plugin_version ) ) {
+	if ( ! empty( $icegram_prem_plugin_version ) ) {
 
 		// Is Premium active?
-		$is_premium_active = $all_plugins[ $ig_prem_plugin ]['is_active'];
+		$icegram_is_premium_active = $icegram_all_plugins[ $icegram_prem_plugin ]['is_active'];
 
 		// Free >= 2.0.0 && Premium < 2.0.0
-		if ( version_compare( $ig_prem_plugin_version, '2.0.0', '<' ) ) {
+		if ( version_compare( $icegram_prem_plugin_version, '2.0.0', '<' ) ) {
 
 			// Show Upgrade Notice if It's Admin Screen.
 			if ( is_admin() ) {
-				add_action( 'admin_head', 'ig_show_upgrade_pro_notice', PHP_INT_MAX );
+				add_action( 'admin_head', 'icegram_show_upgrade_pro_notice', PHP_INT_MAX );
 			}
 
-		} elseif ( $is_premium_active && version_compare( $ig_prem_plugin_version, '2.0.0', '>=' ) ) {
+		} elseif ( $icegram_is_premium_active && version_compare( $icegram_prem_plugin_version, '2.0.0', '>=' ) ) {
 			return;
 		}
 	}
@@ -113,37 +114,37 @@ if ( 'premium' === $ig_plan ) {
 
 /* ***************************** Initial Compatibility Work (End) ******************* */
 
-if ( ! defined( 'IG_PLUGIN_DIR' ) ) {
-	define( 'IG_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
+if ( ! defined( 'ICEGRAM_PLUGIN_DIR' ) ) {
+	define( 'ICEGRAM_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 }
 
-if ( ! defined( 'IG_PLUGIN_URL' ) ) {
-	define( 'IG_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
+if ( ! defined( 'ICEGRAM_PLUGIN_URL' ) ) {
+	define( 'ICEGRAM_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 }
 
-if ( ! defined( 'IG_PLUGIN_FILE' ) ) {
-	define( 'IG_PLUGIN_FILE', __FILE__ );
+if ( ! defined( 'ICEGRAM_PLUGIN_FILE' ) ) {
+	define( 'ICEGRAM_PLUGIN_FILE', __FILE__ );
 }
 
-if ( ! defined( 'IG_PLUGIN_VERSION' ) ) {
-  	define( 'IG_PLUGIN_VERSION', '3.1.34' );
+if ( ! defined( 'ICEGRAM_PLUGIN_VERSION' ) ) {
+  	define( 'ICEGRAM_PLUGIN_VERSION', '' );
 }
 
-if ( ! defined( 'IG_PRODUCT_ID' ) ) {
-	define( 'IG_PRODUCT_ID', 1000 );
+if ( ! defined( 'ICEGRAM_PRODUCT_ID' ) ) {
+	define( 'ICEGRAM_PRODUCT_ID', 1000 );
 }
 
 require plugin_dir_path( __FILE__ ) . 'lite/class-icegram.php';
 require plugin_dir_path( __FILE__ ) . 'lite/class-icegram-loader.php';
 
 
-if ( ! function_exists( 'activate_icegram' ) ) {
+if ( ! function_exists( 'icegram_activate' ) ) {
 	/**
 	 * The code that runs during plugin activation.
 	 * 
 	 * @param bool $network_wide Is plugin being activated on a network.
-	 */
-	function activate_icegram( $network_wide ) {
+	 */	
+	function icegram_activate( $network_wide ) {
 
 		global $wpdb;
 		require_once plugin_dir_path( __FILE__ ) . 'lite/classes/class-icegram-activator.php';
@@ -151,9 +152,10 @@ if ( ! function_exists( 'activate_icegram' ) ) {
 		if ( is_multisite() && $network_wide ) {
 			
 			// Get all active blogs in the network and activate plugin on each one
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 			$blog_ids = $wpdb->get_col( $wpdb->prepare( "SELECT blog_id FROM $wpdb->blogs WHERE deleted = %d", 0 ) );
 			foreach ( $blog_ids as $blog_id ) {
-				ig_activate_on_blog( $blog_id );
+				icegram_activate_on_blog( $blog_id );
 			}
 		} else {
 			Icegram_Activator::activate();
@@ -161,14 +163,14 @@ if ( ! function_exists( 'activate_icegram' ) ) {
 	}
 }
 
-if ( ! function_exists( 'deactivate_icegram' ) ) {
+if ( ! function_exists( 'icegram_deactivate' ) ) {
 	/**
 	 * The code that runs during plugin deactivation.
 	 * 
 	 * @param bool $network_wide Is plugin being activated on a network.
 	 * 
-	 */
-	function deactivate_icegram( $network_wide ) {
+	 */	
+	function icegram_deactivate( $network_wide ) {
 
 		require_once plugin_dir_path( __FILE__ ) . 'lite/classes/class-icegram-deactivator.php';
 
@@ -177,10 +179,11 @@ if ( ! function_exists( 'deactivate_icegram' ) ) {
 			global $wpdb;
 			
 			// Get all active blogs in the network.
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 			$blog_ids = $wpdb->get_col( $wpdb->prepare( "SELECT blog_id FROM $wpdb->blogs WHERE deleted = %d", 0 ) );
 			foreach ( $blog_ids as $blog_id ) {
 				// Run deactivation code on each one
-				ig_trigger_deactivation_in_multisite( $blog_id );
+				icegram_trigger_deactivation_in_multisite( $blog_id );
 			}
 		} else {
 			Icegram_Deactivator::deactivate();
@@ -188,7 +191,7 @@ if ( ! function_exists( 'deactivate_icegram' ) ) {
 	}
 }
 
-if ( ! function_exists( 'ig_activate_on_blog' ) ) {
+if ( ! function_exists( 'icegram_activate_on_blog' ) ) {
 
 	/**
 	 * Function to trigger Icegram's activation code for individual site/blog in a network.
@@ -196,15 +199,15 @@ if ( ! function_exists( 'ig_activate_on_blog' ) ) {
 	 * @param  int $blog_id Blog ID of newly created site/blog.
 	 * 
 	 * @since  1.11.0
-	 */
-	function ig_activate_on_blog( $blog_id ) {
+	 */ 
+	function icegram_activate_on_blog( $blog_id ) {
 		switch_to_blog( $blog_id );
 		Icegram_Activator::activate();
 		restore_current_blog();
 	}
 }
 
-if ( ! function_exists( 'ig_trigger_deactivation_in_multisite' ) ) {
+if ( ! function_exists( 'icegram_trigger_deactivation_in_multisite' ) ) {
 
 	/**
 	 * Function to trigger Icegram deactivation code for individual site in a network.
@@ -213,26 +216,26 @@ if ( ! function_exists( 'ig_trigger_deactivation_in_multisite' ) ) {
 	 * 
 	 * @since  1.11.0
 	 */
-	function ig_trigger_deactivation_in_multisite( $blog_id ) {
+	function icegram_trigger_deactivation_in_multisite( $blog_id ) {
 		switch_to_blog( $blog_id );
 		Icegram_Deactivator::deactivate();
 		restore_current_blog();
 	}
 }
 
-register_activation_hook( __FILE__, 'activate_icegram' );
-register_deactivation_hook( __FILE__, 'deactivate_icegram' );
+register_activation_hook( __FILE__, 'icegram_activate' );
+register_deactivation_hook( __FILE__, 'icegram_deactivate' );
 
-add_action( 'init', 'load_icegram_translations' );
-if ( ! function_exists( 'load_icegram_translations' ) ) {
-	function load_icegram_translations() {
-		load_plugin_textdomain( 'icegram', false, IG_PLUGIN_DIR . 'lite/lang/' );
+add_action( 'init', 'icegram_load_translations' );
+if ( ! function_exists( 'icegram_load_translations' ) ) {
+	function icegram_load_translations() {
+		load_plugin_textdomain( 'icegram', false, ICEGRAM_PLUGIN_DIR . 'lite/lang/' );
 	}
 }
 
-add_action( 'plugins_loaded', 'initialize_icegram' );
-if ( ! function_exists( 'initialize_icegram' ) ) {
-    function initialize_icegram() {
+add_action( 'plugins_loaded', 'icegram_initialize' );
+if ( ! function_exists( 'icegram_initialize' ) ) {
+    function icegram_initialize() {
         /* @var Icegram Object */
         global $icegram;
         $icegram = new Icegram();
@@ -240,10 +243,11 @@ if ( ! function_exists( 'initialize_icegram' ) ) {
     }
 }
 
-add_filter( 'ig-engage_is_page_for_notifications', 'ig_show_notification');
+add_filter( 'icegram-engage_is_page_for_notifications', 'icegram_show_notification');
 
-if ( ! function_exists( 'ig_show_notification' ) ) {
-	function ig_show_notification(){
+if ( ! function_exists( 'icegram_show_notification' ) ) {
+	
+	function icegram_show_notification(){
 
 		$screen = get_current_screen();
 		
@@ -259,7 +263,7 @@ if ( ! function_exists( 'ig_show_notification' ) ) {
 	}
 }
 
-if ( ! function_exists( 'IG' ) ) {
+if ( ! function_exists( 'Icegram_Instance' ) ) {
 	
 	/**
 	 * Icegram instance
@@ -269,8 +273,8 @@ if ( ! function_exists( 'IG' ) ) {
 	 * @return Icegram
 	 *
 	 * @since 1.11.0
-	 */
-	function IG( $plugin_path = '' ) {
+	 */	
+	function Icegram_Instance( $plugin_path = '' ) {
 		$icegram_loader = Icegram_Loader::instance();
 		// Load files if plugin path given.
 		if ( ! empty( $plugin_path ) ) {
@@ -280,11 +284,12 @@ if ( ! function_exists( 'IG' ) ) {
 	}
 }
 
-$current_plugin_path = plugin_dir_path( __FILE__ );
+
+$icegram_current_plugin_path = plugin_dir_path( __FILE__ );
 
 /** 
  * We need to pass the plugin path explicitly using $current_plugin_path variable. 
- * We are not using IG_PLUGIN_DIR constant here, since using IG_PLUGIN_DIR constant causes premium version files not getting loaded when lite version is active and user is activating premium versions.
- * In that case, value of IG_PLUGIN_DIR constant is the path of Icegram lite plugin(since it is loaded first before premium version) which does not have premium version's file thus these files are not loaded.
+ * We are not using ICEGRAM_PLUGIN_DIR constant here, since using ICEGRAM_PLUGIN_DIR constant causes premium version files not getting loaded when lite version is active and user is activating premium versions.
+ * In that case, value of ICEGRAM_PLUGIN_DIR constant is the path of Icegram lite plugin(since it is loaded first before premium version) which does not have premium version's file thus these files are not loaded.
  */
-IG( $current_plugin_path );
+Icegram_Instance( $icegram_current_plugin_path );

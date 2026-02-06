@@ -73,30 +73,48 @@ jQuery(function() {
 		
 			var campaign_id = jQuery(this).data('campaign-id');
 			var gallery_item = jQuery(this).data('gallery-item');
+			var current_href = jQuery('a#ig-trial-optin').attr("href");
 			
-			jQuery('a#ig-trial-optin').attr("href", "?action=fetch_messages&campaign_id="+ campaign_id + "&gallery_item=" + gallery_item + "&ig_trial=1");
-
+			// Extract nonce with improved regex that handles both middle and end of string
+			var nonce_match = current_href.match(/ig_trial_nonce=([^&\s"']+)/);
+			
+			var nonce = '';
+			if (nonce_match && nonce_match[1]) {
+				nonce = '&ig_trial_nonce=' + nonce_match[1];
+			}
+			
+			var new_href = "?action=fetch_messages&campaign_id="+ campaign_id + "&gallery_item=" + gallery_item + "&ig_trial=1" + nonce;
+			
+			jQuery('a#ig-trial-optin').attr("href", new_href);
+		
 		})
-
+	
 		jQuery('#ig-trial-optin').on('click', function(e){
 			
 			e.preventDefault();
 			var name = jQuery('input[name="ig_trial_name"]').val();
 			var email = jQuery('input[name="ig_trial_email"]').val();
 			var list = jQuery('input[name="list"]').val();
-
+			
+			// Capture the href BEFORE AJAX call
+			var redirect_url = jQuery(this).attr('href');
+			
+			// Extract nonce from the href URL parameter
+			var url_params = new URLSearchParams(redirect_url.split('?')[1]);
+			var trial_nonce = url_params.get('ig_trial_nonce');
+			
 			var regex =
 			/^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-            if (!regex.test(email)) {
-                alert('Please enter correct email address');
-                return false;
-            }
+    	    if (!regex.test(email)) {
+    	        alert('Please enter correct email address');
+    	        return false;
+    	    }
 			
 			if ( ! jQuery("input[name='ig-select-trial-template']:checked").val()) {
 		       alert('Please select a template to start the trial');
 		       return false;
 		    }
-
+		
 			var data = {
 					action: 'es_list_subscribe',
 					security: icegram_writepanel_params.ig_nonce,
@@ -104,11 +122,11 @@ jQuery(function() {
 					name: name,
 					email: email,	
 					ig_trial: 1,
+					ig_trial_nonce: trial_nonce
 				}
-
+			
 			jQuery.ajax({
 				method: 'post',
-				context: this,
 				url: icegram_writepanel_params.ajax_url,
 				data: data,
 				dataType: 'json',
@@ -116,12 +134,12 @@ jQuery(function() {
 					jQuery('#ig-trial-optin .ig-spinner').show();
 				}, 
 				complete: function (data) {
-					location.href = this.href;
+					location.href = redirect_url;
 					jQuery('#ig-trial-optin .ig-spinner').hide();
 				}
 			});
 		})
-
+	
 		jQuery('.ig-campaign-status-toggle-label input[type="checkbox"]').change(function() {
 			var checkbox_elem       = jQuery(this);
 			var campaign_id         = jQuery(checkbox_elem).val();
@@ -431,7 +449,7 @@ jQuery(function() {
 			url: icegram_writepanel_params.ajax_url,
 			dataType: 'json',
 			data: {
-				action: 'get_message_action_row',
+				action: 'ig_get_message_action_row',
 				security: icegram_writepanel_params.ig_nonce,
 				message_id: message_id,
 				row: message_rows,

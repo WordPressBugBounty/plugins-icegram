@@ -20,7 +20,7 @@ if ( ! class_exists( 'Icegram_Campaign_Admin' ) ) {
 
 			add_action( 'save_post', array( &$this, 'save_campaign_settings' ), 10, 2 );
 			add_action( 'wp_ajax_icegram_json_search_messages', array( &$this, 'icegram_json_search_messages' ) );
-			add_action( 'wp_ajax_get_message_action_row', array( &$this, 'get_message_action_row' ) );		
+			add_action( 'wp_ajax_ig_get_message_action_row', array( &$this, 'get_message_action_row' ) );		
 		    // add_filter( 'wp_default_editor', create_function('', 'return "html";') );
 			add_action( 'wp_ajax_save_campaign_preview', array( &$this, 'save_campaign_preview' ) );
 			add_action( 'icegram_campaign_target_rules', array( &$this, 'icegram_add_campaign_target_rules' ), 10, 2 );
@@ -54,75 +54,90 @@ if ( ! class_exists( 'Icegram_Campaign_Admin' ) ) {
 			return $ig_campaign_admin;
 		}
 
-		// Initialize campaign Tabs
-		public function add_campaigns_tabs() {
-			global $post, $pagenow;
-			if ($post->post_type != 'ig_campaign') return;
+		
 
-			$tabs = array();
+		public function add_campaigns_tabs() {
+
+			global $post, $pagenow;
+
+			if ( empty($post) || $post->post_type !== 'ig_campaign' ) {
+				return;
+			}
+
+			// Prepare tabs array and apply filters
 			$tabs = array('tabs' => array());
 			$tabs = apply_filters('icegram_campaign_tabs', $tabs);
-			
+
+			// Display rule tab (if any)
 			$display_rule_tab = apply_filters('icegram_display_rules', '');
-	
-			if(!empty($tabs)){
 
-				$tabs_content = !empty($tabs['tabs']) ? implode('', $tabs['tabs']) : '';
+			if ( ! empty( $tabs['tabs'] ) && is_array( $tabs['tabs'] ) ) {
+				// Combine tabs HTML
+				$tabs_content = implode('', $tabs['tabs']); 
 
-				echo '<div id="ig-admin-tabs" class="border-t-2 border-b-2 border-dashed border-gray-200">'. $tabs_content . '</div>' . $display_rule_tab;   
+				// Output tabs - assuming $tabs_content is safe and may contain CSS, so skipping escaping here deliberately
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				echo '<div id="ig-admin-tabs" class="border-t-2 border-b-2 border-dashed border-gray-200">' . $tabs_content . '</div>' . $display_rule_tab;
 			}
-
-			if ( $pagenow == 'post-new.php' ) {
-				echo "<style>
-					#poststuff{
-				position:relative;
-			}
-					#poststuff #post-body.columns-2{
-			margin-right: 0;
-		}
-		.wrap h1.wp-heading-inline,
+			
+			// Custom styles for new post page
+			if ( $pagenow === 'post-new.php' ) {
+				?>
+				<style>
+					#poststuff {
+						position: relative;
+					}
+					#poststuff #post-body.columns-2 {
+						margin-right: 0;
+					}
+					.wrap h1.wp-heading-inline,
 					#post-body-content,
-		.postbox-container + *:not(:last-child),
-		.postbox-container > *:not(.ig-gallery-wrap){
-			display:none;
-		}
-		.wrap h1.wp-heading-inline.gallery-heading{
-			display:inline-block;
-		}
-		.ig-gallery-position{
-			position: absolute;
-			width: 100%;
-			left: 0;
-			top: 50px;
-		}
-					#postbox-container-1 #side-sortables.gal-toggled{
-		display:block;
-	}
-	</style>";
-				// echo '<h1 class="wp-heading-inline gallery-heading">'. __('Import from beautiful design templates', 'icegram'). '<a href="#" class="page-title-action" id="ig-add-new-campaign">'. __('Add New Campaign', 'icegram'). '</a></h1>';
-				// echo '<h1 class="wp-heading-inline gallery-heading">'. __('Import from beautiful design templates', 'icegram').'</h1>';
-	Icegram::gallery_screen();
-}
-
-}
+					.postbox-container + *:not(:last-child),
+					.postbox-container > *:not(.ig-gallery-wrap) {
+						display: none;
+					}
+					.wrap h1.wp-heading-inline.gallery-heading {
+						display: inline-block;
+					}
+					.ig-gallery-position {
+						position: absolute;
+						width: 100%;
+						left: 0;
+						top: 50px;
+					}
+					#postbox-container-1 {
+						display: none !important;
+					}
+					#wp-content #screen-meta-links {
+						display: none;
+					}
+					#screen-meta-links {
+						display: none;
+					}
+				</style>
+				<?php 
+				Icegram::gallery_screen();
+			}
+		} 
+ 
 
 		public function remove_campaign_extra_meta_box(){
 			remove_meta_box( 'submitdiv' , 'ig_campaign' , 'side' ); 
 			
 		}
 
-		public function add_campaign_settings(){
-			global $post;
+		public function add_campaign_settings() {
+			global $post, $icegram;
 
-			if( $post->post_type != 'ig_campaign' ){
+			if ( $post->post_type !== 'ig_campaign' ) {
 				return;
 			}
 
 			$args = array(
-				'post_type'			=> array( 'ig_campaign' ),
-				'post_status'	 	=> array('publish', 'draft'),
-				'posts_per_page' 	=> -1,
-				'post__not_in' 		=> array( $post->ID ),
+				'post_type'      => array( 'ig_campaign' ),
+				'post_status'    => array( 'publish', 'draft' ),
+				'posts_per_page' => -1,
+				'post__not_in'   => array( $post->ID ),
 			);
 
 			$ig_campaigns = get_posts( $args );
@@ -132,32 +147,43 @@ if ( ! class_exists( 'Icegram_Campaign_Admin' ) ) {
 				<h1 class="flex items-center">
 					<div class="ig_campaign_settings_links inline-block w-2/4">
 						<ul class="ig-es-tabs inline-flex">
-							<li id="campaign_content_menu" class="px-1 pb-2 text-center list-none cursor-pointer active ">
-								<a href="#ig-campaign-overview" class=""><span class="mt-1 text-base font-medium tracking-wide text-gray-400 active"><?php esc_html_e( 'Overview', 'icegram' ) ?></span></a>
+							<li id="campaign_content_menu" class="px-1 pb-2 text-center list-none cursor-pointer active">
+								<a href="#ig-campaign-overview">
+									<span class="mt-1 text-base font-medium tracking-wide text-gray-400 active">
+										<?php esc_html_e( 'Overview', 'icegram' ); ?>
+									</span>
+								</a>
 							</li>
-							<li id="campaign_summary_menu" class="px-1 pb-2 ml-5 text-center list-none cursor-pointer hover:border-2 ">
-								<a href="#ig-campaign-content-design" class=""><span class="mt-1 text-base font-medium tracking-wide text-gray-400"><?php esc_html_e( 'Content & Design', 'icegram' ) ?></span></a>
+							<li id="campaign_summary_menu" class="px-1 pb-2 ml-5 text-center list-none cursor-pointer hover:border-2">
+								<a href="#ig-campaign-content-design">
+									<span class="mt-1 text-base font-medium tracking-wide text-gray-400">
+										<?php esc_html_e( 'Content & Design', 'icegram' ); ?>
+									</span>
+								</a>
 							</li>
-							<li id="campaign_summary_menu" class="px-1 pb-2 ml-5 text-center list-none cursor-pointer hover:border-2 ">
-								<a href="#ig-campaign-display-rules" class=""><span class="mt-1 text-base font-medium tracking-wide text-gray-400"><?php esc_html_e( 'Display Rules', 'icegram' ) ?></span></a>
+							<li id="campaign_display_rules_menu" class="px-1 pb-2 ml-5 text-center list-none cursor-pointer hover:border-2">
+								<a href="#ig-campaign-display-rules">
+									<span class="mt-1 text-base font-medium tracking-wide text-gray-400">
+										<?php esc_html_e( 'Display Rules', 'icegram' ); ?>
+									</span>
+								</a>
 							</li>
 						</ul>
 					</div>
 
-					<?php
-
+					<?php 
 					/* Campaign CTAS */
 					$campaign_ctas = '<div class="campaign_ctas right-0 float-right relative inline-block w-2/4">';
 					
 					if ( ! in_array( $post->post_status, array( 'publish' ), true ) ) { 
 						
-						$campaign_ctas .= get_submit_button( __('Publish'), 'primary large float-right ig_campaign_publish', 'publish', false );
+						$campaign_ctas .= get_submit_button( esc_html__('Publish', 'icegram'), 'primary large float-right ig_campaign_publish', 'publish', false );
 						
-						$campaign_ctas .= '<input type="submit" name="save" id="save-post" value="' . esc_attr__( 'Save Draft' ) . '" class="button float-right ig_campaign_save" />';
+						$campaign_ctas .= '<input type="submit" name="save" id="save-post" value="' . esc_attr__( 'Save Draft', 'icegram' ) . '" class="button float-right ig_campaign_save" />';
 
 					} else {
 						
-						$campaign_ctas .= get_submit_button( __( 'Update' ), 'primary large float-right ig_campaign_update', 'save', false, array( 'id' => 'publish' ) );
+						$campaign_ctas .= get_submit_button( esc_html__( 'Update', 'icegram' ), 'primary large float-right ig_campaign_update', 'save', false, array( 'id' => 'publish' ) );
 						
 						$campaign_ctas .= '<button class="button button-secondary float-right ig_campaign_switch_draft" type="submit" name="post_status" id="post_status" value="Draft">' . __('Switch to Draft', 'icegram') . '</button>' ;
 					}
@@ -166,23 +192,23 @@ if ( ! class_exists( 'Icegram_Campaign_Admin' ) ) {
 					
 					$campaign_ctas .= '<div class="button button-secondary float-right load_display_rules">' . esc_html__( 'Load Display Rules', 'icegram' ) . '</div>';
 					
-					$campaign_ctas .= '</div>';
+					$campaign_ctas .= '</div>';  
 					
-					echo $campaign_ctas;
-				?>
+					$ig_allowed_tags = $icegram->ig_add_escape_allowed_tags();
+					echo wp_kses( $campaign_ctas, $ig_allowed_tags ); ?>
+
 				</h1>
 			</div>
+
 			<div class="campaign_box hidden load_rules_popup">
 				<div class="fixed top-0 left-0 z-50 flex items-center justify-center w-full h-full" style="background-color: rgba(0,0,0,.5);">
 					<div id="load-rules-main-container" class="absolute h-fit py-5 ml-16 mr-4 text-left bg-white rounded shadow-xl md:max-w-5xl lg:max-w-7xl md:pt-3 lg:pt-2" style="z-index:999">
 						
 						<div class="px-5 py-2 flex border-b border-gray-200">
 							<h3 class="w-full text-2xl text-left">
-								<?php
-									echo esc_html__( 'Load display rules from', 'email-subscribers' );
-								?>
+								<?php echo esc_html__( 'Load display rules from', 'icegram' ); ?>
 							</h3>
-							<div>			
+							<div>            
 								<span class="close-display-rules-popup cursor-pointer text-sm font-medium tracking-wide text-gray-700 select-none no-outline focus:outline-none focus:shadow-outline-red hover:border-red-400 active:shadow-lg">
 									<svg class="h-5 w-5 inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
 										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -190,28 +216,34 @@ if ( ! class_exists( 'Icegram_Campaign_Admin' ) ) {
 								</span>
 							</div>
 						</div>
+
 						<div class="block flex pt-6 pb-4 px-5">
 							<span class="text-sm font-medium pt-1 w-1/4">
-							<?php 
-								echo esc_html__('Choose a campaign', 'icegram');
-							?>
+								<?php echo esc_html__( 'Choose a campaign', 'icegram' ); ?>
 							</span>
 							<select class="form-select" name="load_display_rules_from">
-								<option value=""> <?php echo esc_html__('Select a campaign', 'icegram');  ?> </option>
-									<?php
-										if ( ! empty( $ig_campaigns ) && is_array( $ig_campaigns ) ) {
-							 				foreach ( $ig_campaigns as $campaign ) {
-											?>
-												<option value="<?php echo esc_html( $campaign->ID); ?>"><?php echo esc_html($campaign->post_title); ?></option>
-											<?php
-											}
-										}
-									?>
+								<option value=""><?php echo esc_html__( 'Select a campaign', 'icegram' ); ?></option>
+								<?php
+								if ( ! empty( $ig_campaigns ) && is_array( $ig_campaigns ) ) {
+									foreach ( $ig_campaigns as $campaign ) {
+										?>
+										<option value="<?php echo esc_attr( $campaign->ID ); ?>">
+											<?php echo esc_html( $campaign->post_title ); ?>
+										</option>
+										<?php
+									}
+								}
+								?>
 							</select>
 						</div>
+
 						<div class="px-7 pt-2 float-right">
-							<button class="button button-primary button-large ig_campaign_load_rules" type="submit" name=""><?php echo esc_html__('Done', 'icegram'); ?></button>
-							<button class="button button-secondary close-display-rules-popup"><?php echo esc_html__('Cancel', 'icegram'); ?></button>
+							<button class="button button-primary button-large ig_campaign_load_rules" type="submit" name="">
+								<?php echo esc_html__( 'Done', 'icegram' ); ?>
+							</button>
+							<button class="button button-secondary close-display-rules-popup">
+								<?php echo esc_html__( 'Cancel', 'icegram' ); ?>
+							</button>
 						</div>
 					</div>
 				</div>
@@ -244,36 +276,36 @@ if ( ! class_exists( 'Icegram_Campaign_Admin' ) ) {
 			return $tabs;
 		}
 
-		public function campaign_message_list(){
+		public function campaign_message_list() {
 			global $post, $icegram;
-			
-			if( $post->post_type != 'ig_campaign' ) return;
+
+			if ( $post->post_type !== 'ig_campaign' ) {
+				return;
+			}
 
 			$messages = array();
-			$messages = self::get_icegram_campaign_messages($messages, $post->ID);
+			$messages = self::get_icegram_campaign_messages( $messages, $post->ID );
 
 			$tab_id = 'main';
-			$tab_class = 'campaign_data'; // space seperated classes
+			$tab_class = 'campaign_data'; // space separated classes
 
-			$tabs['main_message'][$tab_id] = array();
-			$tabs['main_message'][$tab_id]['name'] = '<div class="ig-admin-nav"><p variation="' .$tab_id .'" class="py-3 pl-8 text-sm font-medium  ig-admin-nav-'. $tab_id . '"><a href="#ig-admin-tab-'. $tab_id .'">'. __( 'Messages', 'icegram' ) .'</a></p></div>';
-			$tabs['main_message'][$tab_id]['messages'] = $messages;
-
-
+			$tabs['main_message'][ $tab_id ] = array();
+			$tabs['main_message'][ $tab_id ]['name'] = '<div class="ig-admin-nav"><p variation="' . esc_attr( $tab_id ) . '" class="py-3 pl-8 text-sm font-medium ig-admin-nav-' . esc_attr( $tab_id ) . '"><a href="#ig-admin-tab-' . esc_attr( $tab_id ) . '">' . esc_html__( 'Messages', 'icegram' ) . '</a></p></div>';
+			$tabs['main_message'][ $tab_id ]['messages'] = $messages;
 			?>
 			<div class="stats_cta text-right">
-				<?php do_action('icegram_campaign_stats_cta') ?>
+				<?php do_action( 'icegram_campaign_stats_cta' ); ?>
 			</div>
 
 			<!-- Message Navigation Table -->
 			<table class="min-w-full border mt-3 mb-8" id="ig_message_list_table">
-				<thead>	
+				<thead>    
 					<tr class="bg-gray-100 text-sm text-left leading-4 text-gray-500 tracking-wider border-b border-t border-gray-200 ">
 						<th colspan="3">
 							<div>
-								<div class="message-list-header-name inline-block pl-8 py-4 font-medium" scope="col"><?php echo esc_html_e('Messages', 'icegram') ?></div>
+								<div class="message-list-header-name inline-block pl-8 py-4 font-medium" scope="col"><?php esc_html_e( 'Messages', 'icegram' ); ?></div>
 								<div class="mx-2 inline relative top-1 float-right" id="ig_campaign_cta">
-										<?php do_action('icegram_add_campaign_ctas') ?>
+									<?php do_action( 'icegram_add_campaign_ctas' ); ?>
 								</div>
 							</div>
 						</th>
@@ -292,7 +324,7 @@ if ( ! class_exists( 'Icegram_Campaign_Admin' ) ) {
 									$meta_key = $variation;
 									$icegram_message_meta_key = apply_filters('icegram_message_meta_key', 'messages', $meta_key);
 								?>	
-									<tr class="variation_row border-b text-sm font-normal text-gray-700 border-gray-200" variation="<?php echo esc_html( $variation ) ?>">
+									<tr class="variation_row border-b text-sm font-normal text-gray-700 border-gray-200" variation="<?php echo esc_attr( $variation ) ?>">
 										<td class="w-3/12">
 											<?php echo wp_kses_post( $value['name'] ); ?>	
 										<td class="message-list-col pl-2" style="width: 62%">
@@ -310,7 +342,7 @@ if ( ! class_exists( 'Icegram_Campaign_Admin' ) ) {
 														<div class="form-field message-row px-1 py-2 inline-block" value="<?php echo esc_attr( $message_id ); ?>">
 															<div class="message_edit inline-block hover:bg-gray-200 cursor-pointer px-2 py-1 rounded">
 																<div class="message_header inline-block">
-																	<label class="message_header_label <?php echo "ig_". esc_html( $message_type ) ." " . esc_html( $class ); ?>"><?php echo esc_attr($class); ?></label>
+																	<label class="message_header_label <?php echo "ig_". esc_attr( $message_type ) ." " . esc_attr( $class ); ?>"><?php echo esc_html($class); ?></label>
 																</div>
 																<div class="message_title inline-block">
 																	<span class="message-title-text font-medium"><?php echo esc_html( $message_title ); ?></span>
@@ -359,7 +391,7 @@ if ( ! class_exists( 'Icegram_Campaign_Admin' ) ) {
 														<div class="px-4 py-2 flex border-b border-gray-200">
 															<h3 class="w-full text-2xl text-left">
 																<?php
-																	echo esc_html__( 'Message', 'email-subscribers' );
+																	echo esc_html__( 'Message', 'icegram' );
 																?>
 															</h3>
 															<div>			
@@ -373,7 +405,8 @@ if ( ! class_exists( 'Icegram_Campaign_Admin' ) ) {
 														<div class="block pt-4 pb-2 px-5" id="search_message">
 															<?php 
 																echo wp_kses_post( $title );
-																echo $campaign_box; 
+																$ig_allowed_tags = $icegram->ig_add_escape_allowed_tags();																
+																echo wp_kses( $campaign_box, $ig_allowed_tags ); 
 																?>
 														</div>
 														
@@ -395,15 +428,15 @@ if ( ! class_exists( 'Icegram_Campaign_Admin' ) ) {
 						}
 					} 
 
-					 do_action('icegram_blank_variation', array( 'title'=> $title, 'campaign_box' => $campaign_box) );
-					 ?>
-				</tbody>		
+					do_action('icegram_blank_variation', array( 'title'=> $title, 'campaign_box' => $campaign_box) );
+					?>
+				</tbody>
 			</table>
 
 			<?php 
-			do_action('icegram_additional_campaign_data');
-			
+			do_action( 'icegram_additional_campaign_data' );
 		}
+
 
 		// Display list of messages of campaign
 		public function campaign_data_content() {
@@ -503,249 +536,252 @@ if ( ! class_exists( 'Icegram_Campaign_Admin' ) ) {
 			return $messages;
 		}
 
-		// Display setting fields for campaign targeting rules
-		function icegram_add_campaign_target_rules( $campaign_id, $campaign_target_rules  ) {
+		function icegram_add_campaign_target_rules( $campaign_id, $campaign_target_rules ) {
 			global $wp_roles;
+
 			?>
 			<div class="options_group p-3" id="campaign_target_rules_where">
 				<p class="form-field pt-4">
 					<label class="options_header">
 						<span class="font-semibold text-sm"><?php echo esc_html__( 'Where?', 'icegram' ); ?></span>
-						<span class="help_tip admin_field_icon float-none mt-0 ml-1" data-tip="<?php echo esc_html__('Messages in this campaign will be shown when all these rules match...', 'icegram') ?>"></span>
+						<span class="help_tip admin_field_icon float-none mt-0 ml-1" data-tip="<?php echo esc_attr__( 'Messages in this campaign will be shown when all these rules match...', 'icegram' ); ?>"></span>
 					</label>
 				</p>
 				<p class="form-field py-2">
 					<label for="where_sitewide">
-						
-						<input type="checkbox" name="campaign_target_rules[sitewide]" id="where_sitewide" value="yes" class="form-checkbox mr-1" <?php ( !empty( $campaign_target_rules['sitewide'] ) ) ? checked( $campaign_target_rules['sitewide'], 'yes' ) : ''; ?> />
-						<span class="text-gray-600"><?php echo esc_html__( 'Sitewide', 'icegram' ); ?></span></p>
+						<input type="checkbox" name="campaign_target_rules[sitewide]" id="where_sitewide" value="yes" class="form-checkbox mr-1" <?php checked( !empty( $campaign_target_rules['sitewide'] ) ? $campaign_target_rules['sitewide'] : '', 'yes' ); ?> />
+						<span class="text-gray-600"><?php echo esc_html__( 'Sitewide', 'icegram' ); ?></span>
 					</label>
 				</p>
-				<p class="form-field py-1 " <?php echo ( !empty( $campaign_target_rules['sitewide'] ) && $campaign_target_rules['sitewide'] == 'yes' ) ? '' : 'style="display: none;"'; ?>>
-					
+				<p class="form-field py-1" <?php echo ( !empty( $campaign_target_rules['sitewide'] ) && $campaign_target_rules['sitewide'] === 'yes' ) ? '' : 'style="display: none;"'; ?>>
 					<?php 
-					echo '<select name="exclude_page_id[]" id="exclude_page_id" data-placeholder="' . esc_html__( 'Select pages to exclude&hellip;', 'icegram' ) .  '" style="min-width:300px;" class="icegram_chosen_page" multiple>';
+					echo '<select name="exclude_page_id[]" id="exclude_page_id" data-placeholder="' . esc_attr__( 'Select pages to exclude&hellip;', 'icegram' ) . '" style="min-width:300px;" class="icegram_chosen_page" multiple>';
 					foreach ( get_pages() as $page ) {
-						echo '<option value="' . esc_html( $page->ID ) . '"';
-						if( !empty( $campaign_target_rules['exclude_page_id'] ) ) {
-							echo selected( in_array( $page->ID, $campaign_target_rules['exclude_page_id'] ) );
-						}
-						echo '>' . esc_html__( $page->post_title ) . '</option>';
-					}
-					echo '</select>';
-					?>
-				</p>
-				<p class="form-field py-1">
-					
-					<label for="where_homepage">
-						<input type="checkbox" name="campaign_target_rules[homepage]" id="where_homepage" value="yes" class="form-checkbox mr-1" <?php ( !empty( $campaign_target_rules['homepage'] ) ) ? checked( $campaign_target_rules['homepage'], 'yes' ) : ''; ?> />
-						<?php echo esc_html__( 'Homepage', 'icegram' ); ?>
-					</label>
-				</p>
-				<p class="form-field py-1">
-					
-					<label for="where_other_page">
-						<input type="checkbox" name="campaign_target_rules[other_page]" id="where_other_page" value="yes" class="form-checkbox mr-1" <?php ( !empty( $campaign_target_rules['other_page'] ) ) ? checked( $campaign_target_rules['other_page'], 'yes' ) : ''; ?> />
-						<?php echo esc_html__( 'Selected pages', 'icegram' ); ?>
-					</label>
-				</p>
-				<p class="form-field py-1" <?php echo ( !empty( $campaign_target_rules['other_page'] ) && $campaign_target_rules['other_page'] == 'yes' ) ? '' : 'style="display: none;"'; ?>>
-					
-					<?php 
-					echo '<select name="page_id[]" id="where_page_id" data-placeholder="' . esc_html__( 'Select a page&hellip;', 'icegram' ) .  '" style="min-width:300px;" class="icegram_chosen_page" multiple>';
-					foreach ( get_pages() as $page ) {
-						echo '<option value="' . esc_html( $page->ID ) . '"';
-						if( !empty( $campaign_target_rules['page_id'] ) && is_array($campaign_target_rules['page_id']) ) {
-							echo selected( in_array( $page->ID, $campaign_target_rules['page_id'] ) );
+						echo '<option value="' . esc_attr( $page->ID ) . '"';
+						if ( ! empty( $campaign_target_rules['exclude_page_id'] ) && in_array( $page->ID, $campaign_target_rules['exclude_page_id'] ) ) {
+							echo ' selected="selected"';
 						}
 						echo '>' . esc_html( $page->post_title ) . '</option>';
 					}
 					echo '</select>';
 					?>
 				</p>
-				<?php
-				do_action( 'icegram_after_campaign_pages_where_rule', $campaign_id, $campaign_target_rules );
-				?>
 				<p class="form-field py-1">
-					
+					<label for="where_homepage">
+						<input type="checkbox" name="campaign_target_rules[homepage]" id="where_homepage" value="yes" class="form-checkbox mr-1" <?php checked( !empty( $campaign_target_rules['homepage'] ) ? $campaign_target_rules['homepage'] : '', 'yes' ); ?> />
+						<?php echo esc_html__( 'Homepage', 'icegram' ); ?>
+					</label>
+				</p>
+				<p class="form-field py-1">
+					<label for="where_other_page">
+						<input type="checkbox" name="campaign_target_rules[other_page]" id="where_other_page" value="yes" class="form-checkbox mr-1" <?php checked( !empty( $campaign_target_rules['other_page'] ) ? $campaign_target_rules['other_page'] : '', 'yes' ); ?> />
+						<?php echo esc_html__( 'Selected pages', 'icegram' ); ?>
+					</label>
+				</p>
+				<p class="form-field py-1" <?php echo ( !empty( $campaign_target_rules['other_page'] ) && $campaign_target_rules['other_page'] === 'yes' ) ? '' : 'style="display: none;"'; ?>>
+					<?php
+					echo '<select name="page_id[]" id="where_page_id" data-placeholder="' . esc_attr__( 'Select a page&hellip;', 'icegram' ) . '" style="min-width:300px;" class="icegram_chosen_page" multiple>';
+					foreach ( get_pages() as $page ) {
+						echo '<option value="' . esc_attr( $page->ID ) . '"';
+						if ( ! empty( $campaign_target_rules['page_id'] ) && is_array( $campaign_target_rules['page_id'] ) && in_array( $page->ID, $campaign_target_rules['page_id'] ) ) {
+							echo ' selected="selected"';
+						}
+						echo '>' . esc_html( $page->post_title ) . '</option>';
+					}
+					echo '</select>';
+					?>
+				</p>
+
+				<?php do_action( 'icegram_after_campaign_pages_where_rule', $campaign_id, $campaign_target_rules ); ?>
+
+				<p class="form-field py-1">
 					<label for="where_local_url">
-						<input type="checkbox" name="campaign_target_rules[local_url]" id="where_local_url" value="yes" class="form-checkbox mr-1" <?php ( !empty( $campaign_target_rules['local_url'] ) ) ? checked( $campaign_target_rules['local_url'], 'yes' ) : ''; ?> />
+						<input type="checkbox" name="campaign_target_rules[local_url]" id="where_local_url" value="yes" class="form-checkbox mr-1" <?php checked( !empty( $campaign_target_rules['local_url'] ) ? $campaign_target_rules['local_url'] : '', 'yes' ); ?> />
 						<?php echo esc_html__( 'Specific URLs on this site', 'icegram' ); ?>
 					</label>
 				</p>
-				<p class="form-field py-1 local_url" <?php echo ( !empty( $campaign_target_rules['local_url'] ) && $campaign_target_rules['local_url'] == 'yes' ) ? '' : 'style="display: none;"'; ?>>
+				<p class="form-field py-1 local_url" <?php echo ( !empty( $campaign_target_rules['local_url'] ) && $campaign_target_rules['local_url'] === 'yes' ) ? '' : 'style="display: none;"'; ?>>
 					<?php 
-					if(!empty($campaign_target_rules['local_urls'])){
-						foreach ($campaign_target_rules['local_urls'] as $url) {?>
-							<span><span id="valid-field"> </span>
-							<input type="text" class="form-input url_input_field" data-option="local_url" name="campaign_target_rules[local_urls][]" value="<?php echo $this->site_url.$url ;?>"/><span class="delete-url text-sm"></span></span>
-							<?php	
+					if ( !empty( $campaign_target_rules['local_urls'] ) && is_array( $campaign_target_rules['local_urls'] ) ) {
+						foreach ( $campaign_target_rules['local_urls'] as $url ) {
+							?>
+							<span><span id="valid-field"></span>
+								<input type="text" class="form-input url_input_field" data-option="local_url" name="campaign_target_rules[local_urls][]" value="<?php echo esc_url( $url ); ?>" /><span class="delete-url text-sm"></span>
+							</span>
+							<?php
 						}
-					}else{ ?>
-						<span><span id="valid-field"> </span>
-						<input type="text" class="form-input url_input_field" data-option="local_url" name="campaign_target_rules[local_urls][]" value="<?php echo esc_url( $this->site_url ) .'*' ;?>"/><span class="delete-url text-sm"></span></span>
-					<?php }
+					} else {
+						?>
+						<span><span id="valid-field"></span>
+							<input type="text" class="form-input url_input_field" data-option="local_url" name="campaign_target_rules[local_urls][]" value="<?php echo esc_url( home_url() ) . '*'; ?>" /><span class="delete-url text-sm"></span>
+						</span>
+						<?php
+					}
 					?>
-					<br/><label class="options_header display-rules-add-url" id="add_local_url_row_label">&nbsp;</label><span id="add-url-icon"> </span><a  class="campaign_add_url" id="add_local_url_row" href="#"><?php echo esc_html__( ' Add another', 'icegram' ); ?></a>
+					<br/>
+					<label class="options_header display-rules-add-url" id="add_local_url_row_label">&nbsp;</label><span id="add-url-icon"></span>
+					<a class="campaign_add_url" id="add_local_url_row" href="#"><?php echo esc_html__( ' Add another', 'icegram' ); ?></a>
 				</p>
+
+				<?php do_action( 'icegram_after_campaign_where_rule', $campaign_id, $campaign_target_rules ); ?>
 				
-				<?php
-				do_action( 'icegram_after_campaign_where_rule', $campaign_id, $campaign_target_rules );
-				?>
 				<p class="form-field py-2">
 					<span class="campaign_shortcode light">
-						<?php echo sprintf( esc_html__( 'Additionally you can insert %s wherever you want to run this campaign.', 'icegram' ), '<code>[icegram campaigns="' .$campaign_id . '"]</code>' ); ?>
-					</span> 
+						<?php 
+						$shortcode = sprintf( '[icegram campaigns="%s"]', esc_attr( $campaign_id ) );
+						echo sprintf(
+							/* translators: shortcode for campaigns */
+							esc_html__( 'Additionally you can insert %s wherever you want to run this campaign.', 'icegram' ),
+							'<code>' . esc_html( $shortcode ) . '</code>'
+						); ?>
+					</span>
 				</p>
-				
 			</div>
+
 			<div class="options_group p-3" id="campaign_target_rules_when">
 				<p class="form-field py-2">
 					<label class="options_header"><span class="font-semibold text-sm"><?php echo esc_html__( 'When?', 'icegram' ); ?></span></label>
 				</p>
 				<p class="form-field py-1">
 					<label for="when_always">
-						<input type="radio" class="schedule_rule form-radio" name="campaign_target_rules[when]" id="when_always" value="always" <?php ( !empty( $campaign_target_rules['when'] ) ) ? checked( $campaign_target_rules['when'], 'always' ) : ''; ?> />
+						<input type="radio" class="schedule_rule form-radio" name="campaign_target_rules[when]" id="when_always" value="always" <?php checked( !empty( $campaign_target_rules['when'] ) ? $campaign_target_rules['when'] : '', 'always' ); ?> />
 						<?php echo esc_html__( 'Always', 'icegram' ); ?>
 					</label>
 				</p>
 				<p class="form-field py-2">
-					
 					<label for="when_schedule">
-						<input type="radio" class="schedule_rule form-radio" name="campaign_target_rules[when]" id="when_schedule" value="schedule" <?php ( !empty( $campaign_target_rules['when'] ) ) ? checked( $campaign_target_rules['when'], 'schedule' ) : ''; ?> />
+						<input type="radio" class="schedule_rule form-radio" name="campaign_target_rules[when]" id="when_schedule" value="schedule" <?php checked( !empty( $campaign_target_rules['when'] ) ? $campaign_target_rules['when'] : '', 'schedule' ); ?> />
 						<?php echo esc_html__( 'Schedule', 'icegram' ); ?>
-						<span class="form-field" id="date_picker" <?php echo ( !empty( $campaign_target_rules['when'] ) && $campaign_target_rules['when'] == 'schedule' ) ? '' : 'style="display: none;"'; ?>>
+						<span class="form-field" id="date_picker" <?php echo ( !empty( $campaign_target_rules['when'] ) && $campaign_target_rules['when'] === 'schedule' ) ? '' : 'style="display: none;"'; ?>>
 							<label class="date_picker">
-								<input type="text" class="date-picker form-input" name="campaign_target_rules[from]" value="<?php echo ( !empty( $campaign_target_rules['from'] ) ) ? esc_attr( $campaign_target_rules['from'] ) : ''; ?>" placeholder="<?php echo esc_html__( 'From&hellip;', 'icegram' );?>" />
+								<input type="text" class="date-picker form-input" name="campaign_target_rules[from]" value="<?php echo esc_attr( !empty( $campaign_target_rules['from'] ) ? $campaign_target_rules['from'] : '' ); ?>" placeholder="<?php echo esc_attr__( 'From&hellip;', 'icegram' ); ?>" />
 							</label>
 							<label class="date_picker">
-								<input type="text" class="date-picker form-input" name="campaign_target_rules[to]" value="<?php echo ( !empty( $campaign_target_rules['to'] ) ) ? esc_attr( $campaign_target_rules['to'] ) : ''; ?>" placeholder="<?php echo esc_html__( 'To&hellip;', 'icegram' );?>" />
+								<input type="text" class="date-picker form-input" name="campaign_target_rules[to]" value="<?php echo esc_attr( !empty( $campaign_target_rules['to'] ) ? $campaign_target_rules['to'] : '' ); ?>" placeholder="<?php echo esc_attr__( 'To&hellip;', 'icegram' ); ?>" />
 							</label>
 						</span>
 					</label>
 				</p>
-				<?php
-				do_action( 'icegram_after_campaign_when_rule', $campaign_id, $campaign_target_rules );
-				?>
+
+				<?php do_action( 'icegram_after_campaign_when_rule', $campaign_id, $campaign_target_rules ); ?>
 			</div>
-			<?php 
-			do_action( 'icegram_additional_campaign_rules', $campaign_id, $campaign_target_rules );
-			?>
+
+			<?php do_action( 'icegram_additional_campaign_rules', $campaign_id, $campaign_target_rules ); ?>
+
 			<div class="options_group p-3" id="campaign_target_rules_device">
 				<p class="form-field py-2">
 					<label class="options_header"><span class="font-semibold text-sm"><?php echo esc_html__( 'Device?', 'icegram' ); ?></span></label>
 				</p>
 				<p class="form-field py-2">
-					<label for="device_mobile" class="device" title="<?php echo esc_html__( 'Mobile / Smartphones', 'icegram' ); ?>">
-						<input type="checkbox" name="campaign_target_rules[mobile]" id="device_mobile" value="yes" class="form-checkbox" <?php ( !empty( $campaign_target_rules['mobile'] ) ) ? checked( $campaign_target_rules['mobile'], 'yes' ) : ''; ?> />
+					<label for="device_mobile" class="device" title="<?php echo esc_attr__( 'Mobile / Smartphones', 'icegram' ); ?>">
+						<input type="checkbox" name="campaign_target_rules[mobile]" id="device_mobile" value="yes" class="form-checkbox" <?php checked( !empty( $campaign_target_rules['mobile'] ) ? $campaign_target_rules['mobile'] : '', 'yes' ); ?> />
 						<span class="device_mobile"></span>
 					</label>
-					<label for="device_tablet" class="device" title="<?php echo esc_html__( 'Tablet', 'icegram' ); ?>">
-						<input type="checkbox" name="campaign_target_rules[tablet]" id="device_tablet" value="yes" class="form-checkbox" <?php ( !empty( $campaign_target_rules['tablet'] ) ) ? checked( $campaign_target_rules['tablet'], 'yes' ) : ''; ?> />
+					<label for="device_tablet" class="device" title="<?php echo esc_attr__( 'Tablet', 'icegram' ); ?>">
+						<input type="checkbox" name="campaign_target_rules[tablet]" id="device_tablet" value="yes" class="form-checkbox" <?php checked( !empty( $campaign_target_rules['tablet'] ) ? $campaign_target_rules['tablet'] : '', 'yes' ); ?> />
 						<span class="device_tablet"></span>
 					</label>
-					<label for="device_laptop" class="device" title="<?php echo esc_html__( 'Desktop / Laptop', 'icegram' ); ?>">
-						<input type="checkbox" name="campaign_target_rules[laptop]" id="device_laptop" value="yes" class="form-checkbox" <?php ( !empty( $campaign_target_rules['laptop'] ) ) ? checked( $campaign_target_rules['laptop'], 'yes' ) : ''; ?> />
+					<label for="device_laptop" class="device" title="<?php echo esc_attr__( 'Desktop / Laptop', 'icegram' ); ?>">
+						<input type="checkbox" name="campaign_target_rules[laptop]" id="device_laptop" value="yes" class="form-checkbox" <?php checked( !empty( $campaign_target_rules['laptop'] ) ? $campaign_target_rules['laptop'] : '', 'yes' ); ?> />
 						<span class="device_laptop"></span>
 					</label>
 				</p>
 			</div>
+
 			<div class="options_group p-3" id="campaign_target_rules_users">
 				<p class="form-field py-2">
 					<label class="options_header"><span class="font-semibold text-sm"><?php echo esc_html__( 'Who?', 'icegram' ); ?></span></label>
 				</p>
 				<p class="form-field py-1">
 					<label for="users_all">
-						<input type="radio" name="campaign_target_rules[logged_in]" id="users_all" value="all" class="form-radio" <?php ( !empty( $campaign_target_rules['logged_in'] ) ) ? checked( $campaign_target_rules['logged_in'], 'all' ) : ''; ?> />
+						<input type="radio" name="campaign_target_rules[logged_in]" id="users_all" value="all" class="form-radio" <?php checked( !empty( $campaign_target_rules['logged_in'] ) ? $campaign_target_rules['logged_in'] : '', 'all' ); ?> />
 						<?php echo esc_html__( 'All users', 'icegram' ); ?>
 					</label>
 				</p>
 				<p class="form-field py-1">
-					
 					<label for="users_logged_in">
-						<input type="radio" name="campaign_target_rules[logged_in]" id="users_logged_in" value="logged_in" class="form-radio" <?php ( !empty( $campaign_target_rules['logged_in'] ) ) ? checked( $campaign_target_rules['logged_in'], 'logged_in' ) : ''; ?> />
+						<input type="radio" name="campaign_target_rules[logged_in]" id="users_logged_in" value="logged_in" class="form-radio" <?php checked( !empty( $campaign_target_rules['logged_in'] ) ? $campaign_target_rules['logged_in'] : '', 'logged_in' ); ?> />
 						<?php echo esc_html__( 'Logged in users only', 'icegram' ); ?>
 					</label>
 				</p>
-				
-				<div class="user_roles">
-					<?php
-					if ( !empty( $campaign_target_rules['logged_in'] ) && ($campaign_target_rules['logged_in'] == 'all' || $campaign_target_rules['logged_in'] == 'not_logged_in') ) {
-						$campaign_logged_in_user_style = 'style="display: none;"';
-					} else {
-						$campaign_logged_in_user_style = 'style="display: block;"';
-					}
-					?>
-					<p class="form-field" <?php echo $campaign_logged_in_user_style; ?>>
-						
+
+				<div class="user_roles" style="<?php
+					echo ( !empty( $campaign_target_rules['logged_in'] ) && ( $campaign_target_rules['logged_in'] === 'all' || $campaign_target_rules['logged_in'] === 'not_logged_in' ) ) ? 'display:none;' : 'display:block;';
+				?>">
+					<p class="form-field">
 						<?php
-						if ( isset( $wp_roles ) ) {
+						if ( ! isset( $wp_roles ) ) {
 							$wp_roles = new WP_Roles();
-							$roles = $wp_roles->get_names();
-							
-							echo '<select name="campaign_target_rules[users][]" id="users_roles" data-placeholder="' . esc_html__( 'Select a user role&hellip;', 'icegram' ) .  '" style="min-width:300px;" class="icegram_chosen_page" multiple>';
-							foreach ( $roles as $role_value => $role_name ) {
-								echo '<option value="' . $role_value . '"';
-								if( !empty( $campaign_target_rules['users'] ) ) {
-									echo selected( in_array( $role_value, $campaign_target_rules['users'] ) );
-								}
-								echo '>' . $role_name . '</option>';
-							}
-							echo '</select>';
 						}
+						$roles = $wp_roles->get_names();
+						echo '<select name="campaign_target_rules[users][]" id="users_roles" data-placeholder="' . esc_attr__( 'Select a user role&hellip;', 'icegram' ) . '" style="min-width:300px;" class="icegram_chosen_page" multiple>';
+						foreach ( $roles as $role_value => $role_name ) {
+							echo '<option value="' . esc_attr( $role_value ) . '"';
+							if ( ! empty( $campaign_target_rules['users'] ) && in_array( $role_value, $campaign_target_rules['users'] ) ) {
+								echo ' selected="selected"';
+							}
+							echo '>' . esc_html( $role_name ) . '</option>';
+						}
+						echo '</select>';
 						?>
 					</p>
 				</div>
+
 				<p class="form-field py-1">
-					
 					<label for="users_not_logged_in">
-						<input type="radio" name="campaign_target_rules[logged_in]" id="users_not_logged_in" value="not_logged_in" class="form-radio" <?php ( !empty( $campaign_target_rules['logged_in'] ) ) ? checked( $campaign_target_rules['logged_in'], 'not_logged_in' ) : ''; ?> />
+						<input type="radio" name="campaign_target_rules[logged_in]" id="users_not_logged_in" value="not_logged_in" class="form-radio" <?php checked( !empty( $campaign_target_rules['logged_in'] ) ? $campaign_target_rules['logged_in'] : '', 'not_logged_in' ); ?> />
 						<?php echo esc_html__( 'Not Logged in users', 'icegram' ); ?>
 					</label>
 				</p>
 			</div>
-				<?php 	$expiry_options_for_shown = self::get_expiry_options_for_shown();
-				$expiry_options_for_clicked = self::get_expiry_options_for_clicked(); 
 
-					?>
-					<div class="options_group p-3" id="campaign_target_rules_retargeting">
-						<?php
-						$html_content = '<p class="form-field py-2">
-						<label class="options_header"><span class="font-semibold text-sm">'.__( 'Retargeting', 'icegram' ).'</span></label>
-						</p>
-						<p class="form-field py-1">
-						<label for="retargeting">
-						<input type="checkbox" name="campaign_target_rules[retargeting]" id="retargeting" value="yes" class="form-checkbox" '.(( !empty( $campaign_target_rules['retargeting'] ) ) ? checked( $campaign_target_rules['retargeting'], 'yes', false ) : '').'/>';
-						$html_content .= __(' Once shown, do NOT show this campaign again for ', 'icegram' );
-						$html_content .= '<select class="form-select" name="campaign_target_rules[expiry_time]">';
-						foreach($expiry_options_for_shown as $key => $option){
-							?>
-							<?php	$html_content .= '<option value="'.$key.'"'.((!empty($campaign_target_rules['expiry_time'])) ? selected( $campaign_target_rules['expiry_time'], $key, false ) : "").'>'.$option.'</option>';
-						} 
-						$html_content .= '</select>';
-						$html_content .= '</label>';
-						$campaign_target_rules_retargeting = apply_filters('icegram_campaign_target_rules_retargeting' , array( 'html' => $html_content, 'campaign_target_rules' => $campaign_target_rules, 'expiry_options_for_shown' => $expiry_options_for_shown));
-						echo $campaign_target_rules_retargeting['html'];
-						?>
-					</p>
-					<p class="form-field py-1">
-						
-						<label for="retargeting_clicked">
-							<input type="checkbox" name="campaign_target_rules[retargeting_clicked]" id="retargeting_clicked" value="yes" class="form-checkbox" <?php ( !empty( $campaign_target_rules['retargeting_clicked'] ) ) ? checked( $campaign_target_rules['retargeting_clicked'], 'yes' ) : ''; ?> />
-							<?php echo esc_html__( 'Once CTA is clicked, do NOT show this campaign again for', 'icegram' ); ?>
-							<select class="form-select" name="campaign_target_rules[expiry_time_clicked]">
-								<?php foreach($expiry_options_for_clicked as $key => $option){
-									?>
-									<option value="<?php echo esc_attr( $key ); ?>" <?php (!empty($campaign_target_rules['expiry_time_clicked'])) ? selected( $campaign_target_rules['expiry_time_clicked'], $key ) : ''; ?>><?php echo $option; ?></option>
-									<?php
-								}
+			<?php 
+			$expiry_options_for_shown = self::get_expiry_options_for_shown();
+			$expiry_options_for_clicked = self::get_expiry_options_for_clicked(); 
+			?>
+
+			<div class="options_group p-3" id="campaign_target_rules_retargeting">
+				<p class="form-field py-2">
+					<label class="options_header"><span class="font-semibold text-sm"><?php echo esc_html__( 'Retargeting', 'icegram' ); ?></span></label>
+				</p>
+				<p class="form-field py-1">
+					<label for="retargeting">
+						<input type="checkbox" name="campaign_target_rules[retargeting]" id="retargeting" value="yes" class="form-checkbox" <?php checked( !empty( $campaign_target_rules['retargeting'] ) ? $campaign_target_rules['retargeting'] : '', 'yes' ); ?> />
+						<?php echo esc_html__( 'Once shown, do NOT show this campaign again for', 'icegram' ); ?>
+						<select class="form-select" name="campaign_target_rules[expiry_time]">
+							<?php
+							foreach ( $expiry_options_for_shown as $key => $option ) {
 								?>
-							</select>
-						</label>
-					</p>
-				</div>
-				<?php
-			}
+								<option value="<?php echo esc_attr( $key ); ?>" <?php selected( !empty( $campaign_target_rules['expiry_time'] ) ? $campaign_target_rules['expiry_time'] : '', $key ); ?>>
+									<?php echo esc_html( $option ); ?>
+								</option>
+								<?php
+							}
+							?>
+						</select>
+					</label>
+				</p>
+				<p class="form-field py-1">
+					<label for="retargeting_clicked">
+						<input type="checkbox" name="campaign_target_rules[retargeting_clicked]" id="retargeting_clicked" value="yes" class="form-checkbox" <?php checked( !empty( $campaign_target_rules['retargeting_clicked'] ) ? $campaign_target_rules['retargeting_clicked'] : '', 'yes' ); ?> />
+						<?php echo esc_html__( 'Once CTA is clicked, do NOT show this campaign again for', 'icegram' ); ?>
+						<select class="form-select" name="campaign_target_rules[expiry_time_clicked]">
+							<?php
+							foreach ( $expiry_options_for_clicked as $key => $option ) {
+								?>
+								<option value="<?php echo esc_attr( $key ); ?>" <?php selected( !empty( $campaign_target_rules['expiry_time_clicked'] ) ? $campaign_target_rules['expiry_time_clicked'] : '', $key ); ?>>
+									<?php echo esc_html( $option ); ?>
+								</option>
+								<?php
+							}
+							?>
+						</select>
+					</label>
+				</p>
+			</div>
+			<?php
+		}
+ 
 
 			// Return json encoded messages for searched term
 			function icegram_json_search_messages( $x = '' ) {
@@ -754,7 +790,15 @@ if ( ! class_exists( 'Icegram_Campaign_Admin' ) ) {
 
 				header( 'Content-Type: application/json; charset=utf-8' );
 
-				$term = isset( $_GET['term'] ) ? ( string ) urldecode( stripslashes( strip_tags( sanitize_text_field( $_GET['term'] ) ) ) ) : '';
+				$term = isset( $_GET['term'] )
+				? urldecode(
+					wp_strip_all_tags(
+						sanitize_text_field(
+							wp_unslash( $_GET['term'] )
+						)
+					)
+				)
+				: '';
 				$post_types = array('ig_message');
 
 				if ( empty( $term ) ) die();
@@ -804,7 +848,7 @@ if ( ! class_exists( 'Icegram_Campaign_Admin' ) ) {
 			// }
 				ob_clean();
 				$found_messages = apply_filters( 'icegram_searched_messages', $found_messages, $term );
-				echo json_encode( $found_messages );
+				echo wp_json_encode( $found_messages );
 				die();
 			}
 
@@ -824,18 +868,18 @@ if ( ! class_exists( 'Icegram_Campaign_Admin' ) ) {
 					);
 					$message_id 	= wp_insert_post( $my_post );
 					$message_title 	= '';
-					$message_type 	= sanitize_text_field( $_POST['message_id'] );
+
+					$message_type = isset( $_POST['message_id'] ) ? sanitize_text_field( wp_unslash( $_POST['message_id'] ) ) : '';
 
 				} else {
-
-					$message_id 	= sanitize_text_field( $_POST['message_id'] );
+					$message_id 	= isset( $_POST['message_id'] ) ? sanitize_text_field( wp_unslash( $_POST['message_id'] ) ) : '';
 					$message_title 	= get_the_title( $message_id );
 					$message_data 	= get_post_meta( $message_id, 'icegram_message_data', true );
 					$message_type 	= $message_data['type'];
 
 				}
 
-				$variation = sanitize_text_field( $_POST['variation'] );
+				$variation = isset( $_POST['variation'] ) ? sanitize_text_field( wp_unslash( $_POST['variation'] ) ) : '';
 				ob_start();
 				$icegram_message_meta_key = apply_filters('icegram_message_meta_key' , 'messages', $variation );
 				$message_header_label     =  ucwords( str_replace( "-", ' ', $message_type ) );
@@ -877,9 +921,10 @@ if ( ! class_exists( 'Icegram_Campaign_Admin' ) ) {
 						<p class="message_seconds my-2 inline-block">
 							<?php
 								$row = isset( $_POST['row'] ) ? absint( $_POST['row'] ) : '';
+								$key = $icegram_message_meta_key . '[' . $row . ']';
 							?>
-							<input type="hidden" name="<?php echo $icegram_message_meta_key .'['.$row; ?>][id]" value="<?php echo esc_attr( $message_id )?>">
-							<input type="number" class="seconds-text form-input" name="<?php echo $icegram_message_meta_key .'['.$row; ?>][time]" min="-1" value="<?php echo ( !empty( $message['time'] ) ) ? esc_attr( $message['time'] ) : 0; ?>" size="3" />
+							<input type="hidden" name="<?php echo esc_attr( $key . '[id]' ); ?>" value="<?php echo esc_attr( $message_id )?>">
+							<input type="number" class="seconds-text form-input" name="<?php echo esc_attr( $key . '[time]' ); ?>" min="-1" value="<?php echo esc_attr( ! empty( $message['time'] ) ? $message['time'] : 0 ); ?>" size="3" />
 							<?php echo esc_html__( ' sec', 'icegram' )?>
 						</p>
 
@@ -905,7 +950,7 @@ if ( ! class_exists( 'Icegram_Campaign_Admin' ) ) {
 				if (defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE) return;
 				if (is_int( wp_is_post_revision( $post ) )) return;
 				if (is_int( wp_is_post_autosave( $post ) )) return;
-				if ( empty( $_POST['icegram_campaign_meta_nonce'] ) || ! wp_verify_nonce( $_POST['icegram_campaign_meta_nonce'], 'icegram_campaign_save_data' ) ) return;
+				if ( empty( $_POST['icegram_campaign_meta_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['icegram_campaign_meta_nonce'] ) ), 'icegram_campaign_save_data' ) ) return;
 				if (! current_user_can( 'edit_post', $post_id )) return;
 				if ($post->post_type != 'ig_campaign') return;
 				
@@ -922,8 +967,12 @@ if ( ! class_exists( 'Icegram_Campaign_Admin' ) ) {
 					}
 
 				} else{
-					if ( isset( $_POST['campaign_target_rules'] ) ){
-						$campaign_target_rules = apply_filters( 'icegram_update_campaign_rules', $_POST['campaign_target_rules'], $post_id );
+					 
+					if ( isset( $_POST['campaign_target_rules'] ) ){					    
+						
+						$raw_campaign_rules = icegram_get_request_data( 'campaign_target_rules', array(), false );
+					 	$campaign_target_rules = apply_filters( 'icegram_update_campaign_rules', $raw_campaign_rules, $post_id );
+        
 					}
 
 					if(!empty($campaign_target_rules) && !empty($campaign_target_rules['local_urls'])){
@@ -941,15 +990,22 @@ if ( ! class_exists( 'Icegram_Campaign_Admin' ) ) {
 							}
 						}
 					}
-
+ 
 					if ( isset( $_POST['page_id'] ) ) {
+    					
+						$page_ids = array_map( 'sanitize_text_field', wp_unslash( $_POST['page_id'] ) );
+    
+						$campaign_target_rules['page_id'] = $page_ids;
 						
-						$campaign_target_rules['page_id'] = $_POST['page_id'];
-						update_post_meta( $post_id, 'icegram_campaign_target_pages', $_POST['page_id'] );
+						update_post_meta( $post_id, 'icegram_campaign_target_pages', $page_ids );
 					}
 					if ( isset( $_POST['exclude_page_id'] ) ) {
-						$campaign_target_rules['exclude_page_id'] = $_POST['exclude_page_id'];
-						update_post_meta( $post_id, 'icegram_campaign_target_pages', $_POST['exclude_page_id'] );
+						
+						$exclude_page_ids = array_map( 'sanitize_text_field', wp_unslash( $_POST['exclude_page_id'] ) );
+						
+						$campaign_target_rules['exclude_page_id'] = $exclude_page_ids;
+						
+						update_post_meta( $post_id, 'icegram_campaign_exclude_target_pages', $exclude_page_ids );
 					}
 
 				}
@@ -960,15 +1016,21 @@ if ( ! class_exists( 'Icegram_Campaign_Admin' ) ) {
 
 				if ( empty( $_POST['messages'] ) ) {
 					update_post_meta( $post_id, 'messages', array() );
-				} else {
-					$messages = $_POST['messages'];
-					
-					foreach( $messages as $message => $data ) {
-						if( isset( $data['id'] ) ) {
-							$messages[ $message ]['id'] = is_numeric( $data['id'] ) ? sanitize_text_field( $data['id']) : '';
-						}
-						if( isset( $data['time'] ) ) {
-							$messages[ $message ]['time'] = sanitize_text_field( $data['time'] ); 
+				} else { 
+					$messages = array();
+					if ( isset( $_POST['messages'] ) && is_array( $_POST['messages'] ) ) {
+					    
+						$raw_messages = icegram_get_request_data( 'messages', array(), false );
+						
+						foreach( $raw_messages as $message => $data ) {
+							$messages[ $message ] = array();
+							
+							if( isset( $data['id'] ) ) {
+								$messages[ $message ]['id'] = absint( $data['id'] );
+							}
+							if( isset( $data['time'] ) ) {
+								$messages[ $message ]['time'] = sanitize_text_field( $data['time'] ); 
+							}
 						}
 					}
 
@@ -1001,7 +1063,7 @@ if ( ! class_exists( 'Icegram_Campaign_Admin' ) ) {
 						}
 
 						/* Validating custom js field's script */
-						$script_validation = apply_filters( 'ig_validate_custom_script', $message_data['custom_js'] );
+						$script_validation = apply_filters( 'icegram_validate_custom_script', $message_data['custom_js'] );
 						$message_data['custom_js'] = empty($script_validation) ? $message_data['custom_js'] : '';
 
 						$sanitizing_fields = array( 'bg_color', 'text_color', 'cta_bg_color', 'cta_text_color', 'alt_cta_bg_color', 'alt_cta_text_color', 'form_bg_color', 'form_text_color' );
@@ -1025,7 +1087,7 @@ if ( ! class_exists( 'Icegram_Campaign_Admin' ) ) {
 						}
 						
 						//Senitizing the campaign message body before storing into DB
-						$allowed_tags = apply_filters('ig_escape_allowed_tags', array());
+						$allowed_tags = apply_filters('icegram_escape_allowed_tags', array());
 						$message_data['message']=wp_kses($message_data['message'], $allowed_tags);
 
 					//save message data when campaign is save
@@ -1042,21 +1104,38 @@ if ( ! class_exists( 'Icegram_Campaign_Admin' ) ) {
 				}
 			}
 
+			public function ig_sanitize_message_html( $value ) {
+				if ( ! is_string( $value ) ) {
+					return $value;
+				}
+
+				global $icegram;
+
+				$allowed_tags = $icegram->ig_add_escape_allowed_tags();
+
+				return wp_kses( $value, $allowed_tags );
+			}
+
 			// On preview button click save campaign messages list
 			function save_campaign_preview() {
-
-				 check_ajax_referer( 'ig-nonce', 'security' );
+				
+				check_ajax_referer( 'ig-nonce', 'security' );
 
 				if ( empty($_POST['post_ID']) ) die();
-				$post_id = sanitize_text_field( $_POST['post_ID'] );
+				
+				$post_id = isset( $_POST['post_ID'] ) ? absint( wp_unslash( $_POST['post_ID'] ) ) : 0;
 				if ( !current_user_can( 'edit_post', $post_id ) ) die();
-
-				$messages = apply_filters('campaign_preview_messages',  $_POST['messages'], $_POST);
+ 
+				$raw_messages = icegram_get_request_data( 'messages', array(), false );
+				
+				$messages = apply_filters( 'icegram_campaign_preview_messages', $raw_messages, $_POST );
 				
 				if( !empty( $messages ) ) {
 					update_post_meta( $post_id, 'campaign_preview', $messages ) ;
 					if( isset( $_POST['message_data'] ) ) {
-						foreach ( (array) $_POST['message_data'] as $message_id => $message_data ) {
+						$message_data_raw = map_deep( wp_unslash( $_POST['message_data'] ), array( $this, 'ig_sanitize_message_html' ) );
+
+						foreach ( (array) $message_data_raw as $message_id => $message_data ) {
 							$type = $message_data['type'];
 							if( isset( $message_data['theme'][$type] ) ) {
 								$message_data['theme'] = $message_data['theme'][$type];
@@ -1077,22 +1156,30 @@ if ( ! class_exists( 'Icegram_Campaign_Admin' ) ) {
 							update_post_meta( $message_id, 'icegram_message_preview_data', $message_data );
 						}
 					}
-				// Determine page url to preview on...
+					// Determine page url to preview on...
 					$page_url = '';
 					
 					if ( !empty($_POST['campaign_target_rules']) && !empty($_POST['campaign_target_rules']['other_page']) && !empty($_POST['page_id']) && is_array($_POST['page_id'])) {
-						$page_url = isset( $_POST['page_id'][0] ) ? get_permalink( sanitize_text_field( $_POST['page_id'][0] ) ) : '';
+						if ( isset( $_POST['page_id'][0] ) ) {
+							$page_id_raw = sanitize_text_field( wp_unslash( $_POST['page_id'][0] ) );
+							$page_id     = absint( $page_id_raw );
+							$page_url    = get_permalink( $page_id );
+						}						
 					}
 					if ($page_url == '') {
-						if(!empty($_POST['campaign_target_rules']['local_url']) && is_array($_POST['campaign_target_rules']['local_urls'])){
-							$local_urls = sanitize_text_field( $_POST['campaign_target_rules']['local_urls'][0] );
+						if ( isset( $_POST['campaign_target_rules'], $_POST['campaign_target_rules']['local_urls'] ) && is_array( $_POST['campaign_target_rules']['local_urls'] )){
+							$local_urls = '';
+							if ( isset( $_POST['campaign_target_rules']['local_urls'][0] ) ) {
+								$local_urls = sanitize_text_field( wp_unslash( $_POST['campaign_target_rules']['local_urls'][0] ) );
+							}
 							$page_url = (strpos( $local_urls, '*') === false) ? $local_urls : home_url();
 						}else{
 							$page_url = home_url();
 						}
 					}
+					
 					ob_clean();
-					echo esc_url(add_query_arg( 'campaign_preview_id', $post_id, $page_url ));
+					echo esc_url_raw(add_query_arg( 'campaign_preview_id', $post_id, $page_url ));
 				}
 				die();
 
@@ -1115,7 +1202,7 @@ if ( ! class_exists( 'Icegram_Campaign_Admin' ) ) {
 			
 			function duplicate_campaign() {
 	
-				$nonce = isset( $_REQUEST['_wpnonce'] ) ? ig_get_request_data( '_wpnonce' ) : '';
+				$nonce = isset( $_REQUEST['_wpnonce'] ) ? icegram_get_request_data( '_wpnonce' ) : '';
 			
 				if ( ! empty( $nonce ) && wp_verify_nonce( $nonce, 'ig_campaigns' ) ) {
 					if ( ! empty( $_REQUEST['action'] ) && $_REQUEST['action'] == 'duplicate-campaign' && ! empty( $_REQUEST['campaign_id'] ) ) {

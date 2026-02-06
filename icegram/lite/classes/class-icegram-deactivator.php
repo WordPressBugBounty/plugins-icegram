@@ -27,7 +27,7 @@ class Icegram_Deactivator {
 	 * @since 1.11.0
 	 */
 	public static function deactivate() {
-		do_action( 'ig_deactivated' );
+		do_action( 'icegram_deactivated' );
 	}
 
 }

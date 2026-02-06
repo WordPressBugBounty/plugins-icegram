@@ -24,21 +24,21 @@ if ( ! class_exists( 'Icegram' ) ) {
 		public static $current_page_id;
 
 		public function __construct() {
-			global $ig_feedback, $ig_tracker, $ig_usage_tracker;
+			global $icegram_feedback, $icegram_tracker, $ig_usage_tracker;
 
 			//To get trial related functions
-			require_once IG_PLUGIN_DIR.'lite/classes/class-icegram-trial-admin.php';
+			require_once ICEGRAM_PLUGIN_DIR.'lite/classes/class-icegram-trial-admin.php';
 
-			$this->version             = IG_PLUGIN_VERSION;
+			$this->version             = ICEGRAM_PLUGIN_VERSION;
 			$this->shortcode_instances = array();
 			$this->mode                = 'local';
 			$this->plugin_url          = untrailingslashit( plugins_url( '/', __FILE__ ) );
 			$this->plugin_path         = untrailingslashit( plugin_dir_path( __FILE__ ) );
-			$this->include_classes( IG_FEEDBACK_TRACKER_VERSION );
+			$this->include_classes( ICEGRAM_FEEDBACK_TRACKER_VERSION );
 			$this->cache_compatibility = get_option( 'icegram_cache_compatibility', 'no' );
 
 			if ( is_admin() ) {
-				$ig_feedback->render_deactivate_feedback();
+				$icegram_feedback->render_deactivate_feedback();
 			}
 
 			if ( is_admin() && current_user_can( 'edit_posts' ) ) {
@@ -63,7 +63,7 @@ if ( ! class_exists( 'Icegram' ) ) {
 				add_action( 'wp_ajax_ig_dismiss_mailer_promotion_notice', array( $this, 'dismiss_ig_mailer_promotion_notice' ) );
 				add_action( 'wp_ajax_ig_mailer_notice_clickable', array( $this, 'mailer_notice_clickable' ) );
 
-				add_filter( 'plugin_action_links_' . plugin_basename( IG_PLUGIN_FILE ), array( $this, 'ig_plugin_settings_link' ), 11, 2 );
+				add_filter( 'plugin_action_links_' . plugin_basename( ICEGRAM_PLUGIN_FILE ), array( $this, 'ig_plugin_settings_link' ), 11, 2 );
 				add_filter( 'plugin_row_meta', array( $this, 'add_plugin_support_links' ), 10, 4 );
 				add_filter( 'manage_edit-ig_campaign_columns', array( $this, 'custom_ig_campaign_column' )  ,10,1);
 				add_action( 'manage_ig_campaign_posts_custom_column', array( $this, 'edit_columns' ), 2 );
@@ -72,9 +72,9 @@ if ( ! class_exists( 'Icegram' ) ) {
 				add_action( 'admin_bar_menu', array( $this, 'ig_show_documentation_link_in_admin_bar' ), 999 );
 				add_action( 'admin_head', array( $this, 'ig_documentation_link_admin_bar_css' ), 999 );
 
-				add_filter( 'ig_escape_allowed_tags', array( $this, 'ig_add_escape_allowed_tags' ) );
+				add_filter( 'icegram_escape_allowed_tags', array( $this, 'ig_add_escape_allowed_tags' ) );
 
-				add_filter('ig_validate_custom_script',  array( &$this, 'ig_custom_script_validation' ));
+				add_filter('icegram_validate_custom_script',  array( &$this, 'ig_custom_script_validation' ));
 
 			} else {
 				add_action( 'wp_footer', array( &$this, 'icegram_load_data' ) );
@@ -110,21 +110,21 @@ if ( ! class_exists( 'Icegram' ) ) {
 
 			if ( defined( 'DOING_AJAX' ) ) {
 				if ( $this->cache_compatibility === 'yes' ) {
-					add_action( 'wp_ajax_display_messages', array( &$this, 'display_messages' ) );
-					add_action( 'wp_ajax_nopriv_display_messages', array( &$this, 'display_messages' ) );
+					add_action( 'wp_ajax_ig_display_messages', array( &$this, 'display_messages' ) );
+					add_action( 'wp_ajax_nopriv_ig_display_messages', array( &$this, 'display_messages' ) );
 				}
 				add_action( 'wp_ajax_icegram_event_track', array( &$this, 'icegram_event_track' ) );
 				add_action( 'wp_ajax_nopriv_icegram_event_track', array( &$this, 'icegram_event_track' ) );
 				add_action( 'wp_ajax_es_list_subscribe', array( &$this, 'es_list_subscribe' ) );
 				add_action( 'wp_ajax_icegram_run_housekeeping', array( &$this, 'run_housekeeping' ) );
-				add_action( 'wp_ajax_save_gallery_data', array( &$this, 'save_gallery_data' ) );
+				add_action( 'wp_ajax_ig_save_gallery_data', array( &$this, 'save_gallery_data' ) );
 			}
 		}
 
 
 		function ig_plugin_settings_link( $links, $file ) {
 			global $icegram;
-			if ( $file == plugin_basename( IG_PLUGIN_FILE ) ) {
+			if ( $file == plugin_basename( ICEGRAM_PLUGIN_FILE ) ) {
 
 				$campaigns_link = '<a href="edit.php?post_type=ig_campaign">' . __( 'Campaigns', 'icegram' ) . '</a>';
 				$docs_link 		= '<a href="https://www.icegram.com/knowledgebase_category/icegram/" target="_blank">' . __( 'Docs', 'icegram' ) . '</a>';
@@ -152,7 +152,7 @@ if ( ! class_exists( 'Icegram' ) ) {
 		 */
 		function add_plugin_support_links( $plugin_meta, $plugin_file, $plugin_data, $status ) {
 			
-			if ( plugin_basename( IG_PLUGIN_FILE ) === $plugin_file ) {
+			if ( plugin_basename( ICEGRAM_PLUGIN_FILE ) === $plugin_file ) {
 				$plugin_meta[] = '<a href="https://wordpress.org/support/plugin/icegram/reviews/#new-post" title="' . __( 'Rate Icegram', 'icegram' ) . '" target="_blank">' . __( 'Rate Icegram', 'icegram' ) . '</a>';
 				$plugin_meta[] = '<a href="https://www.icegram.com/contact/" title="' . __( 'Support', 'icegram' ) . ' " target="_blank">' . __( 'Support', 'icegram' ) . '</a>';
 			}
@@ -183,7 +183,7 @@ if ( ! class_exists( 'Icegram' ) ) {
 			foreach ( $compat_classes as $file ) {
 				if ( is_file( $file ) ) {
 					$slug = str_replace( 'class-icegram-compat-', '', str_replace( ".php", "", basename( $file ) ) );
-					if ( in_array( $slug, $active_plugins ) || ig_array_contains( $active_plugins, $slug ) ) {
+					if ( in_array( $slug, $active_plugins ) || icegram_array_contains( $active_plugins, $slug ) ) {
 						include_once( $file );
 						$class_name = 'Icegram_Compat_' . str_replace( '-', '_', $slug );
 						if ( class_exists( $class_name ) ) {
@@ -221,7 +221,9 @@ if ( ! class_exists( 'Icegram' ) ) {
 				?>
 				<div id="ig_es_mailer_promotion_notice" class="notice is-dismissible" style="border-left-width:1px;">
 					<div style="display: flex;gap:0.8em;padding-top:0.5rem;padding-bottom:0.4rem;">
-						<img src="https://ps.w.org/icegram-mailer/assets/icon-128x128.png" style="height:4em;margin-top: 0.1rem;" />
+						<?php 
+						echo '<img src="' . esc_url( $this->plugin_url . '/assets/images/icegram-mailer-icon-128x128.png' ) . '" style="height:4em;margin-top: 0.1rem;border:0;" alt="Icegram Mailer Icon" />';
+						?>
 						<div style="color: rgb(55 65 81);">
 							<p style="font-weight: bolder; font-size:0.8rem; margin:0; font-size:1.1em">
 								<?php echo esc_html__( 'Get 200 Free Emails Every Month!', 'icegram' ); ?>
@@ -230,13 +232,14 @@ if ( ! class_exists( 'Icegram' ) ) {
 							<p style="margin:0; font-size:1.1em;font-weight:400;">
 								<?php echo wp_kses_post(
 										sprintf(
+											/* translators: %s is the name of the product (Icegram Mailer) */
 											__( 'Start sending with confidence. No setup needed, no SMTP headaches. Enjoy 200 emails per month absolutely free with <span style="font-weight: 700;">%s</span>.', 'icegram' ),
 											'Icegram Mailer'
 										)
 									); ?>
 								<a href="<?php echo esc_url( $optin_url ); ?>" target="_blank" id="ig_mailer_promo_button" style="margin-left:0.5rem;">
 									<button type="button" style="color: #5850ec; padding:0.25rem 0.75rem 0.25rem 0.75rem; line-height:1.25rem; font-size:0.875rem; font-weight:500; cursor:pointer; background-color: rgba(255,255,255,1); border:1px solid #d2d6dc;border-radius:0.375rem;">
-										<?php echo esc_html__( $optin_btn_txt, 'icegram'); ?>
+										<?php echo esc_html( $optin_btn_txt ); ?>
 									</button>
 								</a>
 							</p>
@@ -248,11 +251,11 @@ if ( ! class_exists( 'Icegram' ) ) {
 						jQuery('#ig_es_mailer_promotion_notice').on('click', '.notice-dismiss, #ig-es-mailer-promo-button', function() {
 							jQuery.ajax({
 								method: 'POST',
-								url: "<?php echo admin_url( 'admin-ajax.php' ); ?>",
+								url: "<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>",
 								dataType: 'json',
 								data: {
 									action: 'ig_dismiss_mailer_promotion_notice',
-									security: '<?php echo wp_create_nonce( 'ig-dissmiss-mailer-notice' );?>',
+									security: '<?php echo esc_js( wp_create_nonce( 'ig-dissmiss-mailer-notice' ) ); ?>',
 								}
 							}).done(function(response){
 								console.log( 'response: ', response );
@@ -262,11 +265,11 @@ if ( ! class_exists( 'Icegram' ) ) {
 						jQuery('#ig_es_mailer_promotion_notice').on('click', '#ig_mailer_promo_button', function() {
 							jQuery.ajax({
 								method: 'POST',
-								url: "<?php echo admin_url( 'admin-ajax.php' ); ?>",
+								url: "<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>",
 								dataType: 'json',
 								data: {
 									action: 'ig_mailer_notice_clickable',
-									security: '<?php echo wp_create_nonce( 'ig-mailer-notice-clickable' );?>',
+									security: '<?php echo esc_js( wp_create_nonce( 'ig-mailer-notice-clickable' ));?>',
 								}
 							}).done(function(response){
 								console.log( 'response: ', response );
@@ -315,31 +318,49 @@ if ( ! class_exists( 'Icegram' ) ) {
 
 			include_once( 'ig-offer.php' );
 
-			//include_once IG_PLUGIN_DIR . 'lite/notices/admin-notices.php';
+			//include_once ICEGRAM_PLUGIN_DIR . 'lite/notices/admin-notices.php';
 
 		}
 
 		public function dismiss_admin_notice() {
-			if ( isset( $_GET['ig_dismiss_admin_notice'] ) && $_GET['ig_dismiss_admin_notice'] == '1' && isset( $_GET['ig_option_name'] ) ) {
-				$option_name = sanitize_text_field( $_GET['ig_option_name'] );
-				update_option( $option_name . '_icegram', 'yes', false );
 
+			if ( ! isset( $_GET['ig_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['ig_nonce'] ) ), 'ig_dismiss_notice' ) ) {
+				return;
+			}
+			
+			if ( isset( $_GET['ig_dismiss_admin_notice'] ) && $_GET['ig_dismiss_admin_notice'] == '1' && isset( $_GET['ig_option_name'] ) ) {
+			
+				$option_name = sanitize_text_field( wp_unslash( $_GET['ig_option_name'] ) );
+				
+				$allowed_options = array(
+					'trial_to_premium_notice',
+					'ig_offer_bfcm_2025',
+					'ig_new_admin_ui'
+				);
+
+				if ( ! in_array( $option_name, $allowed_options, true ) ) {
+					return; 
+				}
+
+				update_option( $option_name . '_icegram', 'yes', false );			
+				
 				$safe_redirect = false;
+
 				if ( in_array( $option_name, array( 'trial_to_premium_notice' ), true ) ) {
 					update_option( 'ig_' . $option_name . '_date', gmdate( 'Y-m-d H:i:s'), false );
 				}
 				
-				if ( 'ig_offer_bfcm_2024' === $option_name ) {
-					$url = "https://www.icegram.com/pricing/?utm_source=in_app&utm_medium=ig_banner&utm_campaign=offer_bfcm_2024";
+				if ( 'ig_offer_bfcm_2025' === $option_name ) {
+					$url = "https://www.icegram.com/pricing/?utm_source=in_app&utm_medium=ig_banner&utm_campaign=offer_bfcm_2025";
 					header( "Location: {$url}" );
 					exit();
 				} elseif( 'ig_new_admin_ui' === $option_name ) {
-					$url = "https://www.icegram.com/wp-content/uploads/2022/06/IG-admin-UI.png";
+					$url = ICEGRAM_PLUGIN_URL . 'lite/assets/images/IG-admin-UI.png';
 					header( "Location: {$url}" );
 					exit();
 				} elseif( 'trial_to_premium_notice' === $option_name ) {
 					
-					$action = $_GET['action'];
+					$action = isset( $_GET['action'] ) ? sanitize_text_field( wp_unslash( $_GET['action'] ) ) : '';
 					if ( 'ig_trial_to_premium_redirect' === $action ) {
 						
 						header( 'Location: https://www.icegram.com/icegram/pricing/?utm_source=in_app&utm_medium=ig_trial_to_premium_notice&utm_campaign=ig_trial_to_premium_notice' );
@@ -375,8 +396,8 @@ if ( ! class_exists( 'Icegram' ) ) {
 				$offer_end_time 	= $current_ist_time;
 				
 				if ( 'bfcm' === $offer_name ) {
-					$offer_start_time = strtotime( '2024-11-26 12:30:00' ); // Offer start time in IST
-					$offer_end_time   = strtotime( '2024-12-05 12:30:00' ); // Offer end time in IST
+					$offer_start_time = strtotime( '2025-11-14 12:30:00' ); // Offer start time in IST
+					$offer_end_time   = strtotime( '2025-12-05 12:30:00' ); // Offer end time in IST
 				}
 	
 				$is_offer_period = $current_ist_time >= $offer_start_time && $current_ist_time <= $offer_end_time;
@@ -386,28 +407,41 @@ if ( ! class_exists( 'Icegram' ) ) {
 		}
 
 		public function es_subscribe_form() {
+			global $icegram;
 			?>
 	        <div class="wrap">
 				<?php
 				if ( stripos( get_current_screen()->base, 'settings' ) !== false ) {
-					echo "<h2>" . __( 'Free Add-ons, Proven Marketing Tricks and  Updates', 'icegram' ) . "</h2>";
+					echo "<h2>" . esc_html__( 'Free Add-ons, Proven Marketing Tricks and  Updates', 'icegram' ) . "</h2>";
 				}
 				$current_user   = wp_get_current_user();
 				$customer_email = $current_user->user_email;
 				?>
 	            <table class="form-table">
 	                <tr>
-	                    <th scope="row"><span class="text-base text-gray-500"><?php _e( 'Get add-ons and tips...', 'icegram' ) ?></span></th>
+	                    <th scope="row"><span class="text-base text-gray-500"><?php esc_html_e( 'Get add-ons and tips...', 'icegram' ) ?></span></th>
 	                    <td>
 	                    	<form name="ig_subscription_form" id="ig-subscription-form">
 								<input type="hidden"  id="sign-up-list" name="list" value="d44945bf9155"/>
 							    <input type="hidden" id="sign-up-form-source" name="form-source" value=""/>
 								<input class="ltr form-input py-1" type="text" name="name" id="ig-sign-up-name" placeholder="Name"/>
-		                        <input class="regular-text ltr form-input py-1" type="text" name="email" id="ig-sign-up-email" placeholder="Email" value="<?php echo $customer_email ?>"/>                    
+		                        <input class="regular-text ltr form-input py-1" type="text" name="email" id="ig-sign-up-email" placeholder="Email" value="<?php echo esc_attr( $customer_email ); ?>"/>                    
 		                        <input type="submit" name="submit" id="ig-sign-up-submit" class="button button-primary cursor-pointer align-middle px-4 py-0.5 -mt-1 mx-2 hover:shadow-md rounded-md font-medium bg-indigo-600 text-white" value="Subscribe">
 		                        <br><br>
 		                        <input type="checkbox" name="es-gdpr-agree" id="es-gdpr-agree" value="1" class="form-checkbox" required="required">
-		                        <label for="es-gdpr-agree"><?php echo sprintf( __( 'I have read and agreed to our %s.', 'icegram' ), '<a href="https://www.icegram.com/privacy-policy/" target="_blank">' . __( 'Privacy Policy', 'icegram' ) . '</a>' ); ?></label>
+		                        <label for="es-gdpr-agree">
+									<?php
+									$ig_allowed_tags = $icegram->ig_add_escape_allowed_tags();
+									echo wp_kses(
+										sprintf(
+											/* translators: %s is a link to the privacy policy */
+											__( 'I have read and agreed to our %s.', 'icegram' ),
+											'<a href="https://www.icegram.com/privacy-policy/" target="_blank">' . esc_html__( 'Privacy Policy', 'icegram' ) . '</a>'
+										),
+										$ig_allowed_tags
+									 );
+									?>
+								</label>
 		                        <br>
 		                        <div id="ig-subscribe-response"></div>
 							</form>
@@ -442,10 +476,10 @@ if ( ! class_exists( 'Icegram' ) ) {
 						jQuery.ajax({
 							method: 'POST',
 							type: 'text',
-							url: "<?php echo admin_url( 'admin-ajax.php' ); ?>",
+							url: "<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>",
 							data: {
 								action: 'es_list_subscribe',
-								security: '<?php echo wp_create_nonce( 'ig-nonce' );?>',
+								security: '<?php echo esc_js( wp_create_nonce( 'ig-nonce' ) ); ?>',
 								name: name,
 								email: email,
 								list: list,
@@ -476,16 +510,16 @@ if ( ! class_exists( 'Icegram' ) ) {
 		 * @param array $request_data
 		 */
 		public function es_list_subscribe() {
-			
+
 			check_ajax_referer( 'ig-nonce', 'security' );
-			
+
 			$response = array(
 				'status' => 'error',
 			);
 
-			$name  = ! empty( $_POST['name'] ) ? sanitize_text_field( $_POST['name'] ) : '';
-			$email = ! empty( $_POST['email'] ) ? sanitize_text_field( $_POST['email'] ) : '';
-			$list  = ! empty( $_POST['list'] ) ? sanitize_text_field( $_POST['list'] ) : '';
+			$name  = ! empty( $_POST['name'] ) ? sanitize_text_field( wp_unslash( $_POST['name'] ) ) : '';
+			$email = ! empty( $_POST['email'] ) ? sanitize_text_field( wp_unslash( $_POST['email'] ) ) : '';
+			$list  = ! empty( $_POST['list'] ) ? sanitize_text_field( wp_unslash( $_POST['list'] ) ) : '';
 
 			if ( ! empty( $list ) && is_email( $email ) ) {
 
@@ -548,20 +582,20 @@ if ( ! class_exists( 'Icegram' ) ) {
 				if ( stripos( get_current_screen()->base, 'settings' ) !== false ) {
 				?>
 	            <form name="icegram_housekeeping" action="#" method="POST" accept-charset="utf-8">
-	                <h2><?php _e( 'Housekeeping', 'icegram' ) ?></h2>
+	                <h2><?php esc_html_e( 'Housekeeping', 'icegram' ) ?></h2>
 	                <p class="ig_housekeeping">
 	                    <label for="icegram_remove_shortcodes">
 	                        <input type="checkbox" name="icegram_remove_shortcodes" value="yes"/>
-							<?php _e( 'Remove all Icegram Engage shortcodes', 'icegram' ); ?>
+							<?php esc_html_e( 'Remove all Icegram Engage shortcodes', 'icegram' ); ?>
 	                    </label>
 	                    <br/><br/>
 	                    <label for="icegram_remove_all_data">
 	                        <input type="checkbox" name="icegram_remove_all_data" value="yes"/>
-							<?php _e( 'Remove all Icegram Engage campaigns and messages', 'icegram' ); ?>
+							<?php esc_html_e( 'Remove all Icegram Engage campaigns and messages', 'icegram' ); ?>
 	                    </label>
 	                    <br/><br/>
-	                    <img alt="" src="<?php echo admin_url( 'images/wpspin_light.gif' ) ?>" class="ig_loader" style="vertical-align:middle;display:none"/>
-	                    <input type="submit" name="submit" id="submit" class="button button-primary" value="<?php _e( 'Clean Up', 'icegram' ); ?>">
+	                    <img alt="" src="<?php echo esc_url( admin_url( 'images/wpspin_light.gif' ) ); ?>" class="ig_loader" style="vertical-align:middle;display:none"/>
+	                    <input type="submit" name="submit" id="submit" class="button button-primary" value="<?php esc_html_e( 'Clean Up', 'icegram' ); ?>">
 	                <div id="icegram_housekeeping_response"></div>
 	                </p>
 	            </form>
@@ -570,22 +604,22 @@ if ( ! class_exists( 'Icegram' ) ) {
 	        <script type="text/javascript">
 				jQuery(function () {
 					jQuery("form[name=icegram_housekeeping]").submit(function (e) {
-						if (confirm("<?php _e( 'You won\'t be able to recover this data once you proceed. Do you really want to perform this action?', 'icegram' ); ?>") == true) {
+						if (confirm("<?php echo esc_js( __( 'You won\'t be able to recover this data once you proceed. Do you really want to perform this action?', 'icegram' ) ); ?>") == true) {
 							e.preventDefault();
 							jQuery('.ig_loader').show();
 							jQuery('#icegram_housekeeping_response').text("");
 							params = jQuery("form[name=icegram_housekeeping]").serializeArray();
 							params.push({name: 'action', value: 'icegram_run_housekeeping'});
-							params.push({name: 'security', value: '<?php echo wp_create_nonce( 'ig_run_housekeeping' ); ?>'});
+							params.push({name: 'security', value: '<?php echo esc_js( wp_create_nonce( 'ig_run_housekeeping' ) ); ?>'});
 
 							jQuery.ajax({
 								method: 'POST',
 								type: 'text',
-								url: "<?php echo admin_url( 'admin-ajax.php' ); ?>",
+								url: "<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>",
 								data: params,
 								success: function (response) {
 									jQuery('.ig_loader').hide();
-									jQuery('#icegram_housekeeping_response').text("<?php _e( 'Done!', 'icegram' ); ?>");
+									jQuery('#icegram_housekeeping_response').text("<?php echo esc_js( __( 'Done!', 'icegram' ) ); ?>");
 								}
 							});
 						}
@@ -604,7 +638,10 @@ if ( ! class_exists( 'Icegram' ) ) {
 			if ( current_user_can( 'manage_options' ) && ! empty( $params['icegram_remove_shortcodes'] ) && $params['icegram_remove_shortcodes'] == 'yes' ) {
 				// first get all posts with [icegram] shortcode in them
 				$sql   = "SELECT * FROM `$wpdb->posts` WHERE  `post_content` LIKE  '%[icegram %]%' and `post_type` != 'revision' ";
-				$posts = $wpdb->get_results( $sql, OBJECT );
+				
+				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
+				$posts = $wpdb->get_results( $sql, OBJECT );				
+
 				if ( ! empty( $posts ) && is_array( $posts ) ) {
 					foreach ( $posts as $post ) {
 						$post_content = $post->post_content;
@@ -635,15 +672,20 @@ if ( ! class_exists( 'Icegram' ) ) {
 		}
 
 		public function icegram_event_track() {
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing
 			if ( ! empty( $_POST['ig_local_url_cs'] ) && isset( $_SERVER['HTTP_ORIGIN'] ) ) {
-				$parts    = parse_url( sanitize_text_field( $_POST['ig_local_url_cs'] ) );
+				// phpcs:ignore WordPress.Security.NonceVerification.Missing 
+				$parts    = parse_url( sanitize_text_field( wp_unslash( $_POST['ig_local_url_cs'] ) ) );
 				$base_url = $parts["scheme"] . "://" . $parts["host"];
 				header( 'Access-Control-Allow-Origin: ' . $base_url );
 				header( 'Access-Control-Allow-Credentials: true' );
 			}
 
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing
 			if ( ! empty( $_POST['event_data'] ) ) {
-				foreach ( $_POST['event_data'] as $event ) {
+				// phpcs:ignore WordPress.Security.NonceVerification.Missing
+				$event_data = map_deep( wp_unslash( $_POST['event_data'] ), 'sanitize_text_field' );
+				foreach ( $event_data as $event ) {
 					switch ( $event['type'] ) {
 						case 'shown':
 							if ( is_array( $event['params'] ) && ! empty( $event['params']['message_id'] ) ) {
@@ -698,13 +740,12 @@ if ( ! class_exists( 'Icegram' ) ) {
 			// Redirect to welcome screen
 			delete_option( '_icegram_activation_redirect' );
 			add_option( '_icegram_activation_redirect', 'pending' );
-
-			do_action( 'ig_activated' );
+ 
+			do_action( 'icegram_activated' );
 		}
 		
-		static function deactivate() {
-			
-			do_action( 'ig_deactivated' );
+		static function deactivate() {			
+			do_action( 'icegram_deactivated' );
 		}
 
 		public function welcome() {
@@ -719,11 +760,10 @@ if ( ! class_exists( 'Icegram' ) ) {
 			delete_option( '_icegram_activation_redirect' );
 			
 			if ( self::show_campaign_creation_guide() ) {
-				wp_redirect('post-new.php?post_type=ig_campaign');
+				wp_safe_redirect('post-new.php?post_type=ig_campaign');
 			} else {
-				wp_redirect( admin_url( 'edit.php?post_type=ig_campaign&page=icegram-support' ) );
-			}
-
+				wp_safe_redirect( admin_url( 'edit.php?post_type=ig_campaign&page=icegram-support' ) );
+			}		
 		}
 
 		function db_update() {
@@ -748,7 +788,7 @@ if ( ! class_exists( 'Icegram' ) ) {
 			$about      = add_submenu_page( 'edit.php?post_type=ig_campaign', $welcome_page_title, $menu_title, 'manage_options', 'icegram-support', array( $this, 'about_screen' ) );
 			$settings   = add_submenu_page( 'edit.php?post_type=ig_campaign', $settings_page_title, $settings_page_title, 'manage_options', 'icegram-settings', array( $this, 'settings_screen' ) );
 
-			wp_register_style( 'icegram-activation', $this->plugin_url . '/assets/css/admin.min.css' );
+			wp_register_style( 'icegram-activation', $this->plugin_url . '/assets/css/admin.min.css', array(), $this->version );
 
 			add_action( 'admin_print_styles-' . $about, array( $this, 'admin_css' ) );
 			add_action( 'admin_print_styles-' . $settings, array( $this, 'admin_css' ) );
@@ -815,9 +855,9 @@ if ( ! class_exists( 'Icegram' ) ) {
 											method: 'POST',
 											dataType: 'json',
 											data: {
-												action: 'save_gallery_data',
+												action: 'ig_save_gallery_data',
 												galleryitems: JSON.stringify(response),
-												security: '<?php echo wp_create_nonce( 'gallery-save-data' ); // WPCS: XSS ok. ?>'
+												security: '<?php echo esc_js( wp_create_nonce( 'gallery-save-data' ) ); ?>'
 											},
 											success: function (res) {
 												if (res != undefined && res != '' && res.success != undefined && res.success == 'yes') {
@@ -877,9 +917,9 @@ if ( ! class_exists( 'Icegram' ) ) {
 											method: 'POST',
 											dataType: 'json',
 											data: {
-												action: 'save_gallery_data',
+												action: 'ig_save_gallery_data',
 												categories: response,
-												security: '<?php echo wp_create_nonce( 'gallery-save-data' ); // WPCS: XSS ok. ?>'
+												security: '<?php echo esc_js( wp_create_nonce( 'gallery-save-data' ) ); ?>'
 											},
 											success: function (res) {
 												if (res != undefined && res != '' && res.success != undefined && res.success == 'yes') {
@@ -906,11 +946,11 @@ if ( ! class_exists( 'Icegram' ) ) {
 			check_ajax_referer( 'gallery-save-data', 'security' );
 			if ( current_user_can( 'manage_options' ) ) {
 				if ( ! empty( $_REQUEST ) && ! empty( $_REQUEST['galleryitems'] ) ) {
-					$ig_gallery_json = stripslashes( $_REQUEST['galleryitems'] );
+					$ig_gallery_json = stripslashes( sanitize_text_field( wp_unslash( $_REQUEST['galleryitems'] ) ) );
 					update_option( 'ig_last_gallery_items', $ig_gallery_json );
 				}
 				if ( ! empty( $_REQUEST ) && ! empty( $_REQUEST['categories'] ) ) {
-					$categories = $_REQUEST['categories'];
+					$categories = array_map( 'sanitize_text_field', wp_unslash( $_REQUEST['categories'] ) );
 					$cat_list   = array();
 					foreach ( $categories as $category ) {
 						if ( $category['parent'] == 0 ) {
@@ -927,45 +967,30 @@ if ( ! class_exists( 'Icegram' ) ) {
 		}
 
 		public static function gallery_screen() {
-			global $icegram;
-			//check for new gallery item
-			$ig_last_gallery_item_update = get_transient( 'ig_last_gallery_item_update' );
-			
-			if ( empty( $ig_last_gallery_item_update ) ) {
-				$icegram->check_for_gallery_items( true );
-			}
-			$ig_gallery_items = get_option( 'ig_last_gallery_items', true );
-			$cat_list         = get_option( 'ig_cat_list', true );
-			include( 'gallery.php' );
-			wp_register_script( 'ig_gallery_js', $icegram->plugin_url . '/assets/js/gallery.min.js', array( 'jquery', 'backbone', 'wp-backbone', 'wp-a11y', 'wp-util' ), $icegram->version, true );
-			if ( ! wp_script_is( 'ig_gallery_js' ) ) {
+		global $icegram;
+		
+		//check for new gallery item
+		// Enqueue Tailwind CSS for gallery
+		wp_enqueue_style( 'ig_gallery_tailwindcss', $icegram->plugin_url . '/assets/css/tailwind.css', array(), $icegram->version . '-' . filemtime( $icegram->plugin_path . '/assets/css/tailwind.css' ) );
+
+		wp_enqueue_script( 'ig_gallery_mithril_js', ICEGRAM_PLUGIN_URL . 'new-template-gallery/mithril.min.js', array(), $icegram->version, true );
+
+		wp_register_script( 'ig_gallery_js', ICEGRAM_PLUGIN_URL . 'new-template-gallery/gallery-new.js', array( 'ig_gallery_mithril_js' ), $icegram->version . '-' . filemtime( ICEGRAM_PLUGIN_DIR . 'new-template-gallery/gallery-new.js' ), true );
+
+			if ( ! wp_script_is( 'ig_gallery_js' ) ) { 
 				wp_enqueue_script( 'ig_gallery_js' );
-				$imported_gallery_items = get_option( 'ig_imported_gallery_items', true );
-				$ig_plan 				= $icegram->get_plan();
-				$ig_plan                = ( ! empty( $ig_plan ) ) ? ( ( $ig_plan == 'plus' ) ? 1 : ( ( $ig_plan == 'pro' ) ? 2 : ( ( $ig_plan == 'max' ) ? 3 : 0 ) ) ) : 0;
-				
-				$ig_gallery_json        =
-					wp_localize_script( 'ig_gallery_js', '_wpThemeSettings', array(
-						'themes'          => json_decode( $ig_gallery_items, true ),
-						'settings'        => array(
-							'canInstall'    => ( ! is_multisite() && ( 'install_themes' ) ),
-							'isInstall'     => true,
-							'installURI'    => ( ! is_multisite() && ( 'install_themes' ) ) ? admin_url( 'theme-install.php' ) : null,
-							'confirmDelete' => __( "Are you sure you want to delete this theme?\n\nClick 'Cancel' to go back, 'OK' to confirm the delete.", 'icegram' ),
-							'adminUrl'      => parse_url( admin_url(), PHP_URL_PATH ),
-							'ig_plan'       => $ig_plan,
-							'cat_list'      => $cat_list
-						),
-						'l10n'            => array(
-							'addNew'            => __( 'Add New Gallery Templates', 'icegram' ),
-							'search'            => __( 'Search Gallery Templates', 'icegram' ),
-							'searchPlaceholder' => __( 'Search Design Templates', 'icegram' ), // placeholder (no ellipsis)
-							'themesFound'       => __( 'Number of Gallery Templates found: %d', 'icegram' ),
-							'noThemesFound'     => __( 'No Gallery Templates found. Try a different search.', 'icegram' ),
-						),
-						'installedThemes' => $imported_gallery_items
-					) );
+				$ig_plan = ( $icegram->is_plus() ) ? 4 : ( ( $icegram->is_pro() ) ? 2 : ( ( $icegram->is_max() ) ? 3 : 0 ) );
+
+				wp_localize_script( 'ig_gallery_js', '_wpThemeSettings', array(
+					'settings'			=> array(
+			 			'ig_plan'       => $ig_plan,
+						'ig_cat_api_url' => 'https://www.icegram.com/gallery/wp-json/wp/v2/custom_category?orderby=meta_value&meta_key=updated_at&order=desc&per_page=100', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_query_meta_key
+						'ig_projects_api_url' => 'https://www.icegram.com/gallery/wp-json/wp/v2/galleryitem'
+					)
+				));
 			}
+
+			echo '<div id="ig-gallery-root" class="p-4 ig-gallery-wrap"></div>';
 		}
 
 		public function branding_data_remove( $icegram_branding_data ) {
@@ -1013,15 +1038,23 @@ if ( ! class_exists( 'Icegram' ) ) {
 		// Not using currently - made custom post types non public...
 		function icegram_load_data() {
 			global $post;
+
+			$sanitized_get_data = array();
+			$get_data = filter_input_array( INPUT_GET, FILTER_SANITIZE_STRING );
+
+			if ( ! empty( $get_data ) && is_array( $get_data ) ) {
+				$sanitized_get_data = $get_data;
+			} 
+			
 			$icegram_pre_data['ajax_url']                        = admin_url( 'admin-ajax.php' );
-			$icegram_pre_data['post_obj']                        = $_GET;
+			$icegram_pre_data['post_obj']                        = $sanitized_get_data;
 			$icegram_pre_data['post_obj']['is_home']             = ( is_home() || is_front_page() ) ? true : false;
 			$icegram_pre_data['post_obj']['page_id']             = is_object( $post ) && isset( $post->ID ) ? $post->ID : 0;
-			$icegram_pre_data['post_obj']['action']              = 'display_messages';
+			$icegram_pre_data['post_obj']['action']              = 'ig_display_messages';
 			$icegram_pre_data['post_obj']['shortcodes']          = $this->shortcode_instances;
 			$icegram_pre_data['post_obj']['cache_compatibility'] = $this->cache_compatibility;
 			$icegram_pre_data['post_obj']['device']              = $this->get_platform();
-
+			
 			wp_register_script( 'icegram_main_js', $this->plugin_url . '/assets/js/main.min.js', array( 'jquery' ), $this->version, true );
 			if ( 'yes' === $this->cache_compatibility ) {
 				if ( ! wp_script_is( 'icegram_main_js' ) ) {
@@ -1035,7 +1068,10 @@ if ( ! class_exists( 'Icegram' ) ) {
 			
 			$skip_others               = $preview_mode = false;
 			$campaign_ids              = $message_ids = array();
-			$this->shortcode_instances = ( $this->cache_compatibility == 'yes' && ! empty( $_REQUEST['shortcodes'] ) ) ? $_REQUEST['shortcodes'] : $this->shortcode_instances;
+			
+		    // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- intentional read of 'shortcodes' from request for cache compatibility
+			$this->shortcode_instances = ( $this->cache_compatibility == 'yes' && ! empty( $_REQUEST['shortcodes'] ) ) ? array_map( 'sanitize_text_field', wp_unslash( $_REQUEST['shortcodes'] ) ) : $this->shortcode_instances;
+
 			// Pull in message and campaign IDs from shortcodes - if set
 			if ( ! empty( $this->shortcode_instances ) ) {
 				foreach ( $this->shortcode_instances as $i => $value ) {
@@ -1048,13 +1084,16 @@ if ( ! class_exists( 'Icegram' ) ) {
 					$message_ids  = array_merge( $message_ids, $mids );
 				}
 			}
-			if ( ! empty( $_REQUEST['campaign_preview_id'] ) && intval( $_REQUEST['campaign_preview_id'] ) && current_user_can( 'edit_post', ig_get_request_data( 'campaign_preview_id' ) ) ) {
-				$campaign_ids = array( intval( $_REQUEST['campaign_preview_id'] ) );
+
+			$campaign_preview_id = icegram_get_request_data( 'campaign_preview_id', '', false );
+			
+			if ( ! empty( $campaign_preview_id ) && intval( $campaign_preview_id ) && current_user_can( 'edit_post', absint( $campaign_preview_id ) ) ) {
+				$campaign_ids = array( intval( $campaign_preview_id ) );
 				$preview_mode = true;
 			}
 
 			$messages = $this->get_valid_messages( $message_ids, $campaign_ids, $preview_mode, $skip_others );
-
+ 
 			if ( empty( $messages ) ) {
 				//wp_die(0);
 				return;
@@ -1074,7 +1113,7 @@ if ( ! class_exists( 'Icegram' ) ) {
 				// Don't show a seen message again - if needed
 				// change to campaign targetting in v1.9.1
 				if ( ! empty( $message_data['id'] ) &&
-				     empty( $_GET['campaign_preview_id'] ) &&
+			     empty( $campaign_preview_id ) &&
 				     ! empty( $message_data['retargeting'] ) &&
 				     $message_data['retargeting'] == 'yes'
 				) {
@@ -1083,16 +1122,17 @@ if ( ! class_exists( 'Icegram' ) ) {
 						continue;
 					}
 				}
-				if ( ! empty( $message_data['id'] ) &&
-				     empty( $_GET['campaign_preview_id'] ) &&
-				     ! empty( $message_data['retargeting_clicked'] ) &&
-				     $message_data['retargeting_clicked'] == 'yes'
-				) {
-					if ( ! empty( $_COOKIE[ 'icegram_messages_clicked_' . $message_data['id'] ] ) || ! empty( $_COOKIE[ 'icegram_campaign_clicked_' . floor( $message_data['campaign_id'] ) ] ) ) {
-						unset( $messages[ $key ] );
-						continue;
-					}
+				
+			if ( ! empty( $message_data['id'] ) &&
+				empty( $campaign_preview_id ) &&
+				! empty( $message_data['retargeting_clicked'] ) &&
+				$message_data['retargeting_clicked'] == 'yes'
+			) {
+				if ( ! empty( $_COOKIE[ 'icegram_messages_clicked_' . $message_data['id'] ] ) || ! empty( $_COOKIE[ 'icegram_campaign_clicked_' . floor( $message_data['campaign_id'] ) ] ) ) {
+					unset( $messages[ $key ] );
+					continue;
 				}
+			}
 
 				// Avoid showing the same message twice
 				if ( in_array( $message_data['id'], $messages_to_show_ids ) ) {
@@ -1124,7 +1164,7 @@ if ( ! class_exists( 'Icegram' ) ) {
 			$icegram_data    = apply_filters( 'icegram_data', array(
 				'messages'   => array_values( $messages ),
 				'ajax_url'   => admin_url( 'admin-ajax.php' ),
-				'preview_id' => ! empty( $_GET['campaign_preview_id'] ) ? sanitize_text_field( $_GET['campaign_preview_id'] ) : '',
+				'preview_id' => ! empty( $campaign_preview_id ) ? absint( $campaign_preview_id ) : '',
 				'defaults'   => $icegram_default
 			) );
 			if ( empty( $icegram_data['preview_id'] ) ) {
@@ -1191,7 +1231,7 @@ if ( ! class_exists( 'Icegram' ) ) {
 
 			$this->collect_js_and_css( $icegram_data );
 			if ( $this->cache_compatibility === 'yes' ) {
-				echo json_encode( $icegram_data );
+				echo wp_json_encode( $icegram_data );
 				wp_die();
 			} else {
 				wp_localize_script( 'icegram_main_js', 'icegram_data', $icegram_data );
@@ -1239,8 +1279,8 @@ if ( ! class_exists( 'Icegram' ) ) {
 				}
 			}
 			$css                     = array_unique( $css );
-			$icegram_data['scripts'] = apply_filters( 'add_icegram_script', $scripts );
-			$icegram_data['css']     = apply_filters( 'add_icegram_css', $css );
+			$icegram_data['scripts'] = apply_filters( 'icegram_add_script', $scripts );
+			$icegram_data['css']     = apply_filters( 'icegram_add_css', $css );
 			return $icegram_data;
 		}
 
@@ -1363,7 +1403,7 @@ if ( ! class_exists( 'Icegram' ) ) {
 			}
 
 			// Register scripts
-			wp_register_script( 'icegram_writepanel', $this->plugin_url . '/assets/js/admin.min.js', array( 'jquery', 'wp-color-picker' ), $this->version );
+			wp_register_script( 'icegram_writepanel', $this->plugin_url . '/assets/js/admin.min.js', array( 'jquery', 'wp-color-picker' ), $this->version, true );
 
 			wp_enqueue_script( 'icegram_writepanel' );
 
@@ -1403,7 +1443,7 @@ if ( ! class_exists( 'Icegram' ) ) {
 		}
 
 		public static function get_platform() {
-			$mobile_detect = new Ig_Mobile_Detect();
+			$mobile_detect = new Icegram_Mobile_Detect();
 			$mobile_detect->setUserAgent();
 			if ( $mobile_detect->isMobile() ) {
 				return ( $mobile_detect->isTablet() ) ? 'tablet' : 'mobile';
@@ -1435,6 +1475,7 @@ if ( ! class_exists( 'Icegram' ) ) {
 				$message_ids = array_filter( array_unique( $message_ids ) );
 				if ( ! empty( $message_ids ) ) {
 					$message_data_query   .= " AND post_id IN ( " . implode( ',', $message_ids ) . " )";
+					// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
 					$message_data_results = $wpdb->get_results( $message_data_query, 'ARRAY_A' );
 					foreach ( $message_data_results as $message_data_result ) {
 						$data = maybe_unserialize( $message_data_result['meta_value'] );
@@ -1514,13 +1555,14 @@ if ( ! class_exists( 'Icegram' ) ) {
 				}
 				$message_data['delay_time']  = 0;
 				$message_data['retargeting'] = '';
-				$message_data['campaign_id'] = ( $preview_mode && ! empty( $_REQUEST['campaign_preview_id'] ) ) ? sanitize_text_field( $_REQUEST['campaign_preview_id'] ) : '';
+				// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+				$message_data['campaign_id'] = ( $preview_mode && ! empty( $_REQUEST['campaign_preview_id'] ) ) ? sanitize_text_field( wp_unslash( $_REQUEST['campaign_preview_id'] ) ) : '';
 
 				// Pull display time and retargeting rule from campaign if possible
 				$message_id = ( ! empty( $message_data['original_message_id'] ) ) ? $message_data['original_message_id'] : $id;
 				if ( ! empty( $message_campaign_map[ $message_id ] ) ) {
-					//modify campaign id
-					$message_data['campaign_id'] = apply_filters( 'modify_campaing_id', $message_campaign_map[ $message_id ], $message_id );
+					//modify campaign id					
+					$message_data['campaign_id'] = apply_filters( 'icegram_modify_campaign_id', $message_campaign_map[ $message_id ], $message_id );
 					$campaign                    = $valid_campaigns[ floor( $message_data['campaign_id'] ) ];
 					if ( ! empty( $campaign ) && $campaign instanceof Icegram_Campaign ) {
 						$message_meta_from_campaign = $campaign->get_message_meta_by_id( $message_id );
@@ -1572,7 +1614,9 @@ if ( ! class_exists( 'Icegram' ) ) {
 				// and provide arguments for wpdb->prepare if needed.
 				// First element in the array is SQL, remaining are values for placeholders in SQL
 				$sql_params = apply_filters( 'icegram_get_valid_campaigns_sql', array( $sql ), array() );
-
+				
+				/* plugincheck-ignore */
+				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
 				$campaign_ids = $wpdb->get_col( $wpdb->prepare( array_shift( $sql_params ), $sql_params ) );
 			}
 			$valid_campaigns = array();
@@ -1610,9 +1654,12 @@ if ( ! class_exists( 'Icegram' ) ) {
 
 			$sql          .= " OR ( pm.meta_value LIKE '%%%s%%' )";
 			$sql_params[] = 's:10:"post_types";s:3:"yes";';
+			
+		    $cache_compatibility = icegram_get_request_data( 'cache_compatibility', '', false );
 
-			if ( ! empty( $_REQUEST['cache_compatibility'] ) && $_REQUEST['cache_compatibility'] == 'yes' ) {
-				$is_home = ( ! empty( $_REQUEST['is_home'] ) && $_REQUEST['is_home'] === 'true' ) ? true : false;
+		    if ( 'yes' === $cache_compatibility ) { 
+				$is_home_param = icegram_get_request_data( 'is_home', '', false );
+        		$is_home = ( 'true' === $is_home_param ) ? true : false;				
 			} else {
 				$is_home = ( is_home() || is_front_page() ) ? true : false;
 			}
@@ -1631,23 +1678,23 @@ if ( ! class_exists( 'Icegram' ) ) {
 
 		// Include all classes required for Icegram plugin
 		function include_classes( $feedback_version ) {
-			global $ig_tracker, $ig_feedback;
+			global $icegram_tracker, $icegram_feedback;
 
 			$name 				=	'Icegram'; 
 			$text_domain 		= 	'icegram';
 			$plugin 			=   $text_domain;
 			$plugin_prefix 		= 	'ig';
 			$plan 				= 	self::get_plan();
-			$plugin_file_path 	= 	IG_PLUGIN_DIR . 'icegram.php';
+			$plugin_file_path 	= 	ICEGRAM_PLUGIN_DIR . 'icegram.php';
 			$allowed_by_default =  	( 'lite' === $plan ) ? false : true;
 			$event_prefix 		= 'igfree.';
 			// Usage tracker code begin
 			require dirname(__FILE__) . '/classes/feedback/class-ig-plugin-data-tracker.php';
 
-			$ig_usage_tracker = 'Icegram_Plugin_Usage_Tracker_V_' . str_replace( '.', '_', IG_USAGE_TRACKER_VERSION);
+			$ig_usage_tracker = 'Icegram_Plugin_Usage_Tracker_V_' . str_replace( '.', '_', ICEGRAM_USAGE_TRACKER_VERSION);
 
 			if( class_exists( $ig_usage_tracker ) ){
-				new $ig_usage_tracker( $name, $text_domain, $plugin_prefix, IG_PRODUCT_ID, $plan, $plugin_file_path, $ig_tracker, $allowed_by_default );
+				new $ig_usage_tracker( $name, $text_domain, $plugin_prefix, ICEGRAM_PRODUCT_ID, $plan, $plugin_file_path, $icegram_tracker, $allowed_by_default );
 			}
 
 			// Usage tracker code ends
@@ -1667,12 +1714,13 @@ if ( ! class_exists( 'Icegram' ) ) {
 			require_once( $f );
 
 			$ig_feedback_class = 'IG_Feedback_V_' . str_replace( '.', '_', $feedback_version );
-			$ig_feedback       = new $ig_feedback_class( $name, $plugin, $plugin_prefix, $event_prefix, false );
+			
+			$icegram_feedback       = new $ig_feedback_class( $name, $plugin, $plugin_prefix, $event_prefix, false );
 
 			require_once( 'classes/feedback.php' );
 
 			$classes     = glob( $this->plugin_path . '/classes/*.php' );
-			$all_plugins = $ig_tracker::get_plugins();
+			$all_plugins = $icegram_tracker::get_plugins();
 
 			foreach ( $classes as $file ) {
 				// Files with 'admin' in their name are included only for admin section
@@ -1703,7 +1751,8 @@ if ( ! class_exists( 'Icegram' ) ) {
 					$this->message_type_objs[ $type ] = new $class_name();
 				}
 			}
-			do_action( 'ig_file_include' );
+			
+			do_action( 'icegram_file_include' );
 			$this->message_types = apply_filters( 'icegram_message_types', array() );
 
 		}
@@ -1722,7 +1771,7 @@ if ( ! class_exists( 'Icegram' ) ) {
 				'search_items'       => __( 'Search Campaigns', 'icegram' ),
 				'not_found'          => __( 'No campaigns found', 'icegram' ),
 				'not_found_in_trash' => __( 'No campaigns found in Trash', 'icegram' ),
-				'parent_item_colon'  => __( '', 'icegram' ),
+				'parent_item_colon'  => '',
 				'menu_name'          => __( 'Icegram Engage', 'icegram' )
 			);
 
@@ -1760,7 +1809,7 @@ if ( ! class_exists( 'Icegram' ) ) {
 				'search_items'       => __( 'Search Messages', 'icegram' ),
 				'not_found'          => __( 'No messages found', 'icegram' ),
 				'not_found_in_trash' => __( 'No messages found in Trash', 'icegram' ),
-				'parent_item_colon'  => __( '', 'icegram' ),
+				'parent_item_colon'  => '',
 				'menu_name'          => __( 'Messages', 'icegram' )
 			);
 
@@ -1795,8 +1844,8 @@ if ( ! class_exists( 'Icegram' ) ) {
 			if ( 'post-new.php' === $pagenow || 'edit.php' === $pagenow ) {
 				$post_type = $typenow;
 			} elseif ( 'post.php' === $pagenow ) {
-				// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-				$post_type = ! empty( $_GET['post'] ) ? get_post_type( sanitize_text_field( $_GET['post'] ) ) : '';
+				$post_id = icegram_get_request_data( 'post', '', true );
+				$post_type = ! empty( $post_id ) ? get_post_type( absint( $post_id ) ) : '';				
 			}
 
 			$engage_cpts   = array( 'ig_campaign', 'ig_message' );
@@ -1927,13 +1976,16 @@ if ( ! class_exists( 'Icegram' ) ) {
 					}//foreach
 
 					if ( ! empty( $campaign['messages'] ) ) {
-						if( isset( $_REQUEST['ig_trial'] ) ){
+						
+		                $ig_trial = icegram_get_request_data( 'ig_trial', '', true );
+
+ 						if ( ! empty( $ig_trial ) ) {
 							$trial_data = array(
 								'campaign_id' => $new_campaign_id,
 								'messages' => $messages,
 							);
 							
-							do_action('save_trial_campaign_message_ids', $trial_data );
+							do_action('icegram_save_trial_campaign_message_ids', $trial_data );
 						}
 						update_post_meta( $new_campaign_id, 'messages', $messages );
 						update_post_meta( $new_campaign_id, 'campaign_preview', $messages );
@@ -1946,37 +1998,40 @@ if ( ! class_exists( 'Icegram' ) ) {
 		}
 
 		function import_gallery_item() {
-			if ( ! empty( $_REQUEST['action'] ) && $_REQUEST['action'] == 'fetch_messages' && ! empty( $_REQUEST['campaign_id'] ) && ! empty( $_REQUEST['gallery_item'] ) ) {
-				$url                    = 'https://www.icegram.com/gallery/wp-admin/admin-ajax.php?utm_source=ig_inapp&utm_campaign=ig_gallery&utm_medium=' . sanitize_text_field( $_REQUEST['campaign_id'] );
-				$params                 = $_REQUEST;
-				$imported_gallery_items = array();
-				$options                = array(
-					'timeout' => 15,
-					'method'  => 'POST',
-					'body'    => http_build_query( $params )
-				);
-				$response               = wp_remote_request( $url, $options );
-				$response_code          = wp_remote_retrieve_response_code( $response );
-				if ( $response_code == 200 ) {
-					$new_campaign_ids = $this->import( json_decode( $response['body'], true ) );
-					if ( ! empty( $new_campaign_ids ) ) {
-						$imported_gallery_items   = get_option( 'ig_imported_gallery_items' );
-						$imported_gallery_items[] = sanitize_text_field( $_REQUEST['campaign_id'] );
-						update_option( 'ig_imported_gallery_items', $imported_gallery_items );
-						$location = admin_url( 'post.php?post=' . $new_campaign_ids[0] . '&action=edit' );
-						header( 'Location:' . $location );
-
-						if( 'no' === get_option( 'ig_is_onboarding_completed', 'no' ) ){ 
-							update_option( 'ig_is_onboarding_completed', 'yes' );
-						}
-
-						exit;
-					} else {
-						wp_safe_redirect( $_SERVER['HTTP_REFERER'] );
-					}
-				}
-			}
-		}
+            $action       = icegram_get_request_data( 'action', '', true );
+            $campaign_id  = icegram_get_request_data( 'campaign_id', '', true );
+            $gallery_item = icegram_get_request_data( 'gallery_item', '', true );
+             if ( empty( $action ) || 'fetch_messages' !== $action || empty( $campaign_id ) || empty( $gallery_item ) ) {
+                return;
+            }
+            $url = 'https://www.icegram.com/gallery/wp-admin/admin-ajax.php?utm_source=ig_inapp&utm_campaign=ig_gallery&utm_medium=' . $campaign_id;
+            // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+            $params                 = $_REQUEST;
+            $imported_gallery_items = array();
+            $options                = array(
+                'timeout' => 15,
+                'method'  => 'POST',
+                'body'    => http_build_query( $params )
+            );
+            $response               = wp_remote_request( $url, $options );
+            $response_code          = wp_remote_retrieve_response_code( $response );
+            if ( $response_code == 200 ) {
+                $new_campaign_ids = $this->import( json_decode( $response['body'], true ) );
+                if ( ! empty( $new_campaign_ids ) ) {
+                    $imported_gallery_items   = get_option( 'ig_imported_gallery_items' );
+                    $imported_gallery_items[] = $campaign_id;
+                    update_option( 'ig_imported_gallery_items', $imported_gallery_items );
+                    $location = admin_url( 'post.php?post=' . $new_campaign_ids[0] . '&action=edit' );
+                    header( 'Location:' . $location );
+                    if( 'no' === get_option( 'ig_is_onboarding_completed', 'no' ) ){
+                        update_option( 'ig_is_onboarding_completed', 'yes' );
+                    }
+                    exit;
+                } else {
+                    wp_safe_redirect( isset( $_SERVER['HTTP_REFERER'] ) ? wp_unslash( $_SERVER['HTTP_REFERER'] ) : '' );
+                }
+            }
+        }
 
 		function import_sample_data( $data = array() ) {
 
@@ -2208,7 +2263,7 @@ if ( ! class_exists( 'Icegram' ) ) {
 								'headline_font_family' => '',
 								'icon' => '',
 								'message' => '<div class="ig_msg_content_left">
-												<img src="http://www.icegram.com/gallery/wp-content/uploads/2022/08/illustration-hello-discount-man.png" alt="Offer" width="259" height="389" />
+												<img src="' . plugin_dir_url( __FILE__ ) . 'assets/images/illustration-hello-discount-man.png" alt="Offer" width="259" height="389" />
 											  </div>
 											  <div class="ig_msg_content_right">
 												<div class="ig_sub_headline"> Latest offers and updates on trendy gadgets</div>
@@ -2345,7 +2400,7 @@ if ( ! class_exists( 'Icegram' ) ) {
 								'theme' => 'stand-out',
 								'headline' => '<div class="ig_demo_headline_light">Bill Gates says</div>',
 								'headline_font_family' => '',
-								'icon' => 'https://www.icegram.com/gallery/wp-content/uploads/2016/04/billgates-1-150x150.jpg',
+								'icon' => ICEGRAM_PLUGIN_URL . 'lite/assets/images/billgates-1-150x150.jpg',
 								'message' => '<span class="st">"<em>Your most unhappy customers are</em> your greatest source of learning." </span>',
 								'animation' => 'slide',
 								'form_font_family' => '',
@@ -2413,6 +2468,8 @@ if ( ! class_exists( 'Icegram' ) ) {
 			$id  = 0;
 			if ( ! empty( $obj->has_archive ) ) {
 				$sql = $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_name = %s AND post_type= %s ", array( $obj->has_archive, 'page' ) );
+
+				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
 				$id  = $wpdb->get_var( $sql );
 			} elseif ( is_object( $post ) && isset( $post->ID ) ) {
 				$id = $post->ID;
@@ -2422,21 +2479,28 @@ if ( ! class_exists( 'Icegram' ) ) {
 		}
 
 		static function get_current_page_id() {
-			global $post;
-			if ( ! empty( $_REQUEST['page_id'] ) && is_numeric( $_REQUEST['page_id'] ) ) {
-				$post = get_post( sanitize_text_field( $_REQUEST['page_id'] ) );
+			global $post; 
+
+		    $page_id = icegram_get_request_data( 'page_id', '', false );
+
+			if ( ! empty( $page_id ) && is_numeric( $page_id ) ) {
+
+				$post = get_post( absint( $page_id ) );
 				setup_postdata( $post );
 				// WPML check
 				$id                    = apply_filters( 'icegram_identify_current_page', $post->ID );
 				self::$current_page_id = $id;
-			}
-
+			}	
+					
 			return self::$current_page_id;
 		}
 
 		static function get_current_page_url() {
-			if ( ! empty( $_REQUEST['cache_compatibility'] ) && $_REQUEST['cache_compatibility'] == 'yes' ) {
-				$pageURL = ( ! empty( $_REQUEST['referral_url'] ) ) ? sanitize_text_field( $_REQUEST['referral_url'] ) : '';
+		    
+			$cache_compatibility = icegram_get_request_data( 'cache_compatibility', '', false );
+
+			if ( 'yes' === $cache_compatibility ) {
+		        $pageURL = icegram_get_request_data( 'referral_url', '', false );				
 			} else {
 				$pageURL = 'http';
 				if ( isset( $_SERVER["HTTPS"] ) ) {
@@ -2445,13 +2509,12 @@ if ( ! class_exists( 'Icegram' ) ) {
 					}
 				}
 				$pageURL .= "://";
-				if ( isset( $_SERVER["SERVER_PORT"] ) && "80" != $_SERVER["SERVER_PORT"] ) {
-					$pageURL .= $_SERVER["SERVER_NAME"] . ":" . $_SERVER["SERVER_PORT"] . $_SERVER["REQUEST_URI"];
+				if ( isset( $_SERVER["SERVER_PORT"] ) && "80" != sanitize_text_field( wp_unslash( $_SERVER["SERVER_PORT"] ) ) ) {
+					$pageURL .= ( isset( $_SERVER["SERVER_NAME"] ) ? sanitize_text_field( wp_unslash( $_SERVER["SERVER_NAME"] ) ) : '' ) . ":" . sanitize_text_field( wp_unslash( $_SERVER["SERVER_PORT"] ) ) . ( isset( $_SERVER["REQUEST_URI"] ) ? sanitize_text_field( wp_unslash( $_SERVER["REQUEST_URI"] ) ) : '' );
 				} else {
-					$pageURL .= $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"];
+					$pageURL .= ( isset( $_SERVER["SERVER_NAME"] ) ? sanitize_text_field( wp_unslash( $_SERVER["SERVER_NAME"] ) ) : '' ) . ( isset( $_SERVER["REQUEST_URI"] ) ? sanitize_text_field( wp_unslash( $_SERVER["REQUEST_URI"] ) ) : '' );
 				}
-			}
-
+			}			
 			return $pageURL;
 		}
 
@@ -2566,9 +2629,9 @@ if ( ! class_exists( 'Icegram' ) ) {
 			$duplicate['post_status'] = 'draft';
 			// Set the post date
 			$timestamp = current_time( 'timestamp', 0 );
-
-			$duplicate['post_date'] = date( 'Y-m-d H:i:s', $timestamp );
-
+ 
+		    $duplicate['post_date'] = current_time( 'mysql' );
+ 
 			// Remove some of the keys
 			unset( $duplicate['ID'] );
 			unset( $duplicate['guid'] );
@@ -2661,9 +2724,9 @@ if ( ! class_exists( 'Icegram' ) ) {
 		 * @since 1.10.38
 		 */
 		public function render_feedback_widget( $params ) {
-			global $ig_feedback;
+			global $icegram_feedback;
 
-			$feedback = $ig_feedback;
+			$feedback = $icegram_feedback;
 
 			if ( ! $feedback->can_show_feedback_widget() ) {
 				return;
@@ -2787,9 +2850,9 @@ if ( ! class_exists( 'Icegram' ) ) {
 							?>
 							<style type="text/css">
 							<?php
-								echo ".message_header .$message_type { 
-									background-color: {$label_bg_color}; 
-								}";
+							echo '.message_header .' . esc_attr( $message_type ) . ' { 
+								background-color: ' . esc_attr( $label_bg_color ) . '; 
+							}';
 							?>
 							</style>
 							<div style="display: inline; padding-right:0.3rem" class="message_header">
@@ -2836,21 +2899,25 @@ if ( ! class_exists( 'Icegram' ) ) {
 						  			echo esc_html( ucfirst( $campaign_target_rules['when'] ) );
 						  			
 						  			if( 'schedule' === $campaign_target_rules['when'] ){
-						  				$from_date = ! empty( $campaign_target_rules['from'] ) ? $campaign_target_rules['from'] : date( 'Y-m-d' ); 
-						  				$to_date = ! empty( $campaign_target_rules['to'] ) ? $campaign_target_rules['to'] : date( 'Y-m-d' ); 
+									    
+										$default_date = current_time( 'Y-m-d' );
+
+						  				$from_date = ! empty( $campaign_target_rules['from'] ) ? $campaign_target_rules['from'] : $default_date; 
+										
+						  				$to_date = ! empty( $campaign_target_rules['to'] ) ? $campaign_target_rules['to'] : $default_date; 
 
 						  				echo esc_html(' : ') . esc_html($from_date) . esc_html(' to ') . esc_html($to_date);
 
 						  			} 					  				
 					  			}
 
-					  			do_action('when_display_summary_rules', $campaign_target_rules);
+					  			do_action('icegram_when_display_summary_rules', $campaign_target_rules);
 					  		?>
 						</li>
 						<li>
 							<?php
 								//Geo-location
-								do_action('geolocation_display_summary', $campaign_target_rules);
+								do_action('icegram_geolocation_display_summary', $campaign_target_rules);
 							?>
 						</li>
 						<li>
@@ -2868,7 +2935,7 @@ if ( ! class_exists( 'Icegram' ) ) {
 									
 								);
 
-								$where_rules = apply_filters('where_display_rules_summary', $where_rules);
+								$where_rules = apply_filters('icegram_where_display_rules_summary', $where_rules);
 								
 								$map_text = array(
 									'other_page' 	=> 'Selected Pages',
@@ -2896,7 +2963,8 @@ if ( ! class_exists( 'Icegram' ) ) {
 								
 								$show_x_times = isset( $campaign_target_rules['show_x_times'] ) ? $campaign_target_rules['show_x_times'] : 1;
 								
-								echo esc_html__('Show ' . $show_x_times . ' time(s) then do not show for ' . $retargeting_shown[ $campaign_target_rules['expiry_time'] ], 'icegram' );
+								/* translators: 1: number of times to show, 2: time period for not showing the campaign */
+								echo esc_html( sprintf( __( 'Show %1$s time(s) then do not show for %2$s', 'icegram' ), $show_x_times, $retargeting_shown[ $campaign_target_rules['expiry_time'] ] ) );
 							}	
 							?>
 						</li>
@@ -2912,7 +2980,8 @@ if ( ! class_exists( 'Icegram' ) ) {
 							 	<?php
 								$retargeting_clicked = Icegram_Campaign_Admin::get_expiry_options_for_clicked();
 								
-								echo esc_html__('Once CTA is clicked, do NOT show this campaign again for ' . $retargeting_clicked[ $campaign_target_rules['expiry_time_clicked'] ], 'icegram' );
+								/* translators: %s is the time period for not showing the campaign after CTA is clicked */
+								echo esc_html( sprintf( __( 'Once CTA is clicked, do NOT show this campaign again for %s', 'icegram' ), $retargeting_clicked[ $campaign_target_rules['expiry_time_clicked'] ] ) );
 							}
 							?>
 						</li>
@@ -2935,9 +3004,9 @@ if ( ! class_exists( 'Icegram' ) ) {
 		public function toggle_campaign_status() {
 			check_ajax_referer( 'ig-nonce', 'security' );
 		
-			$campaign_id         = ! empty( $_POST['campaign_id'] ) ? sanitize_text_field( $_POST['campaign_id'] ) : '';
-			$new_campaign_status = ! empty( $_POST['new_campaign_status'] ) ? sanitize_text_field( $_POST['new_campaign_status'] ) : 'draft';
-		
+			$campaign_id         = ! empty( $_POST['campaign_id'] ) ? sanitize_text_field( wp_unslash( $_POST['campaign_id'] ) ) : '';
+			$new_campaign_status = ! empty( $_POST['new_campaign_status'] ) ? sanitize_text_field( wp_unslash( $_POST['new_campaign_status'] ) ) : 'draft';			
+				
 			if ( ! empty( $campaign_id ) ) {
 				if ( current_user_can( 'manage_options' )) {
 					$status_updated = wp_update_post( array(
@@ -2970,6 +3039,7 @@ if ( ! class_exists( 'Icegram' ) ) {
 
 			$message_ids = array();
 			$campaign_messages = get_post_meta( $campaign_id, 'messages', true );
+			
 			if(!empty($campaign_messages)){
 				foreach ($campaign_messages as $message) {
 					$message_ids[] = intval($message['id']);
@@ -2997,11 +3067,11 @@ if ( ! class_exists( 'Icegram' ) ) {
 		 * @since 1.10.39
 		 */
 		public function is_premium_installed() {
-			global $ig_tracker;
+			global $icegram_tracker;
 
 			$icegram_premium = 'icegram-engage/icegram-engage.php';
 
-			return $ig_tracker::is_plugin_installed( $icegram_premium );
+			return $icegram_tracker::is_plugin_installed( $icegram_premium );
 		}
 
 		/**
@@ -3012,11 +3082,11 @@ if ( ! class_exists( 'Icegram' ) ) {
 		 * @since 1.10.39
 		 */
 		public function is_premium_activated() {
-			global $ig_tracker;
+			global $icegram_tracker;
 
 			$icegram_premium = 'icegram-engage/icegram-engage.php';
 
-			return $ig_tracker::is_plugin_activated( $icegram_premium );
+			return $icegram_tracker::is_plugin_activated( $icegram_premium );
 		}
 
 		/**
@@ -3027,7 +3097,7 @@ if ( ! class_exists( 'Icegram' ) ) {
 		 * @since
 		 */
 		public function is_plus() {
-			return file_exists( IG_PLUGIN_DIR . '/plus/icegram-plus.php' );
+			return file_exists( ICEGRAM_PLUGIN_DIR . '/plus/icegram-plus.php' );
 		}
 
 		/**
@@ -3038,7 +3108,7 @@ if ( ! class_exists( 'Icegram' ) ) {
 		 * @since
 		 */
 		public function is_pro() {
-			return file_exists( IG_PLUGIN_DIR . 'pro/icegram-pro.php' );
+			return file_exists( ICEGRAM_PLUGIN_DIR . 'pro/icegram-pro.php' );
 		}
 
 		/**
@@ -3080,7 +3150,7 @@ if ( ! class_exists( 'Icegram' ) ) {
 		 * @since
 		 */
 		public function is_max() {
-			return file_exists( IG_PLUGIN_DIR . 'max/icegram-max.php' );
+			return file_exists( ICEGRAM_PLUGIN_DIR . 'max/icegram-max.php' );
 		}
 
 		/**
@@ -3097,13 +3167,13 @@ if ( ! class_exists( 'Icegram' ) ) {
 
 		public function get_plan() {
 
-			if ( file_exists( IG_PLUGIN_DIR . 'max/icegram-max.php' ) ) {
+			if ( file_exists( ICEGRAM_PLUGIN_DIR . 'max/icegram-max.php' ) ) {
                 $plan = 'max';
-            } elseif ( file_exists( IG_PLUGIN_DIR . 'pro/icegram-pro.php' ) ) {
+            } elseif ( file_exists( ICEGRAM_PLUGIN_DIR . 'pro/icegram-pro.php' ) ) {
                 $plan = 'pro';
-            } elseif ( file_exists( IG_PLUGIN_DIR . 'plus/icegram-plus.php' ) ) {
+            } elseif ( file_exists( ICEGRAM_PLUGIN_DIR . 'plus/icegram-plus.php' ) ) {
                 $plan = 'plus';
-            } elseif ( self::is_trial() && ! IG_Trial::is_trial_expired() ) {
+            } elseif ( self::is_trial() && ! Icegram_Trial::is_trial_expired() ) {
                 $plan = 'trial';
             } else {
                 $plan = 'lite';
@@ -3192,23 +3262,23 @@ if ( ! class_exists( 'Icegram' ) ) {
 
 			// Get real visitor IP behind CloudFlare network
 			if ( isset( $_SERVER['HTTP_CF_CONNECTING_IP'] ) ) {
-				$ip = sanitize_text_field( $_SERVER['HTTP_CF_CONNECTING_IP'] );
+				$ip = sanitize_text_field( wp_unslash( $_SERVER['HTTP_CF_CONNECTING_IP'] ) );
 			} elseif ( isset( $_SERVER['HTTP_X_REAL_IP'] ) ) {
-				$ip = sanitize_text_field( $_SERVER['HTTP_X_REAL_IP'] );
+				$ip = sanitize_text_field( wp_unslash( $_SERVER['HTTP_X_REAL_IP'] ) );
 			} elseif ( isset( $_SERVER['HTTP_CLIENT_IP'] ) ) {
-				$ip = sanitize_text_field( $_SERVER['HTTP_CLIENT_IP'] );
+				$ip = sanitize_text_field( wp_unslash( $_SERVER['HTTP_CLIENT_IP'] ) );
 			} elseif ( isset( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ) {
-				$ip = sanitize_text_field( $_SERVER['HTTP_X_FORWARDED_FOR'] );
+				$ip = sanitize_text_field( wp_unslash( $_SERVER['HTTP_X_FORWARDED_FOR'] ) );
 			} elseif ( isset( $_SERVER['HTTP_X_FORWARDED'] ) ) {
-				$ip = sanitize_text_field( $_SERVER['HTTP_X_FORWARDED'] );
+				$ip = sanitize_text_field( wp_unslash( $_SERVER['HTTP_X_FORWARDED'] ) );
 			} elseif ( isset( $_SERVER['HTTP_FORWARDED_FOR'] ) ) {
-				$ip = sanitize_text_field( $_SERVER['HTTP_FORWARDED_FOR'] );
+				$ip = sanitize_text_field( wp_unslash( $_SERVER['HTTP_FORWARDED_FOR'] ) );
 			} elseif ( isset( $_SERVER['HTTP_FORWARDED'] ) ) {
-				$ip = sanitize_text_field( $_SERVER['HTTP_FORWARDED'] );
+				$ip = sanitize_text_field( wp_unslash( $_SERVER['HTTP_FORWARDED'] ) );
 			} else {
-				$ip = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( $_SERVER['REMOTE_ADDR'] ) : 'UNKNOWN';
-			}
-
+				$ip = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : 'UNKNOWN';
+			} 
+		
 			return $ip;
 		}
 
@@ -3236,10 +3306,10 @@ if ( ! class_exists( 'Icegram' ) ) {
 		 */
 		public function ig_show_documentation_link_in_admin_bar( $wp_admin_bar ) {
 
-			$ig_is_page_for_notifications = apply_filters( 'ig-engage_is_page_for_notifications', false );
+			$ig_is_page_for_notifications = apply_filters( 'icegram-engage_is_page_for_notifications', false );
 			
 			if( $ig_is_page_for_notifications ){
-				$ig_logo = '<img class="ig-logo" src="' . IG_PLUGIN_URL . 'lite/assets/images/IG-white_logo-transparent_back-512.png">';
+				$ig_logo = '<img class="ig-logo" src="' . ICEGRAM_PLUGIN_URL . 'lite/assets/images/IG-white_logo-transparent_back-512.png">';
 				// Add the main site admin menu item.
 				$wp_admin_bar->add_menu(
 					array(
@@ -3288,8 +3358,12 @@ if ( ! class_exists( 'Icegram' ) ) {
 			$context_allowed_tags = wp_kses_allowed_html( 'post' );
 			$custom_allowed_tags  = array(
 				'div'      => array(
+					'class'        => true,
+        			'id'           => true,
 					'x-data' => true,
 					'x-show' => true,
+					'variation'    => true,
+					'variation_id' => true,
 				),
 				'select'   => array(
 					'class'    => true,
@@ -3423,7 +3497,14 @@ if ( ! class_exists( 'Icegram' ) ) {
 					'frameborder' => true,
 					'scrolling'   => true,
 					'style'       => true,
-				)
+				),
+				'button' => array(
+					'class' => array(),
+					'type'  => array(),
+					'name'  => array(),
+					'id'    => array(),
+					'value' => array(),
+				),
 			);
 
 			$allowedtags = array_merge_recursive( $context_allowed_tags, $custom_allowed_tags );
@@ -3518,8 +3599,8 @@ if ( ! class_exists( 'Icegram' ) ) {
 				'Webdings' => 'webdings',
 				'Wingdings' => 'wingdings,zapf dingbats',
 			);
-
-			$font_families = apply_filters('ig_font_family', $font_families);
+			
+			$font_families = apply_filters('icegram_font_family', $font_families);
 			return $font_families;
 		}
 

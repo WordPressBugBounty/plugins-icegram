@@ -24,8 +24,8 @@
  *
  * @version     2.8.24
  */
-if ( ! class_exists( 'Ig_Mobile_Detect' ) ) {
-    class Ig_Mobile_Detect
+if ( ! class_exists( 'Icegram_Mobile_Detect' ) ) {
+    class Icegram_Mobile_Detect
     {
         /**
          * Mobile detection type.
@@ -1065,7 +1065,7 @@ if ( ! class_exists( 'Ig_Mobile_Detect' ) ) {
         {
             // make sure the name starts with 'is', otherwise
             if (substr($name, 0, 2) !== 'is') {
-                throw new BadMethodCallException("No such method exists: $name");
+                throw new BadMethodCallException('No such method exists: ' . esc_html($name));
             }
 
             $this->setDetectionType(self::DETECTION_TYPE_MOBILE);

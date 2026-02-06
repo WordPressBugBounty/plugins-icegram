@@ -10,7 +10,7 @@ class Icegram_Pricing {
 	public static function ig_show_pricing() {
 
 		$utm_medium = 'ig-upgrade';
-		$allowedtags = apply_filters( 'ig_escape_allowed_tags', array() );
+		$allowedtags = apply_filters( 'icegram_escape_allowed_tags', array() );
 
 		?>
 		<style type="text/css">
@@ -388,18 +388,18 @@ class Icegram_Pricing {
 						</span>
 
 						<div class="center">
-							<a class="ig_button small green center" href="https://www.icegram.com/?buy-now=16542&qty=1&coupon=ig-upgrade-25&with-cart=1&utm_source=ig_in_app&utm_medium=<?php echo esc_attr( $utm_medium ); ?>&utm_campaign=ig-max" target="_blank" rel="noopener"><?php esc_html_e( 'Buy Now', 'icegram' ); ?><span style="width: 1em; height: 1em; background-image: url('https://www.storeapps.org/wp-content/themes/storeapps/assets/images/fidget.svg'); display: inline-block; margin-left: 0.5em" class="fidget spin"></span></a>
+							<a class="ig_button small green center" href="https://www.icegram.com/?buy-now=16542&qty=1&coupon=ig-upgrade-25&with-cart=1&utm_source=ig_in_app&utm_medium=<?php echo esc_attr( $utm_medium ); ?>&utm_campaign=ig-max" target="_blank" rel="noopener"><?php esc_html_e( 'Buy Now', 'icegram' ); ?><span style="width: 1em; height: 1em; background-image: url('<?php echo esc_url( ICEGRAM_PLUGIN_URL . 'lite/assets/images/fidget.svg' ); ?>'); display: inline-block; margin-left: 0.5em" class="fidget spin"></span></a>
 						</div>
 					</div>
 				</div>
 				<div class="ig_renew_headline"><?php echo esc_html__( ' * Renew at same discounted price', 'icegram' ); ?></div>
 			</div>
 			<div class="ig_row" id="ig-testimonial">
-				<div class="ig_column ig-testimonial-content">
-					<img src="<?php echo IG_PLUGIN_URL ?>/lite/assets/images/mimdoc.png" alt="mnmatty" />
-						<br><img class="star-ratings" src="https://www.icegram.com/wp-content/uploads/2022/11/five-stars.png">
-						<div class="ig_testimonial_headline"><?php echo esc_html__( 'Great tool to get attention!', 'icegram' ) ?></div>
-						<div class="ig_testimonial_text">
+			<div class="ig_column ig-testimonial-content">
+				<img src="<?php echo esc_url( ICEGRAM_PLUGIN_URL . 'lite/assets/images/mimdoc.png' ); ?>" alt="mnmatty" />
+					<br><img class="star-ratings" src="<?php echo esc_url( ICEGRAM_PLUGIN_URL . 'lite/assets/images/five-stars.png' ); ?>">
+					<div class="ig_testimonial_headline"><?php echo esc_html__( 'Great tool to get attention!', 'icegram' ) ?></div>
+					<div class="ig_testimonial_text">
 							<?php echo esc_html__( 'This tool is helping us keep our organization alive and well in the Covid 19 pandemic. Thanks for making it so easy for us to spread the word to our members. Plus it is easy to use and the free themes are fun to help fit our messages as we need them.', 'icegram' ) ?> '<br><br>
 							<p class="ig_es_testimonial_user_name"><?php echo esc_html__( ' - Mimdoc', 'icegram' ) ?> </p>
 						</div>
@@ -870,19 +870,19 @@ class Icegram_Pricing {
 			<div class="ig_row" id="ig-testimonial-others">
 				<div style="width: 70%; margin: 0 auto; display: flex; gap: 2em;">
 					<div class="ig_column ig-testimonial-content">
-						<img src="<?php echo IG_PLUGIN_URL ?>/lite/assets/images/superdivulga.jpeg" alt="mnmatty" />
-						<h3 class="ig_testimonial_headline"><?php echo esc_html__( 'Best lead capture have ever seen', 'icegram' ) ?> </h3>
-						<br><img class="star-ratings" src="https://www.icegram.com/wp-content/uploads/2022/11/five-stars.png">
-						<div class="ig_testimonial_text">
+					<img src="<?php echo esc_url( ICEGRAM_PLUGIN_URL . 'lite/assets/images/superdivulga.jpeg' ); ?>" alt="mnmatty" />
+					<h3 class="ig_testimonial_headline"><?php echo esc_html__( 'Best lead capture have ever seen', 'icegram' ) ?> </h3>
+					<br><img class="star-ratings" src="<?php echo esc_url( ICEGRAM_PLUGIN_URL . 'lite/assets/images/five-stars.png' ); ?>">
+					<div class="ig_testimonial_text">
 							<?php echo esc_html__( 'This is the best lead capture I’ve ever seen. After try a lot of different plugins I finally found a product that is made with Internet Marketing in mind. You can create different campaigns and test what type of lead capture is the best for a particular offer. I’m about to change every WP site I build to use your solutions. Great job guys!', 'icegram' ) ?><br><br>
 							<p class="ig_testimonial_user_name"><?php echo esc_html__( ' - SuperDivulga', 'icegram' )  ?></p>
 						</div>
 					</div>
 					<div class="ig_column ig-testimonial-content">
-						<img src="<?php echo IG_PLUGIN_URL ?>/lite/assets/images/chris_richard.jpeg" alt="mnmatty" />
-						<h3 class="ig_testimonial_headline"><?php echo esc_html__( 'Great Compliment to ANY site', 'icegram' ) ?></h3>
-						<br><img class="star-ratings" src="https://www.icegram.com/wp-content/uploads/2022/11/five-stars.png">
-						<div class="ig_testimonial_text">
+					<img src="<?php echo esc_url( ICEGRAM_PLUGIN_URL . 'lite/assets/images/chris_richard.jpeg' ); ?>" alt="mnmatty" />
+					<h3 class="ig_testimonial_headline"><?php echo esc_html__( 'Great Compliment to ANY site', 'icegram' ) ?></h3>
+					<br><img class="star-ratings" src="<?php echo esc_url( ICEGRAM_PLUGIN_URL . 'lite/assets/images/five-stars.png' ); ?>">
+					<div class="ig_testimonial_text">
 							<?php echo esc_html__( 'I found this plug-in as a result of using Email Subscribers & Newsletters. It’s a great add-on to this plug-in. Fairly easy to use, with options to change and implement on your site in almost every way. I’m glad I found it and even more happy to be using it. Highly recommended.', 'icegram' ) ?><br><br>
 							<p class="ig_testimonial_user_name"> <?php echo esc_html__( '- Chris Richard', 'icegram' ) ?></p>
 						</div>
