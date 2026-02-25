@@ -1,21 +1,27 @@
 === Icegram Engage - Popups, Optins, CTAs & lot more... ===
 Contributors: icegram, storeapps, niravmehta, sandhyam, malayladu, putler, kishanranawat, asmipatel
 Donate link: https://www.icegram.com/
-Tags:  WordPress popup plugin, WordPress Popup, Popup builder, Lead generation, opt-in email, Email Newsletters, WP Popup
+Tags:  popup, optin, lead capture, call to action, announcement bar, form, banner
 Requires at least: 3.9
-Tested up to: 6.8
-Stable tag: 3.1.38
+Tested up to: 6.9
+Stable tag: 3.1.39
 License: GPLv3
 
 Create popups, opt-in forms, and call-to-action messages to capture leads and engage visitors on your WordPress site.
 
 == Description ==
 
-### Icegram Engage helps you create popups, opt-in forms, and call-to-action (CTA) messages to capture leads and communicate with visitors—without requiring coding skills.
+**Icegram Engage helps you show the right message to the right visitor at the right time.**
 
-The plugin provides multiple message types such as popups, header and footer bars, slide-ins, inline messages, and overlays. You can control when and where messages appear using display rules like page targeting, time delays, scroll position, and user actions.
+Instead of hoping visitors sign up or click, you can guide them using popups, opt-in forms, and call-to-action messages.
 
-Icegram Engage is suitable for bloggers, small businesses, online stores, and content-driven websites that want to grow email lists, highlight announcements, or guide visitors toward specific actions.
+Create different message types like popups, header and footer bars, slide-ins, inline messages, and overlays. 
+
+Each format is designed to collect signups, promote offers, or highlight important updates. 
+
+You control when and where messages appear on specific pages, after a delay, on scroll, or based on user actions so they feel relevant, not intrusive.
+
+Icegram Engage is ideal for blogs, business sites, and online stores that want visitors to take action instead of leaving.
 
 **LEAD GENERATION AND EMAIL LIST BUILDING PLUGIN**
 
@@ -382,11 +388,15 @@ Contact Us, provide as much detail of the problem as you can. We will try to sol
 
 == Upgrade Notice ==
 
-= 3.1.38 =
+= 3.1.39 =
 
-* Fix: Add new Campaign button not working in some cases
+* Update: WordPress 6.9 compatibility check
 
 == Changelog ==
+
+**3.1.39 (24.02.2026)**
+
+* Update: WordPress 6.9 compatibility check
 
 **3.1.38 (08.01.2026)**
 
