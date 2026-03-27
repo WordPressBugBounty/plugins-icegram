@@ -487,15 +487,10 @@ if ( ! class_exists( 'Icegram_Message_Admin' ) ) {
 
 										
 									$icegram_message_target_link = apply_filters( 'icegram_message_field_link', array( 'html' => $target_link_field, 'message_id' => $message_id, 'message_data' => $message_data, 'settings' => $settings ) );
+
+									$ig_allowed_tags = $icegram->ig_add_escape_allowed_tags();
 									
-									$allowed_html = array(
-										'p'      => array( 'class' => array() ),
-										'label'  => array( 'for' => array(), 'class' => array() ),
-										'span'   => array( 'class' => array() ),
-										'input'  => array( 'class' => array(), 'type' => array(), 'name' => array(), 'id' => array(), 'value' => array() ),
-									);
-									
-									echo wp_kses( $icegram_message_target_link['html'], $allowed_html );
+									echo wp_kses( $icegram_message_target_link['html'], $ig_allowed_tags );
 									?>
 									<p class="message_row <?php echo esc_attr( 'ig_' . implode( ' ig_', $show_cta_actions ) ) ?>">
 										<label for="message_label" class="message_label"> &nbsp;</label>

@@ -1,13 +1,13 @@
-=== Icegram Engage - Popups, Optins, CTAs & lot more... ===
+=== Icegram Engage – Popups, Optins, CTAs & Lead Generation ===
 Contributors: icegram, storeapps, niravmehta, sandhyam, malayladu, putler, kishanranawat, asmipatel
 Donate link: https://www.icegram.com/
 Tags:  popup, optin, lead capture, call to action, announcement bar, form, banner
 Requires at least: 3.9
 Tested up to: 6.9
-Stable tag: 3.1.39
+Stable tag: 3.1.40
 License: GPLv3
 
-Create popups, opt-in forms, and call-to-action messages to capture leads and engage visitors on your WordPress site.
+Create high-converting popups, email optins, and CTAs in minutes. Capture leads, grow your email list, and convert visitors into customers—without coding.
 
 == Description ==
 
@@ -388,11 +388,15 @@ Contact Us, provide as much detail of the problem as you can. We will try to sol
 
 == Upgrade Notice ==
 
-= 3.1.39 =
+= 3.1.40 =
 
-* Update: WordPress 6.9 compatibility check
+* Fix: CTA action URL is not getting saved
 
 == Changelog ==
+
+**3.1.40 (27.03.2026)**
+
+* Fix: CTA action URL is not getting saved
 
 **3.1.39 (24.02.2026)**
 

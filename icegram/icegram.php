@@ -1,9 +1,9 @@
 <?php
 /*
- * Plugin Name: Icegram Engage - Popups, Optins, CTAs & lot more...
+ * Plugin Name: Icegram Engage – Popups, Optins, CTAs & Lead Generation
  * Plugin URI: https://www.icegram.com/
- * Description: All in one solution to inspire, convert and engage your audiences. Action bars, Popup windows, Messengers, Toast notifications and more. Awesome themes and powerful rules.
- * Version: 3.1.39
+ * Description: Create high-converting popups, email optins, and CTAs in minutes. Capture leads, grow your email list, and convert visitors into customers—without coding.
+ * Version: 3.1.40
  * Tested up to: 6.9
  * Author: icegram
  * Author URI: https://www.icegram.com/
