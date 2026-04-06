@@ -22,8 +22,17 @@ var Gallery = {
   selectedCategory: null,
   currentFilter: "all",
   allProjectsLoaded: false,
+  showRevealedOffer: false,
+  showDiscountNotice: true,
+  isClosingNotice: false,
 
   oninit: function() {
+    // Check if discount notice was already dismissed or unlocked in DB
+    if (_wpThemeSettings && _wpThemeSettings.settings && 
+        (_wpThemeSettings.settings.discount_notice_dismissed === 'yes' || 
+         _wpThemeSettings.settings.unlock_discount_notice === 'yes')) {
+      this.showDiscountNotice = false;
+    }
     this.loadCategories();
     this.loadAllProjects(); // Load all projects first for category counts
   },
@@ -173,9 +182,168 @@ var Gallery = {
     this.hasInteracted = false;
     this.searchQuery = "";
   },
+
+  dismissDiscountNotice: function() {
+    var self = this;
+    
+    // Trigger fade-out animation
+    self.isClosingNotice = true;
+    
+    // Make AJAX call to dismiss the notice
+    if (_wpThemeSettings && _wpThemeSettings.settings && _wpThemeSettings.settings.ajax_url) {
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', _wpThemeSettings.settings.ajax_url, true);
+      xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+      
+      xhr.onload = function() {
+        if (xhr.status === 200) {
+          console.log('Discount notice dismissed successfully');
+        }
+      };
+      
+      xhr.onerror = function() {
+        console.error('Failed to dismiss discount notice');
+      };
+      
+      var params = 'action=ig_dismiss_discount_notice&security=' + 
+                   encodeURIComponent(_wpThemeSettings.settings.dismiss_discount_nonce);
+      xhr.send(params);
+    }
+    
+    // Hide the notice after animation completes
+    setTimeout(function() {
+      self.showDiscountNotice = false;
+      self.isClosingNotice = false;
+      m.redraw();
+    }, 400); // Match the animation duration
+  },
   
   view: function () {
+    var igPlan = parseInt((_wpThemeSettings && _wpThemeSettings.settings && _wpThemeSettings.settings.ig_plan) || "0");
+    
     return m(".font-nunito.min-h-screen", [
+      // Discount Notice Banner - Initial Offer (Only for Lite version - ig_plan = 0)
+      !this.showRevealedOffer && this.showDiscountNotice && igPlan === 0 && m(".relative.overflow-hidden.mb-8.rounded-lg.max-w-6xl.mx-auto.px-12.mt-4.shadow-xl" + (this.isClosingNotice ? ".animate-fadeOut" : ".animate-slideDown"), {
+        style: {
+          background: "linear-gradient(135deg, #4f46e5 0%, #6366f1 33%, #8b5cf6 66%, #a855f7 100%)"
+        }
+      }, [
+        // Close button
+        m("button.absolute.text-white.text-3xl.font-bold.w-10.h-10.flex.items-center.justify-center.rounded-full.focus:outline-none", {
+          type: "button",
+          style: { top: "0.5rem", right: "0.5rem" },
+          onclick: function(e) {
+            e.stopPropagation();
+            Gallery.dismissDiscountNotice();
+          },
+          title: "Close"
+        }, "×"),
+        m(".relative.z-10.py-6.px-8.text-center", [
+          m(".flex.flex-col.md:flex-row.items-center.justify-center.gap-4", [
+            m(".flex.items-center.gap-3", [
+              m("img.gentle-bounce", { 
+                src: _wpThemeSettings && _wpThemeSettings.settings && _wpThemeSettings.settings.ig_img_path + "discount-gift.png",
+                alt: "Special Offer",
+                style: { 
+                  width: "80px",
+                  height: "80px",
+                  border: "0"
+                }
+              }),
+              m("h3.text-white.text-xl.md:text-2xl.font-bold.leading-tight", [
+                "You've unlocked a special discount on Icegram Engage. ",
+                m("br.hidden.md:block"),
+                "Reveal your offer and save on your upgrade."
+              ])
+            ]),
+            m("button.bg-white.text-purple-700.font-bold.text-lg.py-3.px-8.rounded-full.shadow-lg.hover:shadow-2xl.transform.hover:scale-105.transition-all.duration-300.focus:outline-none", {
+              type: "button",
+              onclick: function() {
+                Gallery.showRevealedOffer = true;
+              }
+            }, "Reveal My Offer")
+          ])
+        ]),
+        // Animated sparkles overlay
+        m(".absolute.inset-0.opacity-30.pointer-events-none", {
+          style: {
+            background: "radial-gradient(circle at 20% 50%, rgba(255,255,255,0.8) 0%, transparent 50%), radial-gradient(circle at 80% 50%, rgba(255,255,255,0.8) 0%, transparent 50%)",
+            animation: "sparkle 4s ease-in-out infinite"
+          }
+        })
+      ]),
+
+      // Discount Notice Banner - Revealed Offer (Only for Lite version - ig_plan = 0)
+      this.showRevealedOffer && this.showDiscountNotice && igPlan === 0 && m(".relative.overflow-hidden.mb-8.rounded-lg.max-w-6xl.mx-auto.px-12.mt-4.shadow-xl" + (this.isClosingNotice ? ".animate-fadeOut" : ".animate-slideDown"), {
+        style: {
+          background: "linear-gradient(135deg, #4f46e5 0%, #7c3aed 33%, #a855f7 66%, #c026d3 100%)"
+        }
+      }, [        // Close button
+        m("button.absolute.text-white.text-3xl.font-bold.w-10.h-10.flex.items-center.justify-center.rounded-full.focus:outline-none", {
+          type: "button",
+          style: { top: "0.5rem", right: "0.5rem" },
+          onclick: function(e) {
+            e.stopPropagation();
+            Gallery.dismissDiscountNotice();
+          },
+          title: "Close"
+        }, "×"),        
+        m(".relative.z-10.py-6", [
+          // Flex container: image left, text middle, button right
+          m(".flex.items-center.justify-between.gap-6", [
+            // Left side: emoji image
+            m("img.gentle-bounce", { 
+              src: _wpThemeSettings && _wpThemeSettings.settings && _wpThemeSettings.settings.ig_img_path + "reveal_offer_emoji.png",
+              alt: "Special Offer",
+              style: { 
+                width: "60px",
+                height: "60px",
+                border: "0",
+                flexShrink: "0"
+              }
+            }),
+            // Middle: heading and subtext
+            m(".flex.flex-col.gap-2.text-left.flex-1", [
+              m("h3.text-white.text-xl.md:text-2xl.font-black.leading-tight.drop-shadow-lg", [
+                "Your exclusive discount is ready. You got ",
+                m("span.text-white-300.text-2xl.md:text-3xl", "70% OFF"),
+                " on MAX plan"
+              ]),
+              m("p.text-white.text-base.md:text-lg.font-medium.opacity-90", [
+                "Get all premium features at a price lower than PRO—limited-time unlock"
+              ])
+            ]),
+            // Right side: button
+            m("button.bg-white.text-purple-600.font-bold.text-lg.py-4.px-10.rounded-full.shadow-2xl.hover:shadow-yellow-500/50.transform.hover:scale-110.transition-all.duration-300.focus:outline-none.whitespace-nowrap", {
+              type: "button",
+              style: { animationDuration: "2s" },
+              onclick: function() {
+                // Fire AJAX to track unlock action
+                if (_wpThemeSettings && _wpThemeSettings.settings && _wpThemeSettings.settings.ajax_url) {
+                  var xhr = new XMLHttpRequest();
+                  xhr.open('POST', _wpThemeSettings.settings.ajax_url, true);
+                  xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                  
+                  var params = 'action=ig_unlock_discount_notice&security=' + 
+                               encodeURIComponent(_wpThemeSettings.settings.unlock_discount_nonce);
+                  xhr.send(params);
+                }
+                
+                // Open the purchase URL
+                window.open("https://www.icegram.com/?buy-now=16542&qty=1&coupon=ig-eg-max-70&with-cart=1&utm_source=in-app&utm_medium=banner&utm_id=engage-max-discount", "_blank");
+              }
+            }, "Unlock MAX for $69")
+          ])
+        ]),
+        // Animated sparkles overlay - more intense
+        m(".absolute.inset-0.opacity-40.pointer-events-none", {
+          style: {
+            background: "radial-gradient(circle at 20% 50%, rgba(255,255,255,0.9) 0%, transparent 50%), radial-gradient(circle at 80% 50%, rgba(255,255,255,0.9) 0%, transparent 50%), radial-gradient(circle at 50% 20%, rgba(255,255,255,0.7) 0%, transparent 40%)",
+            animation: "sparkle 3s ease-in-out infinite"
+          }
+        })
+      ]),
+      
       this.error &&
         m(".bg-red-100.border-l-4.border-red-500.text-red-700.p-4.mb-4", [
           m("p", this.error),
@@ -546,6 +714,41 @@ document.head.insertAdjacentHTML("beforeend", "<link href='https://fonts.googlea
     "/* Additional helper class for fade-in animation */" +
     ".fade-in-up {" +
       "animation: fadeInUp 0.4s ease-out forwards !important;" +
+    "}" +
+    "/* Gradient animation for discount banner */" +
+    "@keyframes gradientMove {" +
+      "0% { background-position: 0% 50%; }" +
+      "50% { background-position: 100% 50%; }" +
+      "100% { background-position: 0% 50%; }" +
+    "}" +
+    "/* Sparkle animation */" +
+    "@keyframes sparkle {" +
+      "0%, 100% { opacity: 0.2; transform: scale(1); }" +
+      "50% { opacity: 0.5; transform: scale(1.1); }" +
+    "}" +
+    "/* Slide down animation for banner */" +
+    "@keyframes slideDown {" +
+      "0% { opacity: 0; transform: translateY(-20px); }" +
+      "100% { opacity: 1; transform: translateY(0); }" +
+    "}" +
+    ".animate-slideDown {" +
+      "animation: slideDown 0.5s ease-out forwards;" +
+    "}" +
+    "/* Fade out animation for closing banner */" +
+    "@keyframes fadeOut {" +
+      "0% { opacity: 1; transform: scale(1); }" +
+      "100% { opacity: 0; transform: scale(0.95); }" +
+    "}" +
+    ".animate-fadeOut {" +
+      "animation: fadeOut 0.4s ease-in forwards;" +
+    "}" +
+    "/* Gentle bounce animation for emoji */" +
+    "@keyframes gentleBounce {" +
+      "0%, 100% { transform: translateY(0); }" +
+      "50% { transform: translateY(-10px); }" +
+    "}" +
+    ".gentle-bounce {" +
+      "animation: gentleBounce 2s ease-in-out infinite;" +
     "}" +
   "</style>"
 );

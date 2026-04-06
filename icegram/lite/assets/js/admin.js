@@ -652,7 +652,8 @@ jQuery(function() {
 		jQuery(url).parent().find('span#valid-field').removeClass('error');	
 		if(jQuery(url).data("option") !== 'undefine' && jQuery(url).data("option") == 'local_url' && jQuery(url).val() != '*'){
 			var url_val = url.value;
-			if(url_val.indexOf(home_url) < 0){
+			// Check if URL is not already absolute (starts with http:// or https://) and doesn't contain home_url
+			if(url_val.indexOf(home_url) < 0 && !url_val.match(/^https?:\/\//i)){
 				jQuery(url).val(home_url + url_val);	
 				return;	
 			}

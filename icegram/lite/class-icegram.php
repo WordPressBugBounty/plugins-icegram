@@ -72,6 +72,9 @@ if ( ! class_exists( 'Icegram' ) ) {
 				add_action( 'admin_bar_menu', array( $this, 'ig_show_documentation_link_in_admin_bar' ), 999 );
 				add_action( 'admin_head', array( $this, 'ig_documentation_link_admin_bar_css' ), 999 );
 
+				add_action( 'wp_ajax_ig_dismiss_discount_notice', array( $this, 'dismiss_discount_notice' ) );
+				add_action( 'wp_ajax_ig_unlock_discount_notice', array( $this, 'unlock_discount_notice' ) );
+
 				add_filter( 'icegram_escape_allowed_tags', array( $this, 'ig_add_escape_allowed_tags' ) );
 
 				add_filter('icegram_validate_custom_script',  array( &$this, 'ig_custom_script_validation' ));
@@ -967,31 +970,60 @@ if ( ! class_exists( 'Icegram' ) ) {
 		}
 
 		public static function gallery_screen() {
-		global $icegram;
-		
-		//check for new gallery item
-		// Enqueue Tailwind CSS for gallery
-		wp_enqueue_style( 'ig_gallery_tailwindcss', $icegram->plugin_url . '/assets/css/tailwind.css', array(), $icegram->version . '-' . filemtime( $icegram->plugin_path . '/assets/css/tailwind.css' ) );
+			global $icegram;
+			
+			//check for new gallery item
+			// Enqueue Tailwind CSS for gallery
+			wp_enqueue_style( 'ig_gallery_tailwindcss', $icegram->plugin_url . '/assets/css/tailwind.css', array(), $icegram->version . '-' . filemtime( $icegram->plugin_path . '/assets/css/tailwind.css' ) );
 
-		wp_enqueue_script( 'ig_gallery_mithril_js', ICEGRAM_PLUGIN_URL . 'new-template-gallery/mithril.min.js', array(), $icegram->version, true );
+			wp_enqueue_script( 'ig_gallery_mithril_js', ICEGRAM_PLUGIN_URL . 'new-template-gallery/mithril.min.js', array(), $icegram->version, true );
 
-		wp_register_script( 'ig_gallery_js', ICEGRAM_PLUGIN_URL . 'new-template-gallery/gallery-new.js', array( 'ig_gallery_mithril_js' ), $icegram->version . '-' . filemtime( ICEGRAM_PLUGIN_DIR . 'new-template-gallery/gallery-new.js' ), true );
+			wp_register_script( 'ig_gallery_js', ICEGRAM_PLUGIN_URL . 'new-template-gallery/gallery-new.js', array( 'ig_gallery_mithril_js' ), $icegram->version . '-' . filemtime( ICEGRAM_PLUGIN_DIR . 'new-template-gallery/gallery-new.js' ), true );
 
-			if ( ! wp_script_is( 'ig_gallery_js' ) ) { 
-				wp_enqueue_script( 'ig_gallery_js' );
-				$ig_plan = ( $icegram->is_plus() ) ? 4 : ( ( $icegram->is_pro() ) ? 2 : ( ( $icegram->is_max() ) ? 3 : 0 ) );
+				if ( ! wp_script_is( 'ig_gallery_js' ) ) { 
+					wp_enqueue_script( 'ig_gallery_js' );
+					$ig_plan = ( $icegram->is_plus() ) ? 4 : ( ( $icegram->is_pro() ) ? 2 : ( ( $icegram->is_max() ) ? 3 : 0 ) );
 
-				wp_localize_script( 'ig_gallery_js', '_wpThemeSettings', array(
-					'settings'			=> array(
-			 			'ig_plan'       => $ig_plan,
-						'ig_cat_api_url' => 'https://www.icegram.com/gallery/wp-json/wp/v2/custom_category?orderby=meta_value&meta_key=updated_at&order=desc&per_page=100', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_query_meta_key
-						'ig_projects_api_url' => 'https://www.icegram.com/gallery/wp-json/wp/v2/galleryitem'
-					)
-				));
-			}
-
+					wp_localize_script( 'ig_gallery_js', '_wpThemeSettings', array(
+						'settings'			=> array(
+							'ig_plan'       => $ig_plan,
+							'ig_cat_api_url' => 'https://www.icegram.com/gallery/wp-json/wp/v2/custom_category?orderby=meta_value&meta_key=updated_at&order=desc&per_page=100', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_query_meta_key
+							'ig_projects_api_url' => 'https://www.icegram.com/gallery/wp-json/wp/v2/galleryitem',
+							'ig_img_path' => ICEGRAM_PLUGIN_URL . 'lite/assets/images/',
+							'ajax_url' => admin_url( 'admin-ajax.php' ),
+							'dismiss_discount_nonce' => wp_create_nonce( 'ig-dissmiss-discount-notice' ),
+							'discount_notice_dismissed' => get_option( 'ig_discount_notice_dismissed', 'no' ),
+							'unlock_discount_nonce' => wp_create_nonce( 'ig-unlock-discount-notice' ),
+							'unlock_discount_notice' => get_option( 'ig_unlock_discount_notice', 'no' )
+						)
+					));
+				}
 			echo '<div id="ig-gallery-root" class="p-4 ig-gallery-wrap"></div>';
 		}
+
+		public function dismiss_discount_notice() {
+			$response = array(
+				'success' => 'yes',
+			);
+
+			check_ajax_referer( 'ig-dissmiss-discount-notice', 'security' );
+
+			update_option( 'ig_discount_notice_dismissed', 'yes', false );
+
+			wp_send_json( $response );
+		}
+
+		public function unlock_discount_notice() {
+			$response = array(
+				'success' => 'yes',
+			);
+
+			check_ajax_referer( 'ig-unlock-discount-notice', 'security' );
+
+			update_option( 'ig_unlock_discount_notice', 'yes', false );
+
+			wp_send_json( $response );
+		}	
 
 		public function branding_data_remove( $icegram_branding_data ) {
 			if ( ! empty( $icegram_branding_data ) && 'yes' != get_option( 'icegram_share_love', 'no' ) ) {
