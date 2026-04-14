@@ -1,19 +1,19 @@
 === Icegram Engage – Popups, Optins, CTAs & Lead Generation ===
 Contributors: icegram, storeapps, niravmehta, sandhyam, malayladu, putler, kishanranawat, asmipatel
 Donate link: https://www.icegram.com/
-Tags:  popup, optin, lead capture, call to action, announcement bar, form, banner
+Tags:  WordPress popup plugin, WordPress Popup, Popup builder, Lead generation, opt-in email, Email Newsletters, WP Popup
 Requires at least: 3.9
 Tested up to: 6.9
-Stable tag: 3.1.41
+Stable tag: 3.1.42
 License: GPLv3
 
 Create high-converting popups, email optins, and CTAs in minutes. Capture leads, grow your email list, and convert visitors into customers—without coding.
 
 == Description ==
 
-**Icegram Engage helps you show the right message to the right visitor at the right time.**
+### Icegram Engage helps you create popups, opt-in forms, and call-to-action (CTA) messages to capture leads and communicate with visitors—without requiring coding skills.
 
-Instead of hoping visitors sign up or click, you can guide them using popups, opt-in forms, and call-to-action messages.
+The plugin provides multiple message types such as popups, header and footer bars, slide-ins, inline messages, and overlays. You can control when and where messages appear using display rules like page targeting, time delays, scroll position, and user actions.
 
 Create different message types like popups, header and footer bars, slide-ins, inline messages, and overlays. 
 
@@ -388,11 +388,15 @@ Contact Us, provide as much detail of the problem as you can. We will try to sol
 
 == Upgrade Notice ==
 
-= 3.1.41 =
+= 3.1.42 =
 
-* Fix: "Specific URLs on this site" field is not getting saved properly
+* Fix: Small bug fix
 
 == Changelog ==
+
+**3.1.42 (14.04.2026)**
+
+* Fix: Small bug fix
 
 **3.1.41 (06.04.2026)**
 
