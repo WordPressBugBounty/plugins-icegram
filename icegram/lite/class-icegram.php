@@ -1717,7 +1717,11 @@ if ( ! class_exists( 'Icegram' ) ) {
 				}
 				$message_ids = array_filter( array_unique( $message_ids ) );
 				if ( ! empty( $message_ids ) ) {
-					$message_data_query   .= " AND post_id IN ( " . implode( ',', $message_ids ) . " )";
+					
+					$message_ids              = array_map( 'absint', $message_ids );
+					$message_ids              = array_filter( $message_ids );
+					$message_data_query  .= ' AND post_id IN ( ' . implode( ',', $message_ids ) . ' )';
+
 					// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
 					$message_data_results = $wpdb->get_results( $message_data_query, 'ARRAY_A' );
 					foreach ( $message_data_results as $message_data_result ) {

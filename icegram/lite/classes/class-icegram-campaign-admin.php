@@ -1127,9 +1127,23 @@ if ( ! class_exists( 'Icegram_Campaign_Admin' ) ) {
 				if ( !current_user_can( 'edit_post', $post_id ) ) die();
  
 				$raw_messages = icegram_get_request_data( 'messages', array(), false );
-				
-				$messages = apply_filters( 'icegram_campaign_preview_messages', $raw_messages, $_POST );
-				
+
+				$sanitized_messages = array();
+				foreach ( (array) $raw_messages as $message => $data ) {
+					$sanitized_messages[ $message ] = array();
+					foreach ( (array) $data as $key => $value ) {
+						if ( 'id' === $key ) {
+							$sanitized_messages[ $message ][ $key ] = absint( $value );
+						} elseif ( 'time' === $key ) {
+							$sanitized_messages[ $message ][ $key ] = sanitize_text_field( $value );
+						} else {
+							$sanitized_messages[ $message ][ $key ] = $value;
+						}
+					}
+				}
+
+				$messages = apply_filters( 'icegram_campaign_preview_messages', $sanitized_messages, $_POST );
+
 				if( !empty( $messages ) ) {
 					update_post_meta( $post_id, 'campaign_preview', $messages ) ;
 					if( isset( $_POST['message_data'] ) ) {
