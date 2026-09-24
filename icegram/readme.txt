@@ -3,8 +3,9 @@ Contributors: icegram, storeapps, niravmehta, sandhyam, malayladu, putler, kisha
 Donate link: https://www.icegram.com/
 Tags:  WordPress popup plugin, WordPress Popup, Popup builder, Lead generation, opt-in email, Email Newsletters, WP Popup
 Requires at least: 3.9
-Tested up to: 7.0
-Stable tag: 3.1.43
+Tested up to: 7.1
+Requires PHP: 7.0
+Stable tag: 3.1.44
 License: GPLv3
 
 Create high-converting popups, email optins, and CTAs in minutes. Capture leads, grow your email list, and convert visitors into customers—without coding.
@@ -388,11 +389,19 @@ Contact Us, provide as much detail of the problem as you can. We will try to sol
 
 == Upgrade Notice ==
 
-= 3.1.43 =
+= 3.1.44 =
 
-* Update: WordPress 7.0 compatibility check
+* Improvements: Pricing page UI improvements
+* Update: Tested up to WordPress 7.1
+* Fix: PHP object injection vulnerability
 
 == Changelog ==
+
+**3.1.44 (24.09.2026)**
+
+* Improvements: Pricing page UI improvements
+* Update: Tested up to WordPress 7.1
+* Fix: PHP object injection vulnerability
 
 **3.1.43 (30.07.2026)**
 

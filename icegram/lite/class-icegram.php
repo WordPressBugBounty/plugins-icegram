@@ -60,9 +60,10 @@ if ( ! class_exists( 'Icegram' ) ) {
 				add_action( 'admin_notices', array( &$this, 'add_admin_notices' ) );
 				
 				add_action( 'admin_notices', array( &$this, 'show_ig_mailer_promotion_notice' ) );
-				add_action( 'admin_notices', array( &$this, 'show_discount_notice' ) );
 				add_action( 'wp_ajax_ig_dismiss_mailer_promotion_notice', array( $this, 'dismiss_ig_mailer_promotion_notice' ) );
 				add_action( 'wp_ajax_ig_mailer_notice_clickable', array( $this, 'mailer_notice_clickable' ) );
+
+				add_action( 'wp_ajax_ig_save_upsell_flow', array( $this, 'ig_save_upsell_flow' ) );
 
 				add_filter( 'plugin_action_links_' . plugin_basename( ICEGRAM_PLUGIN_FILE ), array( $this, 'ig_plugin_settings_link' ), 11, 2 );
 				add_filter( 'plugin_row_meta', array( $this, 'add_plugin_support_links' ), 10, 4 );
@@ -72,9 +73,6 @@ if ( ! class_exists( 'Icegram' ) ) {
 				add_action( 'wp_ajax_ig_toggle_campaign_status', array( $this, 'toggle_campaign_status' ) );
 				add_action( 'admin_bar_menu', array( $this, 'ig_show_documentation_link_in_admin_bar' ), 999 );
 				add_action( 'admin_head', array( $this, 'ig_documentation_link_admin_bar_css' ), 999 );
-
-				add_action( 'wp_ajax_ig_dismiss_discount_notice', array( $this, 'dismiss_discount_notice' ) );
-				add_action( 'wp_ajax_ig_unlock_discount_notice', array( $this, 'unlock_discount_notice' ) );
 
 				add_filter( 'icegram_escape_allowed_tags', array( $this, 'ig_add_escape_allowed_tags' ) );
 
@@ -196,6 +194,30 @@ if ( ! class_exists( 'Icegram' ) ) {
 					}
 				}
 			}
+		}
+
+		public static function maybe_unserialize( $data) {
+			if (!empty($data) && is_serialized($data)) {
+				return @unserialize(trim( $data), ['allowed_classes' => false]);	
+			}
+			return $data;
+		}
+
+		public function ig_save_upsell_flow() {
+			check_ajax_referer( 'ig-nonce', 'security' );
+
+			if ( ! current_user_can( 'manage_options' )){
+				return;
+			}
+
+			$flow = isset( $_POST['flow'] ) ? sanitize_text_field( wp_unslash( $_POST['flow'] ) ) : '';
+
+			if ( 'popup' === $flow ) {
+				update_option( 'ig_upsell_flow', $flow, false );
+				wp_send_json_success();
+			} 
+
+			wp_send_json_error();
 		}
 
 		public function show_ig_mailer_promotion_notice() {
@@ -827,6 +849,10 @@ if ( ! class_exists( 'Icegram' ) ) {
 		 */
 		public function dashboard_screen(){
 			include('ig-dashboard.php');
+
+			if ( ! self::is_premium() ) {
+				include('upsale-popup.php');
+			}
 		}
 
 		public function check_for_gallery_items( $force_update = false ) {
@@ -1000,240 +1026,6 @@ if ( ! class_exists( 'Icegram' ) ) {
 					));
 				}
 			echo '<div id="ig-gallery-root" class="p-4 ig-gallery-wrap"></div>';
-		}
-
-	public function show_discount_notice() {
-		$screen = get_current_screen();
-		if ( ! in_array( $screen->id, array( 'ig_campaign_page_icegram-dashboard', 'ig_campaign_page_icegram-upgrade' ), true ) ) {
-			return;
-		}
-
-		$icegram_plan = $this->get_plan();
-		$icegram_discount_notice_dismissed = get_option( 'ig_discount_notice_dismissed', 'no' );
-		$icegram_discount_notice_unlocked = get_option( 'ig_unlock_discount_notice', 'no' );
-
-		if ( $icegram_plan !== 'lite' || $icegram_discount_notice_dismissed === 'yes' || $icegram_discount_notice_unlocked === 'yes' ) {
-			return;
-		}
-
-		?>
-		<div id="ig-discount-notice-initial" style="position: relative; overflow: hidden; margin: <?php echo in_array( $screen->id, array( 'ig_campaign_page_icegram-upgrade' ) ) ? "20px 20px 20px 20px;" : "20px 20px 20px 0;"; ?> padding: 20px; border-radius: 8px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); background: linear-gradient(135deg, #4f46e5 0%, #6366f1 33%, #8b5cf6 66%, #a855f7 100%); animation: igSlideDown 0.5s ease-out forwards;">
-			<!-- Close button -->
-			<button type="button" onclick="igDismissDiscountNotice()" title="Close" style="position: absolute; top: 8px; right: 8px; color: white; font-size: 32px; font-weight: bold; width: 40px; height: 40px; line-height: 1; background: transparent; border: none; cursor: pointer;">&times;</button>
-			
-			<div style="position: relative; z-index: 10; text-align: center;">
-				<div style="display: flex; align-items: center; justify-content: center; gap: 48px; flex-wrap: wrap;">
-					<div style="display: flex; align-items: center; gap: 12px;">
-						<img class="ig-gentle-bounce" src="<?php echo esc_url( ICEGRAM_PLUGIN_URL . 'lite/assets/images/discount-gift.png' ); ?>" alt="Special Offer" style="width: 80px; height: 80px; border: 0;">
-						<h3 style="color: white; font-size: 24px; font-weight: bold; line-height: 1.5; margin: 0; text-shadow: 0 2px 4px rgba(0,0,0,0.2);">
-							You've unlocked a special discount on Icegram Engage.<br>
-							Reveal your offer and save on your upgrade.
-						</h3>
-					</div>
-					<button type="button" class="ig-reveal-btn" onclick="igRevealOffer()">Reveal My Offer</button>
-				</div>
-			</div>
-			
-			<!-- Animated sparkles overlay -->
-			<div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; opacity: 0.3; pointer-events: none; background: radial-gradient(circle at 20% 50%, rgba(255,255,255,0.8) 0%, transparent 50%), radial-gradient(circle at 80% 50%, rgba(255,255,255,0.8) 0%, transparent 50%); animation: igSparkle 4s ease-in-out infinite;"></div>
-		</div>
-
-		<!-- Discount Notice Banner - Revealed Offer -->
-		<div id="ig-discount-notice-revealed" style="display: none; position: relative; overflow: hidden; margin: <?php echo in_array( $screen->id, array( 'ig_campaign_page_icegram-upgrade' ) ) ? "20px 20px 20px 20px;" : "20px 20px 20px 0;"; ?> padding: 20px; border-radius: 8px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 33%, #a855f7 66%, #c026d3 100%); animation: igSlideDown 0.5s ease-out forwards;">
-			<!-- Close button -->
-			<button type="button" onclick="igDismissDiscountNotice()" title="Close" style="position: absolute; top: 8px; right: 8px; color: white; font-size: 32px; font-weight: bold; width: 40px; height: 40px; line-height: 1; background: transparent; border: none; cursor: pointer;">&times;</button>
-			
-			<div style="position: relative; z-index: 10;">
-				<!-- Flex container: image left, text middle, button right -->
-				<div style="display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: nowrap;">
-					<!-- Left side: emoji image -->
-					<img class="ig-gentle-bounce" src="<?php echo esc_url( ICEGRAM_PLUGIN_URL . 'lite/assets/images/reveal_offer_emoji.png' ); ?>" alt="Special Offer" style="width: 60px; height: 60px; border: 0; flex-shrink: 0;">
-					
-					<!-- Middle: heading and subtext -->
-					<div style="flex: 1; min-width: 0;">
-						<h3 style="color: white; font-size: 23px; font-weight: 800; line-height: 1.3; margin: 0 0 8px 0; text-shadow: 0 2px 4px rgba(0,0,0,0.2);">
-							Your exclusive discount is ready. You got 
-							<span style="font-size: 30px; color: #fff;">70% OFF</span>
-							 on MAX plan
-						</h3>
-						<p style="color: white; font-size: 18px; font-weight: 500; opacity: 0.9; margin: 0;">
-							Get all premium features at a price lower than PRO—limited-time unlock
-						</p>
-					</div>
-					
-					<!-- Right side: button -->
-					<button type="button" class="ig-unlock-btn" onclick="igUnlockDiscountOffer()">Unlock MAX for $69</button>
-				</div>
-			</div>
-			
-			<!-- Animated sparkles overlay - more intense -->
-			<div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; opacity: 0.4; pointer-events: none; background: radial-gradient(circle at 20% 50%, rgba(255,255,255,0.9) 0%, transparent 50%), radial-gradient(circle at 80% 50%, rgba(255,255,255,0.9) 0%, transparent 50%), radial-gradient(circle at 50% 20%, rgba(255,255,255,0.7) 0%, transparent 40%); animation: igSparkle 3s ease-in-out infinite;"></div>
-		</div>
-
-		<style>
-			/* Slide down animation for banner */
-			@keyframes igSlideDown {
-				0% { opacity: 0; transform: translateY(-20px); }
-				100% { opacity: 1; transform: translateY(0); }
-			}
-
-			/* Fade out animation for closing banner */
-			@keyframes igFadeOut {
-				0% { opacity: 1; transform: scale(1); }
-				100% { opacity: 0; transform: scale(0.95); }
-			}
-			.ig-animate-fadeOut {
-				animation: igFadeOut 0.4s ease-in forwards;
-			}
-
-			/* Sparkle animation */
-			@keyframes igSparkle {
-				0%, 100% { opacity: 0.2; transform: scale(1); }
-				50% { opacity: 0.5; transform: scale(1.1); }
-			}
-
-			/* Gentle bounce animation for emoji */
-			@keyframes igGentleBounce {
-				0%, 100% { transform: translateY(0); }
-				50% { transform: translateY(-10px); }
-			}
-			.ig-gentle-bounce {
-				animation: igGentleBounce 2s ease-in-out infinite;
-			}
-
-			/* Button styles with hover effects */
-			.ig-reveal-btn {
-				background-color: white;
-				color: #7c3aed;
-				font-weight: bold;
-				font-size: 18px;
-				padding: 12px 32px;
-				border-radius: 9999px;
-				border: none;
-				box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-				cursor: pointer;
-				transition: all 0.3s ease;
-				white-space: nowrap;
-			}
-			.ig-reveal-btn:hover {
-				box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15), 0 10px 10px -5px rgba(0, 0, 0, 0.08);
-				transform: scale(1.05);
-			}
-
-			.ig-unlock-btn {
-				background-color: white;
-				color: #9333ea;
-				font-weight: bold;
-				font-size: 18px;
-				padding: 16px 40px;
-				border-radius: 9999px;
-				border: none;
-				box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-				cursor: pointer;
-				transition: all 0.3s ease;
-				white-space: nowrap;
-				flex-shrink: 0;
-				margin-right: 60px;
-			}
-			.ig-unlock-btn:hover {
-				transform: scale(1.1);
-			}
-		</style>
-
-		<script type="text/javascript">
-			function igRevealOffer() {
-				// Hide initial offer
-				var initialNotice = document.getElementById('ig-discount-notice-initial');
-				if (initialNotice) {
-					initialNotice.style.display = 'none';
-				}
-				
-				// Show revealed offer
-				var revealedNotice = document.getElementById('ig-discount-notice-revealed');
-				if (revealedNotice) {
-					revealedNotice.style.display = 'block';
-				}
-			}
-
-			function igDismissDiscountNotice() {
-				var initialNotice = document.getElementById('ig-discount-notice-initial');
-				var revealedNotice = document.getElementById('ig-discount-notice-revealed');
-				
-				// Add fade-out animation
-				if (initialNotice && initialNotice.style.display !== 'none') {
-					initialNotice.classList.add('ig-animate-fadeOut');
-				}
-				if (revealedNotice && revealedNotice.style.display !== 'none') {
-					revealedNotice.classList.add('ig-animate-fadeOut');
-				}
-				
-				// Make AJAX call to dismiss the notice
-				var xhr = new XMLHttpRequest();
-				xhr.open('POST', ajaxurl, true);
-				xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-				
-				xhr.onload = function() {
-					if (xhr.status === 200) {
-						console.log('Discount notice dismissed successfully');
-					}
-				};
-				
-				xhr.onerror = function() {
-					console.error('Failed to dismiss discount notice');
-				};
-				
-				var params = 'action=ig_dismiss_discount_notice&security=<?php echo esc_js( wp_create_nonce( 'ig-dissmiss-discount-notice' ) ); ?>';
-				xhr.send(params);
-				
-				// Hide the notice after animation completes
-				setTimeout(function() {
-					if (initialNotice) {
-						initialNotice.style.display = 'none';
-					}
-					if (revealedNotice) {
-						revealedNotice.style.display = 'none';
-					}
-				}, 400); // Match the animation duration
-			}
-
-			function igUnlockDiscountOffer() {
-				// Make AJAX call to track unlock action
-				var xhr = new XMLHttpRequest();
-				xhr.open('POST', ajaxurl, true);
-				xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-				
-				var params = 'action=ig_unlock_discount_notice&security=<?php echo esc_js( wp_create_nonce( 'ig-unlock-discount-notice' ) ); ?>';
-				xhr.send(params);
-				
-				// Open the purchase URL
-				window.open('https://www.icegram.com/?buy-now=16542&qty=1&coupon=ig-eg-max-70&with-cart=1&utm_source=in-app&utm_medium=banner&utm_id=engage-max-discount', '_blank');
-			}
-		</script>
-		<?php
-	}
-
-	public function dismiss_discount_notice() {
-			$response = array(
-				'success' => 'yes',
-			);
-
-			check_ajax_referer( 'ig-dissmiss-discount-notice', 'security' );
-
-			update_option( 'ig_discount_notice_dismissed', 'yes', false );
-
-			wp_send_json( $response );
-		}
-
-		public function unlock_discount_notice() {
-			$response = array(
-				'success' => 'yes',
-			);
-
-			check_ajax_referer( 'ig-unlock-discount-notice', 'security' );
-
-			update_option( 'ig_unlock_discount_notice', 'yes', false );
-
-			wp_send_json( $response );
 		}	
 
 		public function branding_data_remove( $icegram_branding_data ) {
@@ -1637,7 +1429,7 @@ if ( ! class_exists( 'Icegram' ) ) {
 
 			}
 
-			if ( ! in_array( $screen->id, array( 'ig_campaign', 'ig_message', 'edit-ig_campaign' ), true ) ) {
+			if ( ! in_array( $screen->id, array( 'ig_campaign', 'ig_message', 'edit-ig_campaign', 'ig_campaign_page_icegram-dashboard' ), true ) ) {
 				return;
 			}
 
@@ -2899,14 +2691,14 @@ if ( ! class_exists( 'Icegram' ) ) {
 			$custom_fields = get_post_custom( $original_id );
 			foreach ( $custom_fields as $key => $value ) {
 				if ( $key === 'messages' ) {
-					$messages = unserialize( $value[0] );
+					$messages = Icegram::maybe_unserialize( $value[0] );
 					foreach ( $messages as &$message ) {
 						$clone_msg_id  = Icegram::duplicate_in_db( $message['id'] );
 						$message['id'] = $clone_msg_id;
 					}
 					$value[0] = serialize( $messages );
 				}
-				add_post_meta( $duplicate_id, $key, maybe_unserialize( $value[0] ) );
+				add_post_meta( $duplicate_id, $key, Icegram::maybe_unserialize( $value[0] ) );
 			}
 
 			return $duplicate_id;

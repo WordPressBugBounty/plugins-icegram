@@ -793,4 +793,25 @@ jQuery(function() {
 			}
 		}
 	}
+
+	jQuery(document).on('click', "#ig-open-upsell-popup", function() {
+		jQuery(".ig-dialog-overlay").show();
+	});
+
+	jQuery("#upsell-upgrade-btn").click( function() {
+		var upsale_data = {
+			action: 'ig_save_upsell_flow',
+			security: icegram_writepanel_params.ig_nonce,
+			flow: 'popup',
+		}
+		
+		jQuery.ajax({
+			method: 'post',
+			url: icegram_writepanel_params.ajax_url,
+			data: upsale_data,
+			dataType: 'json',
+			}).done(function(response){
+				console.log( 'response: ', response );
+		});
+	});
 });

@@ -103,7 +103,7 @@ $icegram_topics_indexes = array_rand( $icegram_topics, 3 );
 					</div>
 				</div>
 				<?php if( ! $icegram->is_premium() ){ ?>
-					<a href="https://www.icegram.com/engage/pricing/?utm_source=in_app_new&utm_medium=dashboard_analytics&utm_campaign=ig_upsell"> <img src="<?php echo esc_url( ICEGRAM_PLUGIN_URL . 'lite/assets/images/upsell/dashboard-last-60-days.png') ?>"></a>
+					<img id="ig-open-upsell-popup" src="<?php echo esc_url( ICEGRAM_PLUGIN_URL . 'lite/assets/images/upsell/dashboard-last-60-days.png') ?>" style="cursor: pointer">
 				<?php } else{ ?>
 				<div class="w-4/12 px-3 flex-auto">
 					<p class="px-1 text-lg font-medium leading-6 text-gray-400">
