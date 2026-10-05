@@ -673,7 +673,7 @@ if ( ! class_exists( 'Icegram_Mobile_Detect' ) ) {
          *                          from the $headers array instead.
          */
         public function __construct(
-            array $headers = null,
+            ? array $headers = null,
             $userAgent = null
         ) {
             $this->setHttpHeaders($headers);
@@ -1235,7 +1235,7 @@ if ( ! class_exists( 'Icegram_Mobile_Detect' ) ) {
          */
         public function match($regex, $userAgent = null)
         {
-            $match = (bool) preg_match(sprintf('#%s#is', $regex), (false === empty($userAgent) ? $userAgent : $this->userAgent), $matches);
+            $match = (bool) preg_match(sprintf('#%s#is', $regex), (false === empty($userAgent) ? $userAgent : ($this->userAgent ?? '')), $matches);
             // If positive match is found, store the results for debug.
             if ($match) {
                 $this->matchingRegex = $regex;

@@ -1069,17 +1069,47 @@ if ( ! class_exists( 'Icegram' ) ) {
 			return implode( " ", $html );
 		}
 
+		/**
+		 * Recursively sanitize a value (fallback for WP < 4.4 where map_deep() is missing).
+		 *
+		 * @param mixed $value
+		 * @return mixed
+		 */
+		public function sanitize_deep( $value ) {
+			if ( is_array( $value ) ) {
+				foreach ( $value as $key => $item ) {
+					$value[ $key ] = $this->sanitize_deep( $item );
+				}
+				return $value;
+			}
+
+			if ( is_object( $value ) ) {
+				$vars = get_object_vars( $value );
+				foreach ( $vars as $key => $item ) {
+					$value->$key = $this->sanitize_deep( $item );
+				}
+				return $value;
+			}
+
+			return is_scalar( $value ) ? sanitize_text_field( $value ) : $value;
+		}
+
 		// Do not index Icegram campaigns / messages...
 		// Not using currently - made custom post types non public...
 		function icegram_load_data() {
 			global $post;
 
 			$sanitized_get_data = array();
-			$get_data = filter_input_array( INPUT_GET, FILTER_SANITIZE_STRING );
 
-			if ( ! empty( $get_data ) && is_array( $get_data ) ) {
-				$sanitized_get_data = $get_data;
-			} 
+			if ( ! empty( $_GET ) && is_array( $_GET ) ) {
+				$unslashed = wp_unslash( $_GET );
+
+				if ( function_exists( 'map_deep' ) ) {
+					$sanitized_get_data = map_deep( $unslashed, 'sanitize_text_field' );
+				} else {
+					$sanitized_get_data = $this->sanitize_deep( $unslashed );
+				}
+			}
 			
 			$icegram_pre_data['ajax_url']                        = admin_url( 'admin-ajax.php' );
 			$icegram_pre_data['post_obj']                        = $sanitized_get_data;
@@ -1478,7 +1508,8 @@ if ( ! class_exists( 'Icegram' ) ) {
 		}
 
 		public static function get_platform() {
-			$mobile_detect = new Icegram_Mobile_Detect();
+			$mobile_detect = new Icegram_Mobile_Detect(); 
+			
 			$mobile_detect->setUserAgent();
 			if ( $mobile_detect->isMobile() ) {
 				return ( $mobile_detect->isTablet() ) ? 'tablet' : 'mobile';
