@@ -1823,8 +1823,14 @@ if ( ! class_exists( 'Icegram' ) ) {
 			}
 			
 			do_action( 'icegram_file_include' );
+			add_action( 'init', array( $this, 'load_icegram_message_types' ) );
+		}
+		
+		/*
+		** Load Icegram message types
+		*/
+		public function load_icegram_message_types() {
 			$this->message_types = apply_filters( 'icegram_message_types', array() );
-
 		}
 
 		// Register Campaign post type
@@ -2956,7 +2962,7 @@ if ( ! class_exists( 'Icegram' ) ) {
 					break;
 				case 'display_rules_summary':
 					$campaign_target_rules = get_post_meta( $post->ID, 'icegram_campaign_target_rules' );
-					$campaign_target_rules = $campaign_target_rules[0];
+					$campaign_target_rules = isset( $campaign_target_rules[0] ) ? $campaign_target_rules[0] : array();
 					?>
 					
 					<ul class="list-none">

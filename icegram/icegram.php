@@ -3,7 +3,7 @@
  * Plugin Name: Icegram Engage – Popups, Optins, CTAs & Lead Generation
  * Plugin URI: https://www.icegram.com/
  * Description: Create high-converting popups, email optins, and CTAs in minutes. Capture leads, grow your email list, and convert visitors into customers—without coding.
- * Version: 3.1.45
+ * Version: 3.1.46
  * Tested up to: 7.1
  * Requires PHP: 7.1
  * Author: icegram
@@ -13,7 +13,7 @@
  * License URI: http://www.gnu.org/licenses/gpl-3.0.html
  *
  * Text Domain: icegram
- * Domain Path: /lite/lang/
+ * Domain Path: /languages/
 */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -230,7 +230,7 @@ register_deactivation_hook( __FILE__, 'icegram_deactivate' );
 add_action( 'init', 'icegram_load_translations' );
 if ( ! function_exists( 'icegram_load_translations' ) ) {
 	function icegram_load_translations() {
-		load_plugin_textdomain( 'icegram', false, ICEGRAM_PLUGIN_DIR . 'lite/lang/' );
+		load_plugin_textdomain( 'icegram', false, dirname( plugin_basename( ICEGRAM_PLUGIN_FILE ) ) . '/languages/' );
 	}
 }
 

@@ -45,7 +45,7 @@ if ( ! class_exists( 'Icegram_Compat_contact_form_7' ) ) {
 		}
 
 		function change_form_action_url($url) {
-		    return Icegram::get_current_page_url();
+		    return $url;
 		}
 
 
