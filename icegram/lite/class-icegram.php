@@ -1335,8 +1335,9 @@ if ( ! class_exists( 'Icegram' ) ) {
 				if ( ! empty( $this->message_types[ $message['type'] ]['themes'][ $message['theme'] ] ) ) {
 					$theme = $this->message_types[ $message['type'] ]['themes'][ $message['theme'] ]['baseurl'] . $message['theme'] . '.css' . $ver_prefix;
 				} else {
-					$theme_default                             = $this->message_types[ $message['type'] ] ['settings']['theme']['default'];
-					$theme                                     = $this->message_types[ $message['type'] ]['themes'][ $theme_default ]['baseurl'] . $theme_default . '.css' . $ver_prefix;
+					$theme_default = isset( $this->message_types[ $message['type'] ]['settings']['theme']['default'] ) ? $this->message_types[ $message['type'] ]['settings']['theme']['default'] : '';
+					$theme_baseurl = isset( $this->message_types[ $message['type'] ]['themes'][ $theme_default ]['baseurl'] ) ? $this->message_types[ $message['type'] ]['themes'][ $theme_default ]['baseurl'] : '';
+					$theme                                     = $theme_baseurl . $theme_default . '.css' . $ver_prefix;
 					$icegram_data['messages'][ $key ]['theme'] = $theme_default;
 				}
 				if ( ! preg_match( '/icegram\/message-types/i', $theme ) ) {
@@ -2094,7 +2095,7 @@ if ( ! class_exists( 'Icegram' ) ) {
             if ( $response_code == 200 ) {
                 $new_campaign_ids = $this->import( json_decode( $response['body'], true ) );
                 if ( ! empty( $new_campaign_ids ) ) {
-                    $imported_gallery_items   = get_option( 'ig_imported_gallery_items' );
+                    $imported_gallery_items   = get_option( 'ig_imported_gallery_items', array() );
                     $imported_gallery_items[] = $campaign_id;
                     update_option( 'ig_imported_gallery_items', $imported_gallery_items );
                     $location = admin_url( 'post.php?post=' . $new_campaign_ids[0] . '&action=edit' );
@@ -3040,7 +3041,8 @@ if ( ! class_exists( 'Icegram' ) ) {
 								$show_x_times = isset( $campaign_target_rules['show_x_times'] ) ? $campaign_target_rules['show_x_times'] : 1;
 								
 								/* translators: 1: number of times to show, 2: time period for not showing the campaign */
-								echo esc_html( sprintf( __( 'Show %1$s time(s) then do not show for %2$s', 'icegram' ), $show_x_times, $retargeting_shown[ $campaign_target_rules['expiry_time'] ] ) );
+								$expiry_time = isset( $campaign_target_rules['expiry_time'] ) && isset( $retargeting_shown[ $campaign_target_rules['expiry_time'] ] ) ? $campaign_target_rules['expiry_time'] : 'current_session';
+								echo esc_html( sprintf( __( 'Show %1$s time(s) then do not show for %2$s', 'icegram' ), $show_x_times, $retargeting_shown[ $expiry_time ] ) );
 							}	
 							?>
 						</li>
@@ -3057,7 +3059,8 @@ if ( ! class_exists( 'Icegram' ) ) {
 								$retargeting_clicked = Icegram_Campaign_Admin::get_expiry_options_for_clicked();
 								
 								/* translators: %s is the time period for not showing the campaign after CTA is clicked */
-								echo esc_html( sprintf( __( 'Once CTA is clicked, do NOT show this campaign again for %s', 'icegram' ), $retargeting_clicked[ $campaign_target_rules['expiry_time_clicked'] ] ) );
+								$expiry_time_clicked = isset( $campaign_target_rules['expiry_time_clicked'] ) && isset( $retargeting_clicked[ $campaign_target_rules['expiry_time_clicked'] ] ) ? $campaign_target_rules['expiry_time_clicked'] : 'current_session';
+								echo esc_html( sprintf( __( 'Once CTA is clicked, do NOT show this campaign again for %s', 'icegram' ), $retargeting_clicked[ $expiry_time_clicked ] ) );
 							}
 							?>
 						</li>

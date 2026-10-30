@@ -875,7 +875,7 @@ if ( ! class_exists( 'Icegram_Campaign_Admin' ) ) {
 					$message_id 	= isset( $_POST['message_id'] ) ? sanitize_text_field( wp_unslash( $_POST['message_id'] ) ) : '';
 					$message_title 	= get_the_title( $message_id );
 					$message_data 	= get_post_meta( $message_id, 'icegram_message_data', true );
-					$message_type 	= $message_data['type'];
+					$message_type 	= isset( $message_data['type'] ) ? $message_data['type'] : '';
 
 				}
 
@@ -1150,7 +1150,7 @@ if ( ! class_exists( 'Icegram_Campaign_Admin' ) ) {
 						$message_data_raw = map_deep( wp_unslash( $_POST['message_data'] ), array( $this, 'ig_sanitize_message_html' ) );
 
 						foreach ( (array) $message_data_raw as $message_id => $message_data ) {
-							$type = $message_data['type'];
+							$type = isset( $message_data['type'] ) ? $message_data['type'] : '';
 							if( isset( $message_data['theme'][$type] ) ) {
 								$message_data['theme'] = $message_data['theme'][$type];
 							} else {

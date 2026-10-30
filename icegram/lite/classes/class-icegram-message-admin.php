@@ -58,11 +58,11 @@ if ( ! class_exists( 'Icegram_Message_Admin' ) ) {
 				foreach ( $icegram->message_types as $message_type => $message ) {
 					if( !empty( $message['admin_style'] ) ) {
 						$message_type = 'ig_'.$message_type;
-						$label_bg_color 		= $message['admin_style']['label_bg_color'];
-						$theme_header_height 	= (int)$message['admin_style']['theme_header_height'];
-					$theme_header_bg_size	= ( $theme_header_height + 3 )."em";					
-					$thumbnail_width 		= $message['admin_style']['thumbnail_width'];
-					$thumbnail_height 		= $message['admin_style']['thumbnail_height'];
+						$label_bg_color 		= isset( $message['admin_style']['label_bg_color'] ) ? $message['admin_style']['label_bg_color'] : '';
+						$theme_header_height 	= isset( $message['admin_style']['theme_header_height'] ) ? (int)$message['admin_style']['theme_header_height'] : 0;
+					$theme_header_bg_size	= ( $theme_header_height + 3 )."em";
+					$thumbnail_width 		= isset( $message['admin_style']['thumbnail_width'] ) ? $message['admin_style']['thumbnail_width'] : '';
+					$thumbnail_height 		= isset( $message['admin_style']['thumbnail_height'] ) ? $message['admin_style']['thumbnail_height'] : '';
 					echo "	.message_header ." . sanitize_html_class( $message_type ) . " { 
 						background-color: " . esc_attr( $label_bg_color ) . "; 
 					} 
@@ -1051,7 +1051,8 @@ if ( ! class_exists( 'Icegram_Message_Admin' ) ) {
 				$type  = ucwords( str_replace( "-", ' ', $message_data['type'] ) );
 				$theme = ucwords( str_replace( "-", ' ', $message_data['theme'] ) );
 
-				$bg_img = $icegram->message_types[ $message_data['type'] ]['themes'][ $message_data['theme'] ]['baseurl'] . $message_data['theme'] . ".png";
+				$theme_baseurl = isset( $icegram->message_types[ $message_data['type'] ]['themes'][ $message_data['theme'] ]['baseurl'] ) ? $icegram->message_types[ $message_data['type'] ]['themes'][ $message_data['theme'] ]['baseurl'] : '';
+				$bg_img = $theme_baseurl . $message_data['theme'] . ".png";
 
 				switch ( $column ) {
 					case 'message_type':

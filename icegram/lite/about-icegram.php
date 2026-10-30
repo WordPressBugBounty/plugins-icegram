@@ -174,12 +174,13 @@ if ( !wp_script_is( 'thickbox' ) ) {
 function icegram_get_about_page_vars() {
     global $icegram;
     
-    $ig_sample_id = get_option('icegram_sample_data_imported');
-    
+    $ig_sample_id = get_option('icegram_sample_data_imported', array());
+    $ig_sample_campaign_id = isset( $ig_sample_id[0] ) ? $ig_sample_id[0] : '';
+
     return array(
         'sample_id'     => $ig_sample_id,
-        'view_campaign' => admin_url( 'post.php?post=' . $ig_sample_id[0] . '&action=edit' ),
-        'preview_url'   => home_url( '?campaign_preview_id=' . $ig_sample_id[0] ),
+        'view_campaign' => admin_url( 'post.php?post=' . $ig_sample_campaign_id . '&action=edit' ),
+        'preview_url'   => home_url( '?campaign_preview_id=' . $ig_sample_campaign_id ),
         'assets_base'   => $icegram->plugin_url . '/assets/images/',
         'version'       => $icegram->version,
     );

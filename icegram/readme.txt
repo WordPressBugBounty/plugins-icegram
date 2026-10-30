@@ -5,7 +5,7 @@ Tags: popup, popups, optin, lead generation, popup builder
 Requires at least: 3.9
 Tested up to: 7.1
 Requires PHP: 7.1
-Stable tag: 3.1.46
+Stable tag: 3.1.47
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -192,6 +192,10 @@ Visit our [Icegram Engage Knowledge Base](https://www.google.com/search?q=https:
 
 == Changelog ==
 
+= 3.1.47 (29.10.2026) =
+* Fix: Resolved "Undefined array key" warnings when viewing campaign retargeting rules, editing messages, and previewing split-testing variations
+* Fix: Resolved "Automatic conversion of false to array" and related warnings when importing sample campaigns or gallery templates
+
 = 3.1.46 (26.10.2026) =
 * Fix: Fixed deprecation warnings in PHP 8.2 and above
 * Fix: Resolved a conflict causing "Invalid action URL is detected" error when rendering Contact Form 7 forms
@@ -239,6 +243,6 @@ Visit our [Icegram Engage Knowledge Base](https://www.google.com/search?q=https:
 
 == Upgrade Notice ==
 
-= 3.1.46 =
-* Fix: Fixed deprecation warnings in PHP 8.2 and above
-* Fix: Resolved a conflict causing "Invalid action URL is detected" error when rendering Contact Form 7 forms
+= 3.1.47 =
+* Fix: Resolved "Undefined array key" warnings when viewing campaign retargeting rules, editing messages, and previewing split-testing variations
+* Fix: Resolved "Automatic conversion of false to array" and related warnings when importing sample campaigns or gallery templates
