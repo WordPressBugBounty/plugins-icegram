@@ -360,7 +360,7 @@ if ( ! class_exists( 'Icegram' ) ) {
 				
 				$allowed_options = array(
 					'trial_to_premium_notice',
-					'ig_offer_bfcm_2025',
+					'ig_offer_pre_bfcm_2026',
 					'ig_new_admin_ui'
 				);
 
@@ -376,8 +376,8 @@ if ( ! class_exists( 'Icegram' ) ) {
 					update_option( 'ig_' . $option_name . '_date', gmdate( 'Y-m-d H:i:s'), false );
 				}
 				
-				if ( 'ig_offer_bfcm_2025' === $option_name ) {
-					$url = "https://www.icegram.com/pricing/?utm_source=in_app&utm_medium=ig_banner&utm_campaign=offer_bfcm_2025";
+				if ( 'ig_offer_pre_bfcm_2026' === $option_name ) {
+					$url = "https://www.icegram.com/checkout/?buy-now=16542&qty=1&with-cart=1&page=6&coupon=bfcm-50-pre-2026&utm_source=in-app&utm_medium=banner&utm_id=bfcm-pre-sale-2026";
 					header( "Location: {$url}" );
 					exit();
 				} elseif( 'ig_new_admin_ui' === $option_name ) {
@@ -422,8 +422,8 @@ if ( ! class_exists( 'Icegram' ) ) {
 				$offer_end_time 	= $current_ist_time;
 				
 				if ( 'bfcm' === $offer_name ) {
-					$offer_start_time = strtotime( '2025-11-14 12:30:00' ); // Offer start time in IST
-					$offer_end_time   = strtotime( '2025-12-05 12:30:00' ); // Offer end time in IST
+					$offer_start_time = strtotime( '2026-11-05 12:30:00' ); // Offer start time in IST
+					$offer_end_time   = strtotime( '2026-11-16 12:30:00' ); // Offer end time in IST
 				}
 	
 				$is_offer_period = $current_ist_time >= $offer_start_time && $current_ist_time <= $offer_end_time;
@@ -1709,38 +1709,73 @@ if ( ! class_exists( 'Icegram' ) ) {
 		function append_to_valid_campaigns_sql( $sql_params = array(), $options = array() ) {
 			// Page check conditions
 			//$pid = $_GET['page_id'];
-			$pid          = Icegram::get_current_page_id();
-			$sql          = " AND ( 
-	                pm.meta_key = 'icegram_campaign_target_rules' AND (
-	                ( pm.meta_value LIKE '%%%s%%' ) 
-	                OR ( pm.meta_value LIKE '%%%s%%' AND pm.meta_value LIKE '%%%s%%' AND pm.meta_value LIKE '%%%s%%' )
-	                ";
-			$sql_params[] = 's:8:"sitewide";s:3:"yes";';
-			$sql_params[] = 's:10:"other_page";s:3:"yes";';
-			$sql_params[] = 's:7:"page_id";a:';
-			$sql_params[] = serialize( (string) $pid );
-			//local url
-			$sql          .= " OR ( pm.meta_value LIKE '%%%s%%' )";
-			$sql_params[] = 's:9:"local_url";s:3:"yes";';
+			$pid = Icegram::get_current_page_id();
 
-			$sql          .= " OR ( pm.meta_value LIKE '%%%s%%' )";
-			$sql_params[] = 's:10:"post_types";s:3:"yes";';
-			
-		    $cache_compatibility = icegram_get_request_data( 'cache_compatibility', '', false );
+			// Each condition is kept to a dedicated ( 'sql' => '(...with %s placeholders...)', 'params' => array(...) )
+			// entry, and this function is the only place that opens/closes the surrounding
+			// `pm.meta_key = 'icegram_campaign_target_rules' AND ( ... )` group. Other modules extend the list of
+			// OR'd conditions via the 'icegram_campaign_target_rule_conditions' filter below, rather than editing
+			// the already-built SQL string - that keeps every condition correctly scoped to this meta_key (and so
+			// to `p.post_status = 'publish'`), which matters both for correctness and for letting MySQL use the
+			// meta_key index instead of scanning the whole postmeta table.
+			$conditions   = array();
+			$conditions[] = array(
+				'sql'    => "( pm.meta_value LIKE '%%%s%%' )",
+				'params' => array( 's:8:"sitewide";s:3:"yes";' ),
+			);
+			$conditions[] = array(
+				'sql'    => "( pm.meta_value LIKE '%%%s%%' AND pm.meta_value LIKE '%%%s%%' AND pm.meta_value LIKE '%%%s%%' )",
+				'params' => array( 's:10:"other_page";s:3:"yes";', 's:7:"page_id";a:', serialize( (string) $pid ) ),
+			);
+			$conditions[] = array(
+				'sql'    => "( pm.meta_value LIKE '%%%s%%' )",
+				'params' => array( 's:9:"local_url";s:3:"yes";' ),
+			);
+			$conditions[] = array(
+				'sql'    => "( pm.meta_value LIKE '%%%s%%' )",
+				'params' => array( 's:10:"post_types";s:3:"yes";' ),
+			);
 
-		    if ( 'yes' === $cache_compatibility ) { 
+			$cache_compatibility = icegram_get_request_data( 'cache_compatibility', '', false );
+
+			if ( 'yes' === $cache_compatibility ) {
 				$is_home_param = icegram_get_request_data( 'is_home', '', false );
-        		$is_home = ( 'true' === $is_home_param ) ? true : false;				
+				$is_home       = ( 'true' === $is_home_param ) ? true : false;
 			} else {
 				$is_home = ( is_home() || is_front_page() ) ? true : false;
 			}
 			if ( $is_home === true ) {
-				$sql          .= " OR ( pm.meta_value LIKE '%%%s%%' )";
-				$sql_params[] = 's:8:"homepage";s:3:"yes";';
+				$conditions[] = array(
+					'sql'    => "( pm.meta_value LIKE '%%%s%%' )",
+					'params' => array( 's:8:"homepage";s:3:"yes";' ),
+				);
 			}
-			$sql .= " ) )";
+
+			/**
+			 * Filters the list of OR'd conditions placed inside the
+			 * `pm.meta_key = 'icegram_campaign_target_rules' AND ( ... )` group used to find valid campaigns
+			 * for the current page. Each entry must be array( 'sql' => '(...with %s placeholders...)',
+			 * 'params' => array(...) ) - params are consumed in order by $wpdb->prepare().
+			 */
+			$conditions = apply_filters( 'icegram_campaign_target_rule_conditions', $conditions, $pid, $options );
+
+			$condition_sql_parts = array();
+			$condition_params    = array();
+			foreach ( (array) $conditions as $condition ) {
+				if ( empty( $condition['sql'] ) ) {
+					continue;
+				}
+				$condition_sql_parts[] = $condition['sql'];
+				$condition_params      = array_merge( $condition_params, isset( $condition['params'] ) ? (array) $condition['params'] : array() );
+			}
+
+			$sql = " AND (
+	                pm.meta_key = 'icegram_campaign_target_rules' AND (
+	                " . implode( ' OR ', $condition_sql_parts ) . '
+	                ) )';
 
 			$sql_params[0] .= $sql;
+			$sql_params     = array_merge( $sql_params, $condition_params );
 
 			//s:9:"logged_in";s:3:"all";
 

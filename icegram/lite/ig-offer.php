@@ -3,15 +3,14 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 global $icegram;
-// BFCM 2025 Campaign
-if ( ( get_option( 'ig_offer_bfcm_2025_icegram' ) !== 'yes' ) && Icegram::is_offer_period( 'bfcm') ) { 
+
+$icegram_plan = $icegram->get_plan();
+ 
+// BFCM 2026 Campaign
+if ( ( get_option( 'ig_offer_pre_bfcm_2026_icegram' ) !== 'yes' ) && Icegram::is_offer_period( 'bfcm') && ! $icegram->is_max() ) { 
     
-    $icegram_img_url = $this->plugin_url .'/assets/images/bfcm-engage-free-pro-banner-2025.png';
-    
-    $icegram_plan = $icegram->get_plan();
-    if( 'max' === $icegram_plan ){        
-        $icegram_img_url = $this->plugin_url .'/assets/images/bfcm-common-max-banner-2025.png';
-    }
+    $icegram_img_url = $this->plugin_url .'/assets/images/bfcm-engage-max-banner.png';    
+     
     // elseif( 'plus' === $icegram_plan || 'pro' === $icegram_plan ){
     //     $icegram_img_url = $this->plugin_url .'/assets/images/bfcm2021_pro.png';
     // }
@@ -19,7 +18,7 @@ if ( ( get_option( 'ig_offer_bfcm_2025_icegram' ) !== 'yes' ) && Icegram::is_off
     $icegram_dismiss_url = add_query_arg( 
         array(
             'ig_dismiss_admin_notice' => '1',
-            'ig_option_name' => 'ig_offer_bfcm_2025',
+            'ig_option_name' => 'ig_offer_pre_bfcm_2026',
             'ig_nonce' => wp_create_nonce( 'ig_dismiss_notice' )
         )
     );
